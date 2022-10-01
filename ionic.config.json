@@ -1,0 +1,7 @@
+{
+  "name": "Easton One SOD FE",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
