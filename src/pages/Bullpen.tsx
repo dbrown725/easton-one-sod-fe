@@ -1,8 +1,7 @@
 import { IonButton, IonButtons, IonContent, IonHeader, IonInput, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { useParams } from 'react-router';
-import ExploreContainer from '../components/ExploreContainer';
 import { gql, useQuery } from '@apollo/client';
-import './Page.css';
+import './Bullpen.css';
 import { useCallback, useEffect, useState } from 'react';
 import {
   IonGrid,
@@ -13,9 +12,9 @@ import {
   IonCardContent,
 } from "@ionic/react";
 
-const Page: React.FC = () => {
+const Bullpen: React.FC = () => {
 
-  const { name } = useParams<{ name: string; }>();
+  // const { name } = useParams<{ name: string; }>();
 
   interface BullpenSongData {
     bullpenSongById: Song;
@@ -58,21 +57,6 @@ const Page: React.FC = () => {
   }
 `;
 
-const GET_SEARCH_RESULTS = gql`
-query GetSearchResults {
-  songBySearchText(searchText: "rolling stones") {
-    id
-  	bandName
-    songName
-    title
-    titleHighlighted
-    link
-    playlist
-    message
-    score
-  }
-}
-`;
 
   const { loading, error, data } = useQuery<BullpenSongData, SongVars>(GET_BULLPEN_SONG);
   console.log('**** UseQuery data GET_BULLPEN_SONG', data);
@@ -80,10 +64,6 @@ query GetSearchResults {
   const onSubmit = (event: any) => {
     event.preventDefault();
     console.log("Submitted");
-       
-    //console.log('cartItems', items);
-    //const { loading, error, data } = useQuery<SearchData, SongVars>(GET_SEARCH_RESULTS);
-    //console.log('**** UseQuery GET_SEARCH_RESULTS data', data);
   }
 
   return (
@@ -93,17 +73,16 @@ query GetSearchResults {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>{name}</IonTitle>
+          <IonTitle>My Bullpen</IonTitle>
         </IonToolbar>
       </IonHeader>
 
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">{name}</IonTitle>
+            <IonTitle size="large">My Bullpen</IonTitle>
           </IonToolbar>
         </IonHeader>
-        {/* <ExploreContainer name={name} /> */}
         {loading && <h1>loading</h1>}
         {data &&
           <IonGrid>
@@ -144,55 +123,6 @@ query GetSearchResults {
                 Link: <a href={data.bullpenSongById.link} target='_blank' rel="noreferrer">{data.bullpenSongById.link}</a>
               </IonCol>
             </IonRow>
-
-            {/* Temp hack to replace css for top margin */}
-            <IonRow>
-              <IonCol>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol>
-              </IonCol>
-            </IonRow>
-
-            <IonRow>
-              <IonCol>
-                <b>Proof of Concept: Data from Elastic Search. Songs matching text</b>
-              </IonCol>
-            </IonRow>
-              <IonRow>
-                <IonCol>
-                  <IonInput placeholder="Enter Search Text"></IonInput>
-                </IonCol>
-              </IonRow>
-              <IonRow>
-                <IonCol>
-                <IonButton onClick={onSubmit}>Submit</IonButton>
-                </IonCol>
-              </IonRow>
-              {/* <form
-                onSubmit={e => {
-                  e.preventDefault();
-                  addTodo({ variables: { type: input.value } });
-                  input.value = '';
-                }}
-              >
-                <input
-                  ref={node => {
-                    input = node;
-                  }}
-                />
-                <button type="submit">Add Todo</button>
-              </form> */}
-
             
           </IonGrid>
         }
@@ -201,4 +131,4 @@ query GetSearchResults {
   );
 };
 
-export default Page;
+export default Bullpen;
