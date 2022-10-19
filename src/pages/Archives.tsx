@@ -7,6 +7,8 @@ import {
   IonRow,
   IonCol,
 } from "@ionic/react";
+import SongList from '../components/SongList';
+
 
 
 const Page: React.FC = () => {
@@ -19,21 +21,17 @@ const Page: React.FC = () => {
 
   //const ENTER_KEY = 13;
 
-  interface Song {
-    id: number;
-    bandName: string;
-    songName: string;
-    title: string;
-    link: string;
-    message: string;
-    sortOrder: number;
-    createTime: string;
-    modifyTime: string;
-    score: number
-  }
-
-  // interface SearchData {
-  //   songs: Song[];
+  // interface Song {
+  //   id: number;
+  //   bandName: string;
+  //   songName: string;
+  //   title: string;
+  //   link: string;
+  //   message: string;
+  //   sortOrder: number;
+  //   createTime: string;
+  //   modifyTime: string;
+  //   score: number
   // }
 
 
@@ -182,56 +180,13 @@ const Page: React.FC = () => {
           }
         </IonGrid>
 
+        {
+        
+          data && data.songBySearchText
+            && <SongList songs={data.songBySearchText}/> 
 
-
-
-
-        {data && data.songBySearchText &&
-            data.songBySearchText.map((song: Song) => {
-            return (
-              <IonCard id={song.id.toString()} key={song.id} class="card-center">
-                <IonCardContent className="puzzle-content">
-                  <IonGrid>
-                    <IonRow>
-                      <IonCol>
-                        <IonRow>
-                          <IonCol>
-                            <IonLabel position="floating">
-                              Score
-                            </IonLabel>
-                            <h3>{song.score}</h3>
-                          </IonCol>
-
-                          <IonCol>
-                            <IonLabel position="floating">
-                              Title
-                            </IonLabel>
-                            <h3><a href={song.link} target='_blank' rel="noreferrer">{song.title}</a></h3>
-                          </IonCol>
-                        </IonRow>
-
-                        <IonRow>
-                          <IonCol>
-                            <IonLabel position="floating">
-                              Band name
-                            </IonLabel>
-                            <h3>{song.bandName}</h3>
-                          </IonCol>
-
-                          <IonCol>
-                            <IonLabel position="floating">
-                              Song name
-                            </IonLabel>
-                            <h3>{song.songName}</h3>
-                          </IonCol>
-                        </IonRow>
-                      </IonCol>
-                    </IonRow>
-                  </IonGrid>
-                </IonCardContent>
-              </IonCard>    
-                );
-            })}
+        }
+            
       </IonContent>
     </IonPage>
   );

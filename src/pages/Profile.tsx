@@ -2,6 +2,7 @@ import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonT
 import { gql, useQuery } from '@apollo/client';
 import './Profile.css';
 import dorm from './../assets/images/Dorm.jpg';
+import {BullpenSongData} from '../common/types';
 import {
   IonGrid,
   IonRow,
@@ -10,23 +11,6 @@ import {
 
 const Profile: React.FC = () => {
 
-  // const { name } = useParams<{ name: string; }>();
-
-  interface BullpenSongData {
-    bullpenSongById: Song;
-  }
-
-  interface Song {
-    id: number;
-    bandName: string;
-    songName: string;
-    title: string;
-    link: string;
-    message: string;
-    sortOrder: number;
-    createTime: string;
-    modifyTime: string;
-  }
 
   interface SongVars {
     // year: number;

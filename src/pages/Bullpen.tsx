@@ -1,40 +1,15 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonInput, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import { useParams } from 'react-router';
+import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { gql, useQuery } from '@apollo/client';
 import './Bullpen.css';
-import { useCallback, useEffect, useState } from 'react';
+import {BullpenSongData} from '../common/types';
+
 import {
   IonGrid,
   IonRow,
   IonCol,
-  IonLabel,
-  IonCard,
-  IonCardContent,
 } from "@ionic/react";
 
 const Bullpen: React.FC = () => {
-
-  // const { name } = useParams<{ name: string; }>();
-
-  interface BullpenSongData {
-    bullpenSongById: Song;
-  }
-
-  interface Song {
-    id: number;
-    bandName: string;
-    songName: string;
-    title: string;
-    link: string;
-    message: string;
-    sortOrder: number;
-    createTime: string;
-    modifyTime: string;
-  }
-
-  interface SearchData {
-    songs: Song[];
-  }
 
   interface SongVars {
     // year: number;

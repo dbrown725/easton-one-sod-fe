@@ -2,6 +2,7 @@ import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonT
 import { gql, useQuery } from '@apollo/client';
 import './Latest.css';
 import dorm from './../assets/images/Dorm.jpg';
+import {BullpenSongData} from '../common/types';
 import {
   IonGrid,
   IonRow,
@@ -9,35 +10,6 @@ import {
 } from "@ionic/react";
 
 const Latest: React.FC = () => {
-
-  // const { name } = useParams<{ name: string; }>();
-
-  interface BullpenSongData {
-    bullpenSongById: Song;
-  }
-
-  // const setDormImg = () => {
-  //   if((document.querySelector('#dormImg') as HTMLIonImgElement).shadowRoot.querySelector('img')  != null) {
-  //     (document.querySelector('#dormImg') as HTMLIonImgElement).shadowRoot.querySelector('img').setAttribute('style', 'opacity:1');
-  //   } 
-    
-  // }; 
-
-  // useIonViewDidEnter(setDormImg);
-
-
-
-  interface Song {
-    id: number;
-    bandName: string;
-    songName: string;
-    title: string;
-    link: string;
-    message: string;
-    sortOrder: number;
-    createTime: string;
-    modifyTime: string;
-  }
 
   interface SongVars {
     // year: number;
