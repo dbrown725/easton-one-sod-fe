@@ -1,6 +1,7 @@
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { gql, useQuery } from '@apollo/client';
 import './Playlist.css';
+import dorm from './../assets/images/Dorm.jpg';
 import {
   IonGrid,
   IonRow,
@@ -88,6 +89,13 @@ const Playlist: React.FC = () => {
                 <b>Coming soon!.</b>
               </IonCol>
             </IonRow>
+
+            <IonRow>
+              <IonCol>
+                <IonImg className='dormImg' src={dorm} alt={"dorm image"}/>
+              </IonCol>
+            </IonRow>
+          
           </IonGrid>
         }
       </IonContent>

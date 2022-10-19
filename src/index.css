@@ -1,0 +1,22 @@
+.dormImg {
+    max-width: 50%;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+/* tablet portrait view */
+@media only screen and (max-width: 992px) and (orientation: portrait)  {
+    .dormImg {
+        max-width: 80%;
+    }
+}
+
+/* mobile portrait view */
+@media only screen and (max-width: 600px) and (orientation: portrait)  {
+    .dormImg {
+        max-width: 100%;
+    }
+}

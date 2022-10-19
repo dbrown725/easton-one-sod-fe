@@ -1,6 +1,7 @@
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonTitle, IonToolbar, useIonViewDidEnter } from '@ionic/react';
 import { gql, useQuery } from '@apollo/client';
 import './Latest.css';
+import dorm from './../assets/images/Dorm.jpg';
 import {
   IonGrid,
   IonRow,
@@ -14,6 +15,17 @@ const Latest: React.FC = () => {
   interface BullpenSongData {
     bullpenSongById: Song;
   }
+
+  // const setDormImg = () => {
+  //   if((document.querySelector('#dormImg') as HTMLIonImgElement).shadowRoot.querySelector('img')  != null) {
+  //     (document.querySelector('#dormImg') as HTMLIonImgElement).shadowRoot.querySelector('img').setAttribute('style', 'opacity:1');
+  //   } 
+    
+  // }; 
+
+  // useIonViewDidEnter(setDormImg);
+
+
 
   interface Song {
     id: number;
@@ -89,6 +101,14 @@ const Latest: React.FC = () => {
                 <b>Coming soon!.</b>
               </IonCol>
             </IonRow>
+
+            <IonRow>
+              <IonCol>
+                <IonImg className='dormImg' src={dorm} alt={"dorm image"}/>
+              </IonCol>
+            </IonRow>
+
+            
           </IonGrid>
         }
       </IonContent>
