@@ -17,4 +17,10 @@ export interface SongResult {
 
 export interface BullpenSongData {
     bullpenSongById: Song;
+    getAllBullpenSongs: Song[];
+}
+
+export interface SongListProps {
+    songs: Song[];
+    isBullpen: boolean;
 }

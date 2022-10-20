@@ -1,13 +1,8 @@
-import { InputChangeEventDetail, IonButtons, IonCard, IonCardContent, IonContent, IonHeader, IonInput, IonLabel, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { gql, useLazyQuery } from '@apollo/client';
-import './Page.css';
+import { InputChangeEventDetail, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonInput, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, useRef, useState } from 'react';
-import {
-  IonGrid,
-  IonRow,
-  IonCol,
-} from "@ionic/react";
 import SongList from '../components/SongList';
+import './Page.css';
 
 
 
@@ -18,22 +13,6 @@ const Page: React.FC = () => {
   const [apiSearchText, setApiSearchText] = useState<string | undefined | null>();
 
   const WAIT_INTERVAL = 1000;
-
-  //const ENTER_KEY = 13;
-
-  // interface Song {
-  //   id: number;
-  //   bandName: string;
-  //   songName: string;
-  //   title: string;
-  //   link: string;
-  //   message: string;
-  //   sortOrder: number;
-  //   createTime: string;
-  //   modifyTime: string;
-  //   score: number
-  // }
-
 
   const GET_SEARCH_RESULTS = gql`
   query GetSearchResults($searchText: String!) {
@@ -158,11 +137,6 @@ const Page: React.FC = () => {
               <IonInput id="searchText" name="searchText" placeholder="Enter Search Text" value={searchText} onIonChange={e => { handleInputChange(e) }} onKeyDown={e => { handleKeyDown(e) }}></IonInput>
             </IonCol>
           </IonRow>
-          <IonRow>
-            <IonCol>
-              {/* <IonButton onClick={() => getSongs()}>Submit</IonButton> */}
-            </IonCol>
-          </IonRow>
 
           {data &&
             <div>
@@ -182,8 +156,8 @@ const Page: React.FC = () => {
 
         {
         
-          data && data.songBySearchText
-            && <SongList songs={data.songBySearchText}/> 
+        data && data.songBySearchText
+          && <SongList isBullpen={false} songs={data.songBySearchText}/> 
 
         }
             

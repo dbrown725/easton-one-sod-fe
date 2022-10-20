@@ -2,6 +2,7 @@ import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, Io
 import { gql, useQuery } from '@apollo/client';
 import './Bullpen.css';
 import {BullpenSongData} from '../common/types';
+import SongList from '../components/SongList';
 
 import {
   IonGrid,
@@ -15,9 +16,9 @@ const Bullpen: React.FC = () => {
     // year: number;
   }
 
-  const GET_BULLPEN_SONG = gql`
-  query GetBullPenSong {
-    bullpenSongById(id: 1) {
+  const GET_ALL_BULLPEN_SONGS = gql`
+  query GetAllBullPenSongs {
+    getAllBullpenSongs(count: 200) {
       id
       bandName
       songName
@@ -32,14 +33,7 @@ const Bullpen: React.FC = () => {
   }
 `;
 
-
-  const { loading, error, data } = useQuery<BullpenSongData, SongVars>(GET_BULLPEN_SONG);
-  console.log('**** UseQuery data GET_BULLPEN_SONG', data);
-
-  const onSubmit = (event: any) => {
-    event.preventDefault();
-    console.log("Submitted");
-  }
+  const { loading, error, data } = useQuery<BullpenSongData, SongVars>(GET_ALL_BULLPEN_SONGS);
 
   return (
     <IonPage>
@@ -59,48 +53,15 @@ const Bullpen: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         {loading && <h1>loading</h1>}
-        {data &&
-          <IonGrid>
-
-            {/* Temp hack to replace css for top margin */}
-            <IonRow>
-              <IonCol>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol>
-              </IonCol>
-            </IonRow>
 
 
-            <IonRow>
-              <IonCol>
-                <b>Proof of Concept: Data from Database. First song in bullpen.</b>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol>
-                Band: {data.bullpenSongById.bandName}
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol>
-                Song: {data.bullpenSongById.songName}
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol>
-                Title: {data.bullpenSongById.title}
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol>
-                Link: <a href={data.bullpenSongById.link} target='_blank' rel="noreferrer">{data.bullpenSongById.link}</a>
-              </IonCol>
-            </IonRow>
-            
-          </IonGrid>
+        {
+        
+        data && data.getAllBullpenSongs
+          && <SongList isBullpen={true} songs={data.getAllBullpenSongs}/> 
+
         }
+
       </IonContent>
     </IonPage>
   );

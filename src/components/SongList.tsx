@@ -1,13 +1,16 @@
 import { IonCard, IonCardContent, IonCol, IonGrid, IonLabel, IonRow } from '@ionic/react';
 import {Song} from '../common/types';
 import {SongResult} from '../common/types';
+import {SongListProps} from '../common/types';
 
-const SongList: React.FC<SongResult> = (songResult) => {
+const SongList: React.FC<SongListProps> = (props) => {
+  
+  console.log('props', props);
 
   return (  
         <div>
-            {songResult &&
-              songResult.songs.map((song: Song) => {
+            {props.songs &&
+              props.songs.map((song: Song) => {
             return (
               <IonCard id={song.id.toString()} key={song.id} class="card-center">
                 <IonCardContent className="puzzle-content">
@@ -15,12 +18,18 @@ const SongList: React.FC<SongResult> = (songResult) => {
                     <IonRow>
                       <IonCol>
                         <IonRow>
-                          <IonCol>
-                            <IonLabel position="floating">
-                              Score
-                            </IonLabel>
-                            <h3>{song.score}</h3>
-                          </IonCol>
+                          
+                            {
+                              !props.isBullpen &&
+                                <>
+                                  <IonCol>
+                                  <IonLabel position="floating">
+                                  Score
+                                  </IonLabel>
+                                  <h3>{song.score}</h3>
+                                  </IonCol>
+                                </>
+                            }
 
                           <IonCol>
                             <IonLabel position="floating">
