@@ -4,8 +4,6 @@ import {SongResult} from '../common/types';
 import {SongListProps} from '../common/types';
 
 const SongList: React.FC<SongListProps> = (props) => {
-  
-  console.log('props', props);
 
   return (  
         <div>

@@ -1,8 +1,8 @@
 import { gql, useLazyQuery } from '@apollo/client';
-import { InputChangeEventDetail, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonInput, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
+import { SearchbarChangeEventDetail, IonBadge, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonItem, IonLabel, IonMenuButton, IonPage, IonRow, IonSearchbar, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, useRef, useState } from 'react';
 import SongList from '../components/SongList';
-import './Page.css';
+import './Archives.css';
 
 
 
@@ -67,33 +67,36 @@ const Page: React.FC = () => {
     refTimer.current = null;
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLIonInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLIonSearchbarElement>) => {
     if (e.key === 'Enter') {
       triggerChange();
     }
   }
 
-  const handleInputChange = (e: CustomEvent<InputChangeEventDetail>) => {
+  const handleInputChange = (e: CustomEvent<SearchbarChangeEventDetail>) => {
     stopTimer();
     setSearchText(e.detail.value);
     startTimer();
   };
 
+  const handleSearchbarClear = (e: CustomEvent<void>) => {
+    setSearchText('');
+    triggerChange();
+  };
+
   const setFocus = () => {
     window.setTimeout(() => {
-    const input = document.querySelector("#searchText > input") as HTMLElement;
-        if(input != null) {
-          input.focus();
-        }
+      const input = document.querySelector("#searchText > div > input") as HTMLElement;
+      if (input != null) {
+        input.focus();
+      }
     }, 250);
   };
 
   const [
     getSongs,
     { loading, data }
-  ] = useLazyQuery(GET_SEARCH_RESULTS, { variables: { searchText: { apiSearchText } }, onCompleted:  setFocus});
-
-  if (loading) return <p>Loading ...</p>;
+  ] = useLazyQuery(GET_SEARCH_RESULTS, { variables: { searchText: { apiSearchText } }, onCompleted: setFocus });
 
   return (
     <IonPage>
@@ -113,54 +116,30 @@ const Page: React.FC = () => {
           </IonToolbar>
         </IonHeader>
 
-        {loading && <h1>loading</h1>}
-
         <IonGrid>
-
-          {/* Temp hack to replace css for top margin */}
           <IonRow>
             <IonCol>
-            </IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>
-            </IonCol>
-          </IonRow>
-
-          <IonRow>
-            <IonCol>
-              <b>Proof of Concept: Data from Elastic Search. Songs matching text</b>
-            </IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>
-              <IonInput id="searchText" name="searchText" placeholder="Enter Search Text" value={searchText} onIonChange={e => { handleInputChange(e) }} onKeyDown={e => { handleKeyDown(e) }}></IonInput>
+              <IonSearchbar id="searchText" value={searchText} onIonClear={e => { handleSearchbarClear(e) }} onIonChange={e => { handleInputChange(e) }} onKeyDown={e => { handleKeyDown(e) }} placeholder="Enter Search Text"></IonSearchbar>
             </IonCol>
           </IonRow>
 
           {data &&
-            <div>
-
-              <IonRow>
-                <IonCol>
-                  Results
-                </IonCol>
-              </IonRow>
-              <IonRow>
-                <IonCol>
-                </IonCol>
-              </IonRow>
-            </div>
+            <IonRow>
+              <IonCol>
+                <IonItem lines="none">
+                  <IonBadge slot="start">{data.songBySearchText.length}</IonBadge>
+                  <IonLabel>Results</IonLabel>
+                </IonItem>
+              </IonCol>
+            </IonRow>
           }
         </IonGrid>
 
         {
-        
-        data && data.songBySearchText
-          && <SongList isBullpen={false} songs={data.songBySearchText}/> 
-
+          data && data.songBySearchText
+          && <SongList isBullpen={false} songs={data.songBySearchText} />
         }
-            
+
       </IonContent>
     </IonPage>
   );
