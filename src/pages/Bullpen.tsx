@@ -58,7 +58,7 @@ const Bullpen: React.FC = () => {
         {
         
         data && data.getAllBullpenSongs
-          && <SongList isBullpen={true} songs={data.getAllBullpenSongs}/> 
+          && <SongList showId={false} showScore={false} songs={data.getAllBullpenSongs}/> 
 
         }
 

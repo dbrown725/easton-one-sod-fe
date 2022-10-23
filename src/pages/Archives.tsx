@@ -137,7 +137,7 @@ const Page: React.FC = () => {
 
         {
           data && data.songBySearchText
-          && <SongList isBullpen={false} songs={data.songBySearchText} />
+          && <SongList showId={true} showScore={true} songs={data.songBySearchText} />
         }
 
       </IonContent>

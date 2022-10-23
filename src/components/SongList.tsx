@@ -16,9 +16,20 @@ const SongList: React.FC<SongListProps> = (props) => {
                     <IonRow>
                       <IonCol>
                         <IonRow>
+                            {
+                              props.showId &&
+                                <>
+                                  <IonCol>
+                                  <IonLabel position="floating">
+                                  Id
+                                  </IonLabel>
+                                  <h3>{song.id}</h3>
+                                  </IonCol>
+                                </>
+                            }
                           
                             {
-                              !props.isBullpen &&
+                              props.showScore &&
                                 <>
                                   <IonCol>
                                   <IonLabel position="floating">

@@ -13,6 +13,7 @@ export interface Song {
 
 export interface SongResult {
     songs: Song[];
+    getMostRecentSongs: Song[];
 }
 
 export interface BullpenSongData {
@@ -22,5 +23,6 @@ export interface BullpenSongData {
 
 export interface SongListProps {
     songs: Song[];
-    isBullpen: boolean;
+    showScore: boolean;
+    showId: boolean;
 }

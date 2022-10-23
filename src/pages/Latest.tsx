@@ -1,23 +1,18 @@
-import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonTitle, IonToolbar, useIonViewDidEnter } from '@ionic/react';
+import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { gql, useQuery } from '@apollo/client';
 import './Latest.css';
-import dorm from './../assets/images/Dorm.jpg';
-import {BullpenSongData} from '../common/types';
-import {
-  IonGrid,
-  IonRow,
-  IonCol,
-} from "@ionic/react";
+import {SongResult} from '../common/types';
+import SongList from '../components/SongList';
 
 const Latest: React.FC = () => {
 
   interface SongVars {
-    // year: number;
+    count: 50
   }
 
-  const GET_BULLPEN_SONG = gql`
-  query GetBullPenSong {
-    bullpenSongById(id: 1) {
+  const GET_MOST_RECENT_SONGS = gql`
+  query getMostRecentSongs {
+    getMostRecentSongs(count: 50) {
       id
       bandName
       songName
@@ -33,8 +28,8 @@ const Latest: React.FC = () => {
 `;
 
 
-  const { loading, error, data } = useQuery<BullpenSongData, SongVars>(GET_BULLPEN_SONG);
-  console.log('**** UseQuery data GET_BULLPEN_SONG', data);
+  const { loading, error, data } = useQuery<SongResult, SongVars>(GET_MOST_RECENT_SONGS);
+  console.log('**** UseQuery data GET_MOST_RECENT_SONGS', data);
 
   return (
     <IonPage>
@@ -53,35 +48,9 @@ const Latest: React.FC = () => {
             <IonTitle size="large">Latest songs</IonTitle>
           </IonToolbar>
         </IonHeader>
-        {loading && <h1>loading</h1>}
-        {data &&
-          <IonGrid>
-
-            {/* Temp hack to replace css for top margin */}
-            <IonRow>
-              <IonCol>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol>
-              </IonCol>
-            </IonRow>
-
-
-            <IonRow>
-              <IonCol>
-                <b>Coming soon!.</b>
-              </IonCol>
-            </IonRow>
-
-            <IonRow>
-              <IonCol>
-                <IonImg className='dormImg' src={dorm} alt={"dorm image"}/>
-              </IonCol>
-            </IonRow>
-
-            
-          </IonGrid>
+        {
+          data && data.getMostRecentSongs
+          && <SongList showId={true} showScore={false} songs={data.getMostRecentSongs} />
         }
       </IonContent>
     </IonPage>
