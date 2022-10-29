@@ -1,39 +1,67 @@
-import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import { gql, useQuery } from '@apollo/client';
+import { IonAlert, IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Submit.css';
-import dorm from './../assets/images/Dorm.jpg';
-import {BullpenSongData} from '../common/types';
-import {
-  IonGrid,
-  IonRow,
-  IonCol,
-} from "@ionic/react";
+import { Song } from '../common/types';
+import SongForm from '../components/SongForm';
+import { gql, useMutation } from '@apollo/client';
+import { useHistory } from 'react-router';
+import { useEffect, useState } from 'react';
 
 const Submit: React.FC = () => {
 
-  interface SongVars {
-    // year: number;
-  }
+  const song: Song = {
+    bandName: '',
+    songName: '',
+    title: '',
+    link: '',
+    message: '',
+    playlist: ''
+  };
 
-  const GET_BULLPEN_SONG = gql`
-  query GetBullPenSong {
-    bullpenSongById(id: 1) {
-      id
-      bandName
-      songName
+  const INSERT_SOD = gql`
+  mutation insertSodSong($title: String!, $songName: String!, $bandName: String!, $link: String!, $message: String!, $playlist: String!, $userId: ID!) {
+    insertSodSong(
+      title: $title
+      songName: $songName
+      bandName: $bandName
+      link: $link
+      message: $message
+      playlist: $playlist
+      userId: $userId) 
+      {
       title
+      songName
+      bandName
       link
       message
-      sortOrder
+      playlist
       userId
-      createTime
-      modifyTime
     }
   }
 `;
 
+  const history = useHistory();
 
-  const { loading, error, data } = useQuery<BullpenSongData, SongVars>(GET_BULLPEN_SONG);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+
+  const [insertSod, { data, loading, error }] = useMutation(INSERT_SOD);
+
+  //loading && console.log("....loading");
+  error && console.log("error: ", error);
+  data && console.log("data: ", data);
+
+  const handleFormSubmit = () => {
+    console.log('in handleFormSubmit song:', song);
+
+    //Hard coded for now, in the future will use the authenticated person's user object
+    song.userId = 1;
+
+    insertSod({ variables: { title: song.title, songName: song.songName, bandName: song.bandName, link: song.link, message: song.message, playlist: song.playlist, userId: song.userId } });
+    
+  };
+
+  useEffect(() => {
+    data && setShowAlert(true);
+  }, [data]);
 
   return (
     <IonPage>
@@ -47,39 +75,22 @@ const Submit: React.FC = () => {
       </IonHeader>
 
       <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Submit</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        {loading && <h1>loading</h1>}
-        {data &&
-          <IonGrid>
-
-            {/* Temp hack to replace css for top margin */}
-            <IonRow>
-              <IonCol>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol>
-              </IonCol>
-            </IonRow>
-
-
-            <IonRow>
-              <IonCol>
-                <b>Coming soon!.</b>
-              </IonCol>
-            </IonRow>
-
-            <IonRow>
-              <IonCol>
-                <IonImg className='dormImg' src={dorm} alt={"dorm image"}/>
-              </IonCol>
-            </IonRow>
-          </IonGrid>
-        }
+        <>
+          <IonHeader collapse="condense">
+            <IonToolbar>
+              <IonTitle size="large">Submit</IonTitle>
+            </IonToolbar>
+          </IonHeader>
+          <IonAlert
+            isOpen={showAlert}
+            onDidDismiss={() => {setShowAlert(false); history.push('/page/Latest')}}
+            header=""
+            subHeader="Congrats!"
+            message="Your Song submission is complete."
+            buttons={['OK']}
+          />
+          <SongForm Callback={handleFormSubmit} song={song}></SongForm>
+        </>
       </IonContent>
     </IonPage>
   );

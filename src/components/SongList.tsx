@@ -10,7 +10,7 @@ const SongList: React.FC<SongListProps> = (props) => {
             {props.songs &&
               props.songs.map((song: Song) => {
             return (
-              <IonCard id={song.id.toString()} key={song.id} class="card-center">
+              <IonCard id={song.id!.toString()} key={song.id} class="card-center">
                 <IonCardContent className="puzzle-content">
                   <IonGrid>
                     <IonRow>

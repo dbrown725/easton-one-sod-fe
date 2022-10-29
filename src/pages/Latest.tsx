@@ -1,9 +1,10 @@
-import { IonButtons, IonContent, IonHeader, IonInfiniteScroll, IonInfiniteScrollContent, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { gql, useLazyQuery } from '@apollo/client';
 import './Latest.css';
 import {Song} from '../common/types';
 import SongList from '../components/SongList';
 import { useEffect, useState } from 'react';
+import { refresh } from 'ionicons/icons';
 
 const Latest: React.FC = () => {
 
@@ -37,10 +38,21 @@ const Latest: React.FC = () => {
 
   const [
     getSongs,
-    { loading, error, data }
-  ] = useLazyQuery(GET_MOST_RECENT_SONGS, {
+    { loading, error, data, refetch }
+  ] = useLazyQuery(GET_MOST_RECENT_SONGS, {fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache',
     variables: { count: count }, onCompleted: (data) => {
+
+      //Initialize again in case of a button click refresh
+      setDisplayData([]);
+      setCurrentBucketNumber(0);
+
       let bucketCount: number = Math.ceil(data?.getMostRecentSongs.length / addDataIncrement);
+
+      //if only one bucket no need for infinite scroll
+      if(bucketCount == 1) {
+        setInfiniteDisabled(true);
+      }
+
       let buckets: Song[][] = [];
       for (let i = 0; i < bucketCount; i++) {
           let songs: Song[] = [];
@@ -124,6 +136,9 @@ const Latest: React.FC = () => {
               <IonTitle size="large">Latest songs</IonTitle>
             </IonToolbar>
           </IonHeader>
+          <IonButton size="small" onClick={ () => getSongs()}> 
+                <IonIcon slot="icon-only" icon={refresh}></IonIcon>
+          </IonButton>
           {
             displayData
             && <SongList showId={true} showScore={false} songs={displayData} />
