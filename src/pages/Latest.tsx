@@ -5,8 +5,12 @@ import {Song} from '../common/types';
 import SongList from '../components/SongList';
 import { useEffect, useState } from 'react';
 import { refresh } from 'ionicons/icons';
+import { useHistory, useLocation } from 'react-router';
 
 const Latest: React.FC = () => {
+
+  const history = useHistory();
+  const location = useLocation();
 
   const [displayData, setDisplayData] = useState<Song[]>([]);
   const [dataBuckets, setDataBuckets] = useState<Song[][] | undefined | void>([]);
@@ -76,9 +80,21 @@ const Latest: React.FC = () => {
     }
   }
  
-  // Retrieve data once page loaded
+  // Retrieve data upon initial page load and create a revisit page listener to reload data.
   useEffect(() => {
     getSongs();
+
+    //Add listener: When page visited again reload songs
+    const unlisten = history.listen(() => {
+      if(history.location.pathname === location.pathname) {
+        getSongs();
+      }
+    });
+    return () => {
+      // unlisten() will be called when the 'Latest' componenet unmounts, prevents memory leaks.
+      unlisten();
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -50,11 +50,8 @@ const Submit: React.FC = () => {
   data && console.log("data: ", data);
 
   const handleFormSubmit = () => {
-    console.log('in handleFormSubmit song:', song);
-
     //Hard coded for now, in the future will use the authenticated person's user object
     song.userId = 1;
-
     insertSod({ variables: { title: song.title, songName: song.songName, bandName: song.bandName, link: song.link, message: song.message, playlist: song.playlist, userId: song.userId } });
     
   };
@@ -83,7 +80,7 @@ const Submit: React.FC = () => {
           </IonHeader>
           <IonAlert
             isOpen={showAlert}
-            onDidDismiss={() => {setShowAlert(false); history.push('/page/Latest')}}
+            onDidDismiss={() => {setShowAlert(false); history.push({pathname:'/page/Latest'})}}
             header=""
             subHeader="Congrats!"
             message="Your Song submission is complete."
