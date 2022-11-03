@@ -6,6 +6,7 @@ import SongList from '../components/SongList';
 import { useEffect, useState } from 'react';
 import { refresh } from 'ionicons/icons';
 import { useHistory, useLocation } from 'react-router';
+import FabToSubmit from '../components/FabToSubmit';
 
 const Latest: React.FC = () => {
 
@@ -42,7 +43,7 @@ const Latest: React.FC = () => {
 
   const [
     getSongs,
-    { loading, error, data, refetch }
+    { loading, error, data }
   ] = useLazyQuery(GET_MOST_RECENT_SONGS, {fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache',
     variables: { count: count }, onCompleted: (data) => {
 
@@ -53,7 +54,7 @@ const Latest: React.FC = () => {
       let bucketCount: number = Math.ceil(data?.getMostRecentSongs.length / addDataIncrement);
 
       //if only one bucket no need for infinite scroll
-      if(bucketCount == 1) {
+      if(bucketCount === 1) {
         setInfiniteDisabled(true);
       }
 
@@ -120,9 +121,8 @@ const Latest: React.FC = () => {
 
       setCurrentBucketNumber(currentBucketNumber + 1);
     }
-
   }
-
+  
   //called when page scrolled to bottom of current data list
   const loadData = (ev: any) => {
     setTimeout(() => {
@@ -169,6 +169,7 @@ const Latest: React.FC = () => {
               loadingText="Loading more data..."
             ></IonInfiniteScrollContent>
           </IonInfiniteScroll>
+          <FabToSubmit/>
         </>
       </IonContent>
     </IonPage>

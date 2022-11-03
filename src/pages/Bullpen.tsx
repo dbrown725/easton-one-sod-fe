@@ -4,11 +4,7 @@ import './Bullpen.css';
 import {BullpenSongData} from '../common/types';
 import SongList from '../components/SongList';
 
-import {
-  IonGrid,
-  IonRow,
-  IonCol,
-} from "@ionic/react";
+import FabToSubmit from '../components/FabToSubmit';
 
 const Bullpen: React.FC = () => {
 
@@ -61,7 +57,7 @@ const Bullpen: React.FC = () => {
           && <SongList showId={false} showScore={false} songs={data.getAllBullpenSongs}/> 
 
         }
-
+        <FabToSubmit/>
       </IonContent>
     </IonPage>
   );

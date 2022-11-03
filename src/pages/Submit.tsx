@@ -5,6 +5,7 @@ import SongForm from '../components/SongForm';
 import { gql, useMutation } from '@apollo/client';
 import { useHistory } from 'react-router';
 import { useEffect, useState } from 'react';
+import FabToSubmit from '../components/FabToSubmit';
 
 const Submit: React.FC = () => {
 
@@ -47,7 +48,7 @@ const Submit: React.FC = () => {
 
   //loading && console.log("....loading");
   error && console.log("error: ", error);
-  data && console.log("data: ", data);
+  //data && console.log("data: ", data);
 
   const handleFormSubmit = () => {
     //Hard coded for now, in the future will use the authenticated person's user object
@@ -87,6 +88,7 @@ const Submit: React.FC = () => {
             buttons={['OK']}
           />
           <SongForm Callback={handleFormSubmit} song={song}></SongForm>
+          <FabToSubmit/>
         </>
       </IonContent>
     </IonPage>

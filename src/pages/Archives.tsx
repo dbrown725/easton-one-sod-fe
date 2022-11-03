@@ -1,10 +1,9 @@
 import { gql, useLazyQuery } from '@apollo/client';
 import { SearchbarChangeEventDetail, IonBadge, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonItem, IonLabel, IonMenuButton, IonPage, IonRow, IonSearchbar, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, useRef, useState } from 'react';
+import FabToSubmit from '../components/FabToSubmit';
 import SongList from '../components/SongList';
 import './Archives.css';
-
-
 
 const Page: React.FC = () => {
 
@@ -139,7 +138,7 @@ const Page: React.FC = () => {
           data && data.songBySearchText
           && <SongList showId={true} showScore={true} songs={data.songBySearchText} />
         }
-
+        <FabToSubmit/>
       </IonContent>
     </IonPage>
   );
