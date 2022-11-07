@@ -1,3 +1,6 @@
+import { IonReorderGroupCustomEvent } from "@ionic/core";
+import { ItemReorderEventDetail } from "@ionic/react";
+
 export interface Song {
     id?: number;
     bandName: string;
@@ -27,6 +30,7 @@ export interface SongListProps {
     songs: Song[];
     showScore: boolean;
     showId: boolean;
+    handleReorder?: ((event: IonReorderGroupCustomEvent<ItemReorderEventDetail>) => void) | undefined;
 }
 
 export interface SongFormProps {

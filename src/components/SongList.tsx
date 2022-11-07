@@ -1,17 +1,19 @@
-import { IonCard, IonCardContent, IonCol, IonGrid, IonLabel, IonRow } from '@ionic/react';
+import { IonCard, IonCardContent, IonCol, IonGrid, IonLabel, IonList, IonReorder, IonReorderGroup, IonRow } from '@ionic/react';
 import {Song} from '../common/types';
-import {SongResult} from '../common/types';
 import {SongListProps} from '../common/types';
 
 const SongList: React.FC<SongListProps> = (props) => {
 
   return (  
         <div>
+          <IonList>
+            <IonReorderGroup disabled={typeof props.handleReorder === "undefined"} onIonItemReorder={props.handleReorder}> 
             {props.songs &&
               props.songs.map((song: Song) => {
             return (
               <IonCard id={song.id!.toString()} key={song.id} class="card-center">
-                <IonCardContent className="puzzle-content">
+                <IonCardContent>
+                  <IonReorder slot="end" style={{float: "right"}}></IonReorder>
                   <IonGrid>
                     <IonRow>
                       <IonCol>
@@ -70,6 +72,8 @@ const SongList: React.FC<SongListProps> = (props) => {
               </IonCard>    
                 );
             })}
+            </IonReorderGroup>
+          </IonList> 
         </div>
     );
 }
