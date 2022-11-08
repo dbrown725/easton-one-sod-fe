@@ -12,6 +12,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
   const [playlist, setPlaylist] = useState<string | number |null>('End of the World (And I Feel Fine)');
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+
     event.preventDefault();
     props.song.message = String(message);
     props.song.title = String(title);
@@ -20,7 +21,13 @@ const SongForm: React.FC<SongFormProps> = (props) => {
     props.song.link = String(link);
     props.song.playlist = String(playlist);
 
-    await props.Callback(); // triggering the callback
+    if(document.activeElement?.id === 'newSodSong') {
+      await props.sodCallback();
+    } else if(document.activeElement?.id === 'newBullpenSong') {
+      await props.bpCallback();
+    } else {
+      console.log('fell through');
+    }
     clearForm();
   };
 
@@ -91,13 +98,13 @@ const SongForm: React.FC<SongFormProps> = (props) => {
             </IonRow>
 
             <IonRow>
-               {/* <IonCol>
-                <IonButton id="newBullpenSong" expand="block" type="submit" className="ion-margin-top" class="newBullpenSong">
+               <IonCol>
+                <IonButton id="newBullpenSong" expand="block" type="submit" className="ion-margin-top">
                   Save to my Bullpen
                 </IonButton>
-              </IonCol> */}
+              </IonCol>
               <IonCol>
-                <IonButton id="newSodSong" expand="block" type="submit" className="ion-margin-top" class="newSodSong">
+                <IonButton id="newSodSong" expand="block" type="submit" className="ion-margin-top">
                   Submit your Song of the Day
                 </IonButton>
               </IonCol>

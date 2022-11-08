@@ -1,5 +1,27 @@
 import { gql } from "@apollo/client";
 
+export   const ADD_BULLPEN_SONG = gql`
+            mutation addBullpenSong($title: String!, $songName: String!, $bandName: String!, $link: String!, $message: String!, $userId: ID!) {
+            addBullpenSong(
+                title: $title
+                songName: $songName
+                bandName: $bandName
+                link: $link
+                message: $message
+                userId: $userId) 
+                {
+                id  
+                title
+                songName
+                bandName
+                link
+                message
+                sortOrder
+                userId
+                }
+            }
+            `;
+
 export   const UPDATE_BULLPEN_SONG = gql`
             mutation updateBullpenSong($id: ID!, $title: String!, $songName: String!, $bandName: String!, $link: String!, $message: String!, $sortOrder: Int!) {
             updateBullpenSong(

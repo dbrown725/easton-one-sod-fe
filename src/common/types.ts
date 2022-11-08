@@ -34,6 +34,7 @@ export interface SongListProps {
 }
 
 export interface SongFormProps {
-    Callback: () => void
+    sodCallback: () => void
+    bpCallback: () => void
     song: Song;
 }

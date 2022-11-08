@@ -1,12 +1,13 @@
-import { useMutation, useQuery } from '@apollo/client';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, ItemReorderEventDetail } from '@ionic/react';
 import { BullpenSongData, Song } from '../common/types';
 import SongList from '../components/SongList';
 import './Bullpen.css';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FabToSubmit from '../components/FabToSubmit';
 import { GET_ALL_BULLPEN_SONGS, UPDATE_BULLPEN_SONG } from '../graphql/graphql';
+import { useHistory, useLocation } from 'react-router';
 
 const Bullpen: React.FC = () => {
 
@@ -14,11 +15,14 @@ const Bullpen: React.FC = () => {
     // year: number;
   }
 
-const [updateBPSong, { data: updateData, loading: updateLoading , error: updateError }] = useMutation(UPDATE_BULLPEN_SONG);
+  const history = useHistory();
+  const location = useLocation();  
 
-//updateLoading && console.log("....updateLoading");
-updateError && console.log("updateError: ", updateError);
-//updateData && console.log("updateData: ", updateData);
+  const [updateBPSong, { data: updateData, loading: updateLoading , error: updateError }] = useMutation(UPDATE_BULLPEN_SONG);
+
+  //updateLoading && console.log("....updateLoading");
+  updateError && console.log("updateError: ", updateError);
+  //updateData && console.log("updateData: ", updateData);
 
   const [displayData, setDisplayData] = useState<Song[]>([]);
 
@@ -71,11 +75,32 @@ updateError && console.log("updateError: ", updateError);
 
   }
 
-  const { loading, error, data } = useQuery<BullpenSongData, SongVars>(GET_ALL_BULLPEN_SONGS, 
+  const [
+    getBpSongs,
+    { loading, error, data }
+  ] =  useLazyQuery<BullpenSongData, SongVars>(GET_ALL_BULLPEN_SONGS, 
     {fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache', onCompleted: (data) => {
     setDisplayData(data.getAllBullpenSongs);
     },
   });
+
+  // Retrieve data upon initial page load and create a revisit page listener to reload data.
+  useEffect(() => {
+    getBpSongs();
+
+    //Add listener: When page visited again reload songs
+    const unlisten = history.listen(() => {
+      if(history.location.pathname === location.pathname) {
+        getBpSongs();
+      }
+    });
+    return () => {
+      // unlisten() will be called when the 'Latest' componenet unmounts, prevents memory leaks.
+      unlisten();
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <IonPage>
