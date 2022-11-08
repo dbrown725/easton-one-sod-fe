@@ -1,8 +1,9 @@
-import { gql, useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { SearchbarChangeEventDetail, IonBadge, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonItem, IonLabel, IonMenuButton, IonPage, IonRow, IonSearchbar, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, useRef, useState } from 'react';
 import FabToSubmit from '../components/FabToSubmit';
 import SongList from '../components/SongList';
+import { GET_SEARCH_RESULTS } from '../graphql/graphql';
 import './Archives.css';
 
 const Page: React.FC = () => {
@@ -12,22 +13,6 @@ const Page: React.FC = () => {
   const [apiSearchText, setApiSearchText] = useState<string | undefined | null>();
 
   const WAIT_INTERVAL = 1000;
-
-  const GET_SEARCH_RESULTS = gql`
-  query GetSearchResults($searchText: String!) {
-    songBySearchText(searchText: $searchText) {
-      id
-      bandName
-      songName
-      title
-      titleHighlighted
-      link
-      playlist
-      message
-      score
-    }
-  }
-  `;
 
   // use ref to store the timer id
   const refTimer = useRef<number | null>(null);

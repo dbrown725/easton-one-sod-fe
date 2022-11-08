@@ -2,10 +2,11 @@ import { IonAlert, IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, Io
 import './Submit.css';
 import { Song } from '../common/types';
 import SongForm from '../components/SongForm';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useHistory } from 'react-router';
 import { useEffect, useState } from 'react';
 import FabToSubmit from '../components/FabToSubmit';
+import { INSERT_SOD } from '../graphql/graphql';
 
 const Submit: React.FC = () => {
 
@@ -17,28 +18,6 @@ const Submit: React.FC = () => {
     message: '',
     playlist: ''
   };
-
-  const INSERT_SOD = gql`
-  mutation insertSodSong($title: String!, $songName: String!, $bandName: String!, $link: String!, $message: String!, $playlist: String!, $userId: ID!) {
-    insertSodSong(
-      title: $title
-      songName: $songName
-      bandName: $bandName
-      link: $link
-      message: $message
-      playlist: $playlist
-      userId: $userId) 
-      {
-      title
-      songName
-      bandName
-      link
-      message
-      playlist
-      userId
-    }
-  }
-`;
 
   const history = useHistory();
 

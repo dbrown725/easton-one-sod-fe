@@ -1,5 +1,5 @@
 import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import { gql, useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import './Latest.css';
 import {Song} from '../common/types';
 import SongList from '../components/SongList';
@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { refresh } from 'ionicons/icons';
 import { useHistory, useLocation } from 'react-router';
 import FabToSubmit from '../components/FabToSubmit';
+import { GET_MOST_RECENT_SONGS } from '../graphql/graphql';
 
 const Latest: React.FC = () => {
 
@@ -22,24 +23,6 @@ const Latest: React.FC = () => {
   let count: number = 300;
   //  pagination size for infinit scroll
   let addDataIncrement: number = 20;
-
-  //graphql query
-  const GET_MOST_RECENT_SONGS = gql`
-  query getMostRecentSongs($count: Int!) {
-    getMostRecentSongs(count: $count) {
-      id
-      bandName
-      songName
-      title
-      link
-      message
-      sortOrder
-      userId
-      createTime
-      modifyTime
-    }
-  }
-`;
 
   const [
     getSongs,

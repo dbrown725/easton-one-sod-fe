@@ -1,39 +1,18 @@
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, ItemReorderEventDetail } from '@ionic/react';
 import { BullpenSongData, Song } from '../common/types';
 import SongList from '../components/SongList';
 import './Bullpen.css';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import FabToSubmit from '../components/FabToSubmit';
+import { GET_ALL_BULLPEN_SONGS, UPDATE_BULLPEN_SONG } from '../graphql/graphql';
 
 const Bullpen: React.FC = () => {
 
   interface SongVars {
     // year: number;
   }
-
-  const UPDATE_BULLPEN_SONG = gql`
-  mutation updateBullpenSong($id: ID!, $title: String!, $songName: String!, $bandName: String!, $link: String!, $message: String!, $sortOrder: Int!) {
-    updateBullpenSong(
-      id: $id
-      title: $title
-      songName: $songName
-      bandName: $bandName
-      link: $link
-      message: $message
-      sortOrder: $sortOrder) 
-      {
-      id  
-      title
-      songName
-      bandName
-      link
-      message
-      sortOrder
-    }
-  }
-`;
 
 const [updateBPSong, { data: updateData, loading: updateLoading , error: updateError }] = useMutation(UPDATE_BULLPEN_SONG);
 
@@ -68,13 +47,13 @@ updateError && console.log("updateError: ", updateError);
       if((event.detail.to + 1) === tempSongs.length) {
         //dragged to the bottom
         const songAbove = tempSongs[event.detail.to - 1];
-        const newSortOrder = songAbove.sortOrder! * .5;
+        const newSortOrder = Math.ceil(songAbove.sortOrder! * .5);
         draggedItem.sortOrder = newSortOrder;
       } else {
         //sandwiched between two songs, need to calculate the halfway point between both song's sort orders.
         const songAbove = tempSongs[event.detail.to - 1];
         const songBelow = tempSongs[event.detail.to + 1];
-        draggedItem.sortOrder = ((songAbove.sortOrder! - songBelow.sortOrder!) * .5) + songBelow.sortOrder!;
+        draggedItem.sortOrder = Math.ceil((songAbove.sortOrder! - songBelow.sortOrder!) * .5) + songBelow.sortOrder!;
       }
     }
 
@@ -91,23 +70,6 @@ updateError && console.log("updateError: ", updateError);
     event.detail.complete();
 
   }
-
-  const GET_ALL_BULLPEN_SONGS = gql`
-  query GetAllBullPenSongs {
-    getAllBullpenSongs(count: 200) {
-      id
-      bandName
-      songName
-      title
-      link
-      message
-      sortOrder
-      userId
-      createTime
-      modifyTime
-    }
-  }
-`;
 
   const { loading, error, data } = useQuery<BullpenSongData, SongVars>(GET_ALL_BULLPEN_SONGS, 
     {fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache', onCompleted: (data) => {
