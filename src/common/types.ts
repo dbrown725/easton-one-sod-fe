@@ -6,6 +6,7 @@ export interface Song {
     bandName: string;
     songName: string;
     title: string;
+    titleHighlighted?: string;
     link: string;
     playlist: string;
     message?: string;

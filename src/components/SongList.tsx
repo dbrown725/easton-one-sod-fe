@@ -1,8 +1,23 @@
 import { IonCard, IonCardContent, IonCol, IonGrid, IonLabel, IonList, IonReorder, IonReorderGroup, IonRow } from '@ionic/react';
 import {Song} from '../common/types';
 import {SongListProps} from '../common/types';
+import DOMPurify from 'dompurify';
 
 const SongList: React.FC<SongListProps> = (props) => {
+
+  //
+  const sanitizeData = (dirty: string) => {
+    console.log('dirty:', dirty);
+    const clean = DOMPurify.sanitize(dirty, {
+      ALLOWED_TAGS: [ 'em' ],
+    });
+    console.log('clean', clean);
+    return clean;
+  }
+
+  const highlightMatches = (raw: string) => {
+    return raw.replaceAll('em>', 'mark>');
+  }
 
   return (  
         <div>
@@ -46,7 +61,9 @@ const SongList: React.FC<SongListProps> = (props) => {
                             <IonLabel position="floating">
                               Title
                             </IonLabel>
-                            <h3><a href={song.link} target='_blank' rel="noreferrer">{song.title}</a></h3>
+                            <h3><a href={song.link} target='_blank' rel="noreferrer" 
+                                  dangerouslySetInnerHTML={{__html: song.titleHighlighted? highlightMatches(sanitizeData(song.titleHighlighted)): sanitizeData(song.title)}}>
+                                </a></h3>
                           </IonCol>
                         </IonRow>
 

@@ -1,6 +1,7 @@
 import { IonButton, IonCol, IonGrid, IonInput, IonItem, IonLabel, IonList, IonRow, IonTextarea } from '@ionic/react';
 import { useState } from 'react';
 import {SongFormProps} from '../common/types';
+import DOMPurify from 'dompurify';
 
 const SongForm: React.FC<SongFormProps> = (props) => {
 
@@ -11,15 +12,21 @@ const SongForm: React.FC<SongFormProps> = (props) => {
   const [link, setLink] = useState<string | number |null>();
   const [playlist, setPlaylist] = useState<string | number |null>('End of the World (And I Feel Fine)');
 
-  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const sanitizeData = (dirty: string) => {
+    const clean = DOMPurify.sanitize(dirty, {
+      //options
+    });
+    return clean;
+  }
 
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    props.song.message = String(message);
-    props.song.title = String(title);
-    props.song.bandName = String(bandName);
-    props.song.songName = String(songName);
-    props.song.link = String(link);
-    props.song.playlist = String(playlist);
+    props.song.message = sanitizeData(String(message));
+    props.song.title = sanitizeData(String(title));
+    props.song.bandName = sanitizeData(String(bandName));
+    props.song.songName = sanitizeData(String(songName));
+    props.song.link = sanitizeData(String(link));
+    props.song.playlist = sanitizeData(String(playlist));
 
     if(document.activeElement?.id === 'newSodSong') {
       await props.sodCallback();
