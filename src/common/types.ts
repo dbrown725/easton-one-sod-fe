@@ -1,5 +1,6 @@
 import { IonReorderGroupCustomEvent } from "@ionic/core";
 import { ItemReorderEventDetail } from "@ionic/react";
+import { MouseEventHandler } from "react";
 
 export interface Song {
     id?: number;
@@ -32,6 +33,7 @@ export interface SongListProps {
     showScore: boolean;
     showId: boolean;
     handleReorder?: ((event: IonReorderGroupCustomEvent<ItemReorderEventDetail>) => void) | undefined;
+    deleteCallback?: ((event: React.MouseEvent<HTMLIonIconElement>, song: Song) => void) | undefined;
 }
 
 export interface SongFormProps {

@@ -59,7 +59,15 @@ export    const GET_ALL_BULLPEN_SONGS = gql`
                 modifyTime
                 }
             }
-            `;        
+            `;  
+              
+export   const DELETE_BULLPEN_SONG = gql`
+            mutation deleteBullpenSong($id: ID!) {
+              deleteBullpenSong(
+                id: $id
+                ) 
+            }
+            `;              
 
 export    const GET_MOST_RECENT_SONGS = gql`
             query getMostRecentSongs($count: Int!) {

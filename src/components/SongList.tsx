@@ -1,17 +1,16 @@
-import { IonCard, IonCardContent, IonCol, IonGrid, IonLabel, IonList, IonReorder, IonReorderGroup, IonRow } from '@ionic/react';
+import { IonCard, IonCardContent, IonCol, IonGrid, IonIcon, IonLabel, IonList, IonReorder, IonReorderGroup, IonRow } from '@ionic/react';
 import {Song} from '../common/types';
 import {SongListProps} from '../common/types';
 import DOMPurify from 'dompurify';
+import { trash } from 'ionicons/icons';
+import './SongList.css';
 
 const SongList: React.FC<SongListProps> = (props) => {
 
-  //
   const sanitizeData = (dirty: string) => {
-    console.log('dirty:', dirty);
     const clean = DOMPurify.sanitize(dirty, {
       ALLOWED_TAGS: [ 'em' ],
     });
-    console.log('clean', clean);
     return clean;
   }
 
@@ -33,6 +32,15 @@ const SongList: React.FC<SongListProps> = (props) => {
                     <IonRow>
                       <IonCol>
                         <IonRow>
+                            {
+                              typeof props.deleteCallback !== "undefined" &&
+                                <>
+                                  <IonCol>
+                                    <IonIcon icon={trash} size="small" onClick={(event) => props.deleteCallback?.(event,song)}></IonIcon>
+                                  </IonCol>
+                                </>
+                            }
+
                             {
                               props.showId &&
                                 <>
