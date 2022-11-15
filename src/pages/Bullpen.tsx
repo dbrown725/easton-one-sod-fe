@@ -122,7 +122,7 @@ const Bullpen: React.FC = () => {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('delete cancelled');
+            //console.log('delete cancelled');
           },
         },
         {
@@ -143,6 +143,13 @@ const Bullpen: React.FC = () => {
       getBpSongs();
       },
     });
+  }
+
+  const editClickHandler = (event: React.MouseEvent<HTMLSpanElement>, song: Song) => {
+    history.push({
+      pathname:'/page/Submit',
+      state: {song: song}
+    })
   }
 
   return (
@@ -167,7 +174,7 @@ const Bullpen: React.FC = () => {
         {
           displayData
             && 
-            <SongList showId={true} showScore={false} deleteCallback={deleteClickHandler} handleReorder={handleReorder} songs={displayData}/>
+            <SongList showId={true} showScore={false} editCallback={editClickHandler} deleteCallback={deleteClickHandler} handleReorder={handleReorder} songs={displayData}/>
         }
         <FabToSubmit/>
       </IonContent>

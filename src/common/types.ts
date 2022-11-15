@@ -34,10 +34,15 @@ export interface SongListProps {
     showId: boolean;
     handleReorder?: ((event: IonReorderGroupCustomEvent<ItemReorderEventDetail>) => void) | undefined;
     deleteCallback?: ((event: React.MouseEvent<HTMLIonIconElement>, song: Song) => void) | undefined;
+    editCallback?: ((event: React.MouseEvent<HTMLSpanElement>, song: Song) => void) | undefined;
 }
 
 export interface SongFormProps {
-    sodCallback: () => void
-    bpCallback: () => void
+    sodCallback: () => void;
+    bpCallback: () => void;
     song: Song;
+}
+
+export interface SubmitProps {
+    song?: Song;
 }

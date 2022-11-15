@@ -2,7 +2,7 @@ import { IonCard, IonCardContent, IonCol, IonGrid, IonIcon, IonLabel, IonList, I
 import {Song} from '../common/types';
 import {SongListProps} from '../common/types';
 import DOMPurify from 'dompurify';
-import { trash } from 'ionicons/icons';
+import { create, trash } from 'ionicons/icons';
 import './SongList.css';
 
 const SongList: React.FC<SongListProps> = (props) => {
@@ -32,15 +32,6 @@ const SongList: React.FC<SongListProps> = (props) => {
                     <IonRow>
                       <IonCol>
                         <IonRow>
-                            {
-                              typeof props.deleteCallback !== "undefined" &&
-                                <>
-                                  <IonCol>
-                                    <IonIcon icon={trash} size="small" onClick={(event) => props.deleteCallback?.(event,song)}></IonIcon>
-                                  </IonCol>
-                                </>
-                            }
-
                             {
                               props.showId &&
                                 <>
@@ -89,6 +80,22 @@ const SongList: React.FC<SongListProps> = (props) => {
                             </IonLabel>
                             <h3>{song.songName}</h3>
                           </IonCol>
+                        </IonRow>
+                        <IonRow>
+                            {
+                              
+                              (typeof props.editCallback !== "undefined" || typeof props.deleteCallback !== "undefined") &&
+                                <>
+                                  <IonCol>
+                                    <span id="edit" title="Edit" onClick={(event) => props.editCallback?.(event,song)}>
+                                      <IonIcon icon={create} size="small"  title="Edit"></IonIcon>
+                                    </span>
+                                    <span>
+                                      <IonIcon icon={trash} size="small" onClick={(event) => props.deleteCallback?.(event,song)} title="Delete"></IonIcon>
+                                    </span>
+                                  </IonCol>
+                                </>
+                            }
                         </IonRow>
                       </IonCol>
                     </IonRow>

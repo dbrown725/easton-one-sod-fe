@@ -1,16 +1,63 @@
 import { IonButton, IonCol, IonGrid, IonInput, IonItem, IonLabel, IonList, IonRow, IonTextarea } from '@ionic/react';
-import { useState } from 'react';
-import {SongFormProps} from '../common/types';
+import { useEffect, useRef, useState } from 'react';
+import {Song, SongFormProps} from '../common/types';
 import DOMPurify from 'dompurify';
+import { useHistory, useLocation } from 'react-router';
 
 const SongForm: React.FC<SongFormProps> = (props) => {
 
-  const [message, setMessage] = useState<string | null>();
-  const [title, setTitle] = useState<string | number |null>();
-  const [bandName, setBandName] = useState<string |number | null>();
-  const [songName, setSongName] = useState<string | number |null>();
-  const [link, setLink] = useState<string | number |null>();
-  const [playlist, setPlaylist] = useState<string | number |null>('End of the World (And I Feel Fine)');
+  const playlistName = 'End of the World (And I Feel Fine)';
+  const [id, setId] = useState<number | null | undefined>();
+  const [message, setMessage] = useState<string | null | undefined>('');
+  const [title, setTitle] = useState<string | number | null | undefined>('');
+  const [bandName, setBandName] = useState<string |number | null | undefined>('');
+  const [songName, setSongName] = useState<string | number | null | undefined>('');
+  const [link, setLink] = useState<string | number |null | undefined>('');
+  const [playlist, setPlaylist] = useState<string | number |null | undefined>(playlistName);
+  const location = useLocation<{ song: Song }>();
+  const history = useHistory();
+
+  // Start logic related to clearing form when user navigates away without submitting.
+  // There must be an easier way.
+  const [previousPathname, setPreviousPathname] = useState<string>('');
+  const myStateRef = useRef(previousPathname);
+  const setMyState = (data: string) => {
+    myStateRef.current = data;
+    setPreviousPathname(data);
+  };
+
+  useEffect(() => {
+    setMyState(location.pathname);
+    const unlisten = history.listen((location) => {
+      //myStateRef.current is the previous page
+      //clear everything if you just left /page/Submit
+      if(myStateRef.current === '/page/Submit') {
+        clearForm();
+        clearState();
+      }
+      setMyState(location.pathname);
+    })
+    return function cleanup() {
+      unlisten()
+    }
+  }, [])
+  // End logic related to clearing form when user navigates away without submitting.
+
+  useEffect(() => {
+    if(location.state){
+      if(location.state.song) {
+        setId(location.state.song.id);
+        if(location.state.song.message) {
+          setMessage(location.state.song.message);
+        }
+        setTitle(location.state.song.title);
+        setBandName(location.state.song.bandName);
+        setSongName(location.state.song.songName);
+        setLink(location.state.song.link);
+        setPlaylist(location.state.song.playlist);
+      }
+    }
+  }, [location.state]);
 
   const sanitizeData = (dirty: string) => {
     const clean = DOMPurify.sanitize(dirty, {
@@ -36,6 +83,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
       console.log('fell through');
     }
     clearForm();
+    clearState();
   };
 
   const clearForm = () => {
@@ -44,6 +92,16 @@ const SongForm: React.FC<SongFormProps> = (props) => {
     setBandName('');
     setSongName('');
     setLink('');
+  }
+
+  const clearState = () => {
+    setId(null);
+    setMessage('');
+    setTitle('');
+    setBandName('');
+    setSongName('');
+    setLink('');
+    setPlaylist(playlistName);
   }
 
   return (
