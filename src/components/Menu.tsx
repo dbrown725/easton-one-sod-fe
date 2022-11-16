@@ -11,7 +11,7 @@ import {
 } from '@ionic/react';
 
 import { useLocation } from 'react-router-dom';
-import { archiveOutline, archiveSharp, bookmarkOutline, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp } from 'ionicons/icons';
+import { baseballOutline, baseballSharp, cloudUploadOutline, cloudUploadSharp, downloadOutline, downloadSharp, listOutline, listSharp, musicalNoteOutline, musicalNoteSharp, personCircleOutline, personCircleSharp, searchOutline, searchSharp } from 'ionicons/icons';
 import './Menu.css';
 
 interface AppPage {
@@ -23,40 +23,46 @@ interface AppPage {
 
 const appPages: AppPage[] = [
   {
-    title: 'Inbox',
-    url: '/page/Inbox',
-    iosIcon: mailOutline,
-    mdIcon: mailSharp
+    title: 'Latest songs',
+    url: '/page/Latest',
+    iosIcon: musicalNoteOutline,
+    mdIcon: musicalNoteSharp
   },
   {
-    title: 'Outbox',
-    url: '/page/Outbox',
-    iosIcon: paperPlaneOutline,
-    mdIcon: paperPlaneSharp
+    title: 'Search Song Archives',
+    url: '/page/Archives',
+    iosIcon: searchOutline,
+    mdIcon: searchSharp
   },
   {
-    title: 'Favorites',
-    url: '/page/Favorites',
-    iosIcon: heartOutline,
-    mdIcon: heartSharp
+    title: 'Submit a Song',
+    url: '/page/Submit',
+    iosIcon: cloudUploadOutline,
+    mdIcon: cloudUploadSharp
   },
   {
-    title: 'Archived',
-    url: '/page/Archived',
-    iosIcon: archiveOutline,
-    mdIcon: archiveSharp
+    title: 'My Song Bullpen',
+    url: '/page/Bullpen',
+    iosIcon: baseballOutline,
+    mdIcon: baseballSharp
   },
   {
-    title: 'Trash',
-    url: '/page/Trash',
-    iosIcon: trashOutline,
-    mdIcon: trashSharp
+    title: 'Download CSV',
+    url: '/page/Download',
+    iosIcon: downloadOutline,
+    mdIcon: downloadSharp
   },
   {
-    title: 'Spam',
-    url: '/page/Spam',
-    iosIcon: warningOutline,
-    mdIcon: warningSharp
+    title: 'Generate Playlist',
+    url: '/page/Playlist',
+    iosIcon: listOutline,
+    mdIcon: listSharp
+  },
+  {
+    title: 'My Profile',
+    url: '/page/Profile',
+    iosIcon: personCircleOutline,
+    mdIcon: personCircleSharp
   }
 ];
 
@@ -69,8 +75,8 @@ const Menu: React.FC = () => {
     <IonMenu contentId="main" type="overlay">
       <IonContent>
         <IonList id="inbox-list">
-          <IonListHeader>Inbox</IonListHeader>
-          <IonNote>hi@ionicframework.com</IonNote>
+          <IonListHeader>Song of the Day</IonListHeader>
+          <IonNote>All the music that is fit to play!</IonNote>
           {appPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>
@@ -82,7 +88,7 @@ const Menu: React.FC = () => {
             );
           })}
         </IonList>
-
+{/* 
         <IonList id="labels-list">
           <IonListHeader>Labels</IonListHeader>
           {labels.map((label, index) => (
@@ -91,7 +97,7 @@ const Menu: React.FC = () => {
               <IonLabel>{label}</IonLabel>
             </IonItem>
           ))}
-        </IonList>
+        </IonList> */}
       </IonContent>
     </IonMenu>
   );

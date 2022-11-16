@@ -1,0 +1,20 @@
+ion-icon[title="Edit"] {
+    pointer-events: none;
+    padding-top: 10px;
+    cursor:pointer;
+    text-decoration:underline;
+}
+
+ion-icon[title="Delete"] {
+    padding-top: 10px;
+    cursor:pointer;
+    text-decoration:underline;
+}
+
+span#edit {
+    font-size: x-large;
+    cursor:pointer;
+    text-decoration:underline;
+    line-height: 1;
+    margin-right: 20px;
+}

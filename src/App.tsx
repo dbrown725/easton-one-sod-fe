@@ -2,7 +2,13 @@ import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact } from '@ionic/r
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
 import Menu from './components/Menu';
-import Page from './pages/Page';
+import Archives from './pages/Archives';
+import Bullpen from './pages/Bullpen';
+import Latest from './pages/Latest';
+import Submit from './pages/Submit';
+import Download from './pages/Download';
+import Playlist from './pages/Playlist';
+import Profile from './pages/Profile';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -26,6 +32,7 @@ import './theme/variables.css';
 setupIonicReact();
 
 const App: React.FC = () => {
+  
   return (
       <IonApp>
         <IonReactRouter>
@@ -33,11 +40,32 @@ const App: React.FC = () => {
             <Menu />
             <IonRouterOutlet id="main">
               <Route path="/" exact={true}>
-                <Redirect to="/page/Inbox" />
+                <Redirect to="/page/Latest" />
               </Route>
-              <Route path="/page/:name" exact={true}>
+              <Route path="/page/Archives" exact={true}>
+                <Archives/>
+              </Route>
+              <Route path="/page/Bullpen" exact={true}>
+                <Bullpen/>
+              </Route>
+              <Route path="/page/Latest" exact={true}>
+                <Latest/>
+              </Route>
+              <Route path="/page/Submit" exact={true}>
+                <Submit/>
+              </Route>
+              <Route path="/page/Download" exact={true}>
+                <Download/>
+              </Route>
+              <Route path="/page/Playlist" exact={true}>
+                <Playlist/>
+              </Route>
+              <Route path="/page/Profile" exact={true}>
+                <Profile/>
+              </Route>
+              {/* <Route path="/page/:name" exact={true}>
                 <Page />
-              </Route>
+              </Route> */}
             </IonRouterOutlet>
           </IonSplitPane>
         </IonReactRouter>
