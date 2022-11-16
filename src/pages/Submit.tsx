@@ -1,4 +1,4 @@
-import { IonAlert, IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, useIonAlert } from '@ionic/react';
 import './Submit.css';
 import { Song, SubmitProps } from '../common/types';
 import SongForm from '../components/SongForm';
@@ -11,17 +11,15 @@ const Submit: React.FC<SubmitProps> = (props) => {
 
   const history = useHistory();
 
-  const [showBpAlert, setShowBpAlert] = useState<boolean>(false);
-
-  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [insertSod, { data: sodData, loading: sodLoading, error: sodError }] = useMutation(INSERT_SOD);
 
   const [addBpSong, { data: bpData, loading: bpLoading, error: bpError }] = useMutation(ADD_BULLPEN_SONG);
-
-  const [insertSod, { data, loading, error }] = useMutation(INSERT_SOD);
 
   const [updateBPSong, { data: updateBpData, loading: updateBpLoading , error: updateBpError }] = useMutation(UPDATE_BULLPEN_SONG);
 
   const location = useLocation<{ song: Song }>();
+
+  const [presentAlert] = useIonAlert();
 
   const [song, setSong] = useState<Song>({
       bandName: 'test',
@@ -44,9 +42,9 @@ const Submit: React.FC<SubmitProps> = (props) => {
   bpError && console.log("error: ", bpError);
   //bpData && console.log("data: ", bpData);
 
-  //loading && console.log("....loading");
-  error && console.log("error: ", error);
-  //data && console.log("data: ", data);
+  //sodLoading && console.log("....sodLoading");
+  sodError && console.log("error: ", sodError);
+  //sodData && console.log("data: ", sodData);
 
   const handleBpFormSubmit = () => {
     //Hard coded for now, in the future will use the authenticated person's user object
@@ -70,16 +68,46 @@ const Submit: React.FC<SubmitProps> = (props) => {
   };
 
   useEffect(() => {
-    data && setShowAlert(true);
-  }, [data]);
+    sodData && showSodAlert();
+  }, [sodData]);
 
   useEffect(() => {
-    bpData && setShowBpAlert(true);
+    bpData && showBpAlert();
   }, [bpData]);
 
   useEffect(() => {
-    updateBpData && setShowBpAlert(true);
+    updateBpData && showBpAlert();
   }, [updateBpData]);
+
+  const showBpAlert = () => {
+    presentAlert({
+      header: 'Your save to Bullpen is complete.',
+      buttons: [
+          {
+            text: 'OK',
+            role: 'confirm',
+            handler: () => {
+              history.push({pathname:'/page/Bullpen'})
+            },
+          },
+        ]
+      });
+    };
+
+  const showSodAlert = () => {
+    presentAlert({
+      header: 'Your Song submission is complete.',
+      buttons: [
+          {
+            text: 'OK',
+            role: 'confirm',
+            handler: () => {
+              history.push({pathname:'/page/Latest'})
+            },
+          },
+        ]
+      });
+    }; 
 
   return (
     <IonPage>
@@ -99,22 +127,6 @@ const Submit: React.FC<SubmitProps> = (props) => {
               <IonTitle size="large">Submit</IonTitle>
             </IonToolbar>
           </IonHeader>
-          <IonAlert
-            isOpen={showBpAlert}
-            onDidDismiss={() => {setShowBpAlert(false); history.push({pathname:'/page/Bullpen'})}}
-            header=""
-            subHeader="Congrats!"
-            message="Your save to Bullpen is complete."
-            buttons={['OK']}
-          />
-          <IonAlert
-            isOpen={showAlert}
-            onDidDismiss={() => {setShowAlert(false); history.push({pathname:'/page/Latest'})}}
-            header=""
-            subHeader="Congrats!"
-            message="Your Song submission is complete."
-            buttons={['OK']}
-          />
           <SongForm bpCallback={handleBpFormSubmit} sodCallback={handleSODFormSubmit} song={song}></SongForm>
         </>
       </IonContent>
