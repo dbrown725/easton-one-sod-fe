@@ -1,9 +1,10 @@
-import { IonCard, IonCardContent, IonCol, IonGrid, IonIcon, IonLabel, IonList, IonReorder, IonReorderGroup, IonRow } from '@ionic/react';
+import { IonAvatar, IonCard, IonCardContent, IonChip, IonCol, IonGrid, IonIcon, IonLabel, IonList, IonReorder, IonReorderGroup, IonRow } from '@ionic/react';
 import {Song} from '../common/types';
 import {SongListProps} from '../common/types';
 import DOMPurify from 'dompurify';
 import { create, trash } from 'ionicons/icons';
 import './SongList.css';
+import adminPic from './../assets/images/Admin.png';
 
 const SongList: React.FC<SongListProps> = (props) => {
 
@@ -32,30 +33,15 @@ const SongList: React.FC<SongListProps> = (props) => {
                     <IonRow>
                       <IonCol>
                         <IonRow>
-                            {
-                              props.showId &&
-                                <>
-                                  <IonCol>
-                                  <IonLabel position="floating">
-                                  Id
-                                  </IonLabel>
-                                  <h3>{song.id}</h3>
-                                  </IonCol>
-                                </>
-                            }
-                          
-                            {
-                              props.showScore &&
-                                <>
-                                  <IonCol>
-                                  <IonLabel position="floating">
-                                  Score
-                                  </IonLabel>
-                                  <h3>{song.score}</h3>
-                                  </IonCol>
-                                </>
-                            }
-
+                        <IonCol>
+                            <IonChip>
+                              <IonAvatar>
+                                {/* <img alt="Silhouette of a person's head" src="https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=Site+Admin&rounded=true" /> */}
+                                <img alt="Silhouette of a person's head" src={adminPic} />
+                              </IonAvatar>
+                              <IonLabel>Site Admin</IonLabel>
+                            </IonChip>
+                          </IonCol>
                           <IonCol>
                             <IonLabel position="floating">
                               Title
@@ -82,20 +68,18 @@ const SongList: React.FC<SongListProps> = (props) => {
                           </IonCol>
                         </IonRow>
                         <IonRow>
-                            {
-                              
-                              (typeof props.editCallback !== "undefined" || typeof props.deleteCallback !== "undefined") &&
-                                <>
-                                  <IonCol>
-                                    <span id="edit" title="Edit" onClick={(event) => props.editCallback?.(event,song)}>
-                                      <IonIcon icon={create} size="small"  title="Edit"></IonIcon>
-                                    </span>
-                                    <span>
-                                      <IonIcon icon={trash} size="small" onClick={(event) => props.deleteCallback?.(event,song)} title="Delete"></IonIcon>
-                                    </span>
-                                  </IonCol>
-                                </>
+                          <IonCol>
+                            {typeof props.editCallback !== "undefined" &&
+                              <span id="edit" title="Edit" onClick={(event) => props.editCallback?.(event,song)}>
+                                <IonIcon icon={create} size="small"  title="Edit"></IonIcon>
+                              </span>
                             }
+                            {typeof props.deleteCallback !== "undefined" &&
+                              <span>
+                                <IonIcon icon={trash} size="small" onClick={(event) => props.deleteCallback?.(event,song)} title="Delete"></IonIcon>
+                              </span>
+                            }
+                          </IonCol>
                         </IonRow>
                       </IonCol>
                     </IonRow>
