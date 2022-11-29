@@ -29,16 +29,10 @@ const appPages: AppPage[] = [
     mdIcon: musicalNoteSharp
   },
   {
-    title: 'Search Song Archives',
+    title: 'Song Archives',
     url: '/page/Archives',
     iosIcon: searchOutline,
     mdIcon: searchSharp
-  },
-  {
-    title: 'Submit a Song',
-    url: '/page/Submit',
-    iosIcon: cloudUploadOutline,
-    mdIcon: cloudUploadSharp
   },
   {
     title: 'My Song Bullpen',

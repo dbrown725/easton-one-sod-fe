@@ -32,23 +32,29 @@ const SongList: React.FC<SongListProps> = (props) => {
                   <IonGrid>
                     <IonRow>
                       <IonCol>
-                        <IonRow>
-                        <IonCol>
-                            <IonChip>
+                        {/* Stand in check for when bullPen data */}
+                        {typeof props.deleteCallback === "undefined" &&
+                          <IonRow>
+                            <IonCol>
                               <IonAvatar>
-                                {/* <img alt="Silhouette of a person's head" src="https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=Site+Admin&rounded=true" /> */}
-                                <img alt="Silhouette of a person's head" src={adminPic} />
+                                <img alt="Silhouette of a person's head" 
+                                  src={"https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=" + song.userFirstName + "+" + song.userLastName + "&rounded=true&background=" + song.userAvatarColor} 
+                                  title={song.userFirstName + " " + song.userLastName}/>
+                                {/* <img alt="Silhouette of a person's head" src={adminPic} /> */}
                               </IonAvatar>
-                              <IonLabel>Site Admin</IonLabel>
-                            </IonChip>
-                          </IonCol>
+                            </IonCol>
+                          </IonRow>  
+                        }
+                        <IonRow>
                           <IonCol>
                             <IonLabel position="floating">
                               Title
                             </IonLabel>
-                            <h3><a href={song.link} target='_blank' rel="noreferrer" 
+                            <h3>
+                                <a href={song.link} target='_blank' rel="noreferrer" 
                                   dangerouslySetInnerHTML={{__html: song.titleHighlighted? highlightMatches(sanitizeData(song.titleHighlighted)): sanitizeData(song.title)}}>
-                                </a></h3>
+                                </a>
+                            </h3>
                           </IonCol>
                         </IonRow>
 

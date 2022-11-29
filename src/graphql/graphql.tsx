@@ -80,6 +80,9 @@ export    const GET_MOST_RECENT_SONGS = gql`
                 message
                 sortOrder
                 userId
+                userFirstName
+                userLastName
+                userAvatarColor
                 createTime
                 modifyTime
                 }
@@ -118,6 +121,10 @@ export    const GET_MOST_RECENT_SONGS = gql`
               titleHighlighted
               link
               playlist
+              userId
+              userFirstName
+              userLastName
+              userAvatarColor
               message
               score
             }

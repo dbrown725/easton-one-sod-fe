@@ -1,6 +1,5 @@
 import { IonReorderGroupCustomEvent } from "@ionic/core";
 import { ItemReorderEventDetail } from "@ionic/react";
-import { MouseEventHandler } from "react";
 
 export interface Song {
     id?: number;
@@ -16,6 +15,9 @@ export interface Song {
     modifyTime?: string;
     score?: number;
     userId?: number;
+    userFirstName?: string;
+    userLastName?: string;
+    userAvatarColor?: string;
 }
 
 export interface SongResult {
