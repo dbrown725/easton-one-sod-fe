@@ -27,7 +27,8 @@ const Submit: React.FC<SubmitProps> = (props) => {
       title: '',
       link: '',
       message: '',
-      playlist: ''
+      playlist: '',
+      userId: 1
     });
 
   useEffect(() => {
@@ -48,8 +49,7 @@ const Submit: React.FC<SubmitProps> = (props) => {
 
   const handleBpFormSubmit = () => {
     //Hard coded for now, in the future will use the authenticated person's user object
-    song.userId = 1;
-
+    //song.userId = 1;
     if(song.id) {
       updateBPSong({ variables: { id: song.id, title: song.title, 
         songName: song.songName, bandName: song.bandName, 
@@ -62,7 +62,7 @@ const Submit: React.FC<SubmitProps> = (props) => {
 
   const handleSODFormSubmit = () => {
     //Hard coded for now, in the future will use the authenticated person's user object
-    song.userId = 1;
+    //song.userId = 1;
     insertSod({ variables: { title: song.title, songName: song.songName, bandName: song.bandName, link: song.link, message: song.message, playlist: song.playlist, userId: song.userId } });
     
   };
