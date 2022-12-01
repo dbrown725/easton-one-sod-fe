@@ -55,7 +55,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
         setBandName(location.state.song.bandName);
         setSongName(location.state.song.songName);
         setLink(location.state.song.link);
-        setPlaylist(location.state.song.playlist);
+        //setPlaylist(location.state.song.playlist);
         setUserId(location.state.song.userId);
       }
     }
@@ -68,8 +68,10 @@ const SongForm: React.FC<SongFormProps> = (props) => {
     return clean;
   }
 
-  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const submitData = async (buttonIdentifier: String) => {
+    if(!title || !bandName || !songName || !link) {
+      return;
+    }
     props.song.message = sanitizeData(String(message));
     props.song.title = sanitizeData(String(title));
     props.song.bandName = sanitizeData(String(bandName));
@@ -78,9 +80,9 @@ const SongForm: React.FC<SongFormProps> = (props) => {
     props.song.playlist = sanitizeData(String(playlist));
     props.song.userId = Number(userId);
 
-    if(document.activeElement?.id === 'newSodSong') {
+    if(buttonIdentifier === 'newSodSong') {
       await props.sodCallback();
-    } else if(document.activeElement?.id === 'newBullpenSong') {
+    } else if(buttonIdentifier === 'bullpenSong') {
       await props.bpCallback();
     } else {
       console.log('fell through');
@@ -109,7 +111,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
 
   return (
     <IonList>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={(e) => e.preventDefault()}>
         <IonGrid>
             <IonRow>
               <IonCol>
@@ -209,17 +211,18 @@ const SongForm: React.FC<SongFormProps> = (props) => {
                   </IonList>
                 </IonItem>
                 {"userId: " + userId}
+                {" id: " + id}
               </IonCol>
             </IonRow>
 
             <IonRow>
                <IonCol>
-                <IonButton id="newBullpenSong" expand="block" type="submit" className="ion-margin-top">
+                <IonButton id="bullpenSong" expand="block" type="submit" className="ion-margin-top" onClick={(e) => {submitData('bullpenSong')}}>
                   Save to my Bullpen
                 </IonButton>
               </IonCol>
               <IonCol>
-                <IonButton id="newSodSong" expand="block" type="submit" className="ion-margin-top">
+                <IonButton id="newSodSong" expand="block" type="submit" className="ion-margin-top" onClick={(e) => submitData('newSodSong')}>
                   Submit your Song of the Day
                 </IonButton>
               </IonCol>

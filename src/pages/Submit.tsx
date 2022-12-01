@@ -5,7 +5,7 @@ import SongForm from '../components/SongForm';
 import { useMutation } from '@apollo/client';
 import { useHistory, useLocation } from 'react-router';
 import { useEffect, useState } from 'react';
-import { ADD_BULLPEN_SONG, INSERT_SOD, UPDATE_BULLPEN_SONG } from '../graphql/graphql';
+import { ADD_BULLPEN_SONG, DELETE_BULLPEN_SONG, INSERT_SOD, UPDATE_BULLPEN_SONG } from '../graphql/graphql';
 
 const Submit: React.FC<SubmitProps> = (props) => {
 
@@ -17,12 +17,14 @@ const Submit: React.FC<SubmitProps> = (props) => {
 
   const [updateBPSong, { data: updateBpData, loading: updateBpLoading , error: updateBpError }] = useMutation(UPDATE_BULLPEN_SONG);
 
+  const [deleteBPSong, { data: deleteData, loading: deleteLoading , error: deleteError }] = useMutation(DELETE_BULLPEN_SONG);
+
   const location = useLocation<{ song: Song }>();
 
   const [presentAlert] = useIonAlert();
 
   const [song, setSong] = useState<Song>({
-      bandName: 'test',
+      bandName: '',
       songName: '',
       title: '',
       link: '',
@@ -30,6 +32,19 @@ const Submit: React.FC<SubmitProps> = (props) => {
       playlist: '',
       userId: 1
     });
+
+
+  const clearSong = () => {
+    setSong({
+      bandName: '',
+      songName: '',
+      title: '',
+      link: '',
+      message: '',
+      playlist: '',
+      userId: 1
+    });
+  }
 
   useEffect(() => {
     if(location.state){
@@ -47,6 +62,10 @@ const Submit: React.FC<SubmitProps> = (props) => {
   sodError && console.log("error: ", sodError);
   //sodData && console.log("data: ", sodData);
 
+  // deleteLoading && console.log("....deleteLoading");
+  deleteError && console.log("deleteError: ", deleteError);
+  // deleteData && console.log("deleteData: ", deleteData);
+
   const handleBpFormSubmit = () => {
     //Hard coded for now, in the future will use the authenticated person's user object
     //song.userId = 1;
@@ -58,6 +77,7 @@ const Submit: React.FC<SubmitProps> = (props) => {
     } else {
       addBpSong({ variables: { title: song.title, songName: song.songName, bandName: song.bandName, link: song.link, message: song.message, userId: song.userId } });
     }
+    clearSong();
   };
 
   const handleSODFormSubmit = () => {
@@ -65,6 +85,10 @@ const Submit: React.FC<SubmitProps> = (props) => {
     //song.userId = 1;
     insertSod({ variables: { title: song.title, songName: song.songName, bandName: song.bandName, link: song.link, message: song.message, playlist: song.playlist, userId: song.userId } });
     
+    if(song.id) {
+      deleteBPSong({ variables: { id: song.id } });
+    }
+    clearSong();
   };
 
   useEffect(() => {

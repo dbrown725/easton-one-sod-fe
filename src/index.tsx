@@ -7,7 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink } from '@apollo/client';
 
 const httpLink = new HttpLink({ 
-  uri: 'http://10.0.0.101:8080/easton/graphql',
+  uri: 'http://10.0.0.101:8080/easton/graphql/',
 });
 
 const client = new ApolloClient({
