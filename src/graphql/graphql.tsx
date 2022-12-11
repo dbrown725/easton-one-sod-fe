@@ -119,6 +119,8 @@ export    const GET_MOST_RECENT_SONGS = gql`
               songName
               title
               titleHighlighted
+              bandNameHighlighted
+              songNameHighlighted
               link
               playlist
               userId

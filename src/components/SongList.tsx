@@ -63,14 +63,18 @@ const SongList: React.FC<SongListProps> = (props) => {
                             <IonLabel position="floating">
                               Band name
                             </IonLabel>
-                            <h3>{song.bandName}</h3>
+                            <h3
+                              dangerouslySetInnerHTML={{__html: song.bandNameHighlighted? highlightMatches(sanitizeData(song.bandNameHighlighted)): sanitizeData(song.bandName)}}>
+                            </h3>
                           </IonCol>
 
                           <IonCol>
                             <IonLabel position="floating">
                               Song name
                             </IonLabel>
-                            <h3>{song.songName}</h3>
+                            <h3
+                              dangerouslySetInnerHTML={{__html: song.songNameHighlighted? highlightMatches(sanitizeData(song.songNameHighlighted)): sanitizeData(song.songName)}}>
+                            </h3>
                           </IonCol>
                         </IonRow>
                         <IonRow>
