@@ -11,7 +11,7 @@ import {
 } from '@ionic/react';
 
 import { useLocation } from 'react-router-dom';
-import { baseballOutline, baseballSharp, cloudUploadOutline, cloudUploadSharp, downloadOutline, downloadSharp, listOutline, listSharp, musicalNoteOutline, musicalNoteSharp, personCircleOutline, personCircleSharp, searchOutline, searchSharp } from 'ionicons/icons';
+import { baseballOutline, baseballSharp, constructOutline, constructSharp, downloadOutline, downloadSharp, listOutline, listSharp, musicalNoteOutline, musicalNoteSharp, personCircleOutline, personCircleSharp, searchOutline, searchSharp } from 'ionicons/icons';
 import './Menu.css';
 
 interface AppPage {
@@ -39,6 +39,12 @@ const appPages: AppPage[] = [
     url: '/page/Bullpen',
     iosIcon: baseballOutline,
     mdIcon: baseballSharp
+  },
+  {
+    title: 'Song Repair Shop',
+    url: '/page/Repair',
+    iosIcon: constructOutline,
+    mdIcon: constructSharp
   },
   {
     title: 'Download CSV',
@@ -70,7 +76,7 @@ const Menu: React.FC = () => {
       <IonContent>
         <IonList id="inbox-list">
           <IonListHeader>Song of the Day</IonListHeader>
-          <IonNote>All the music that is fit to play!</IonNote>
+          <IonNote>All the music that is fit to be played!</IonNote>
           {appPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>

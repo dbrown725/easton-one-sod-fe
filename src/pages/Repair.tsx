@@ -1,15 +1,15 @@
 import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { useLazyQuery } from '@apollo/client';
-import './Latest.css';
+import './Repair.css';
 import {Song} from '../common/types';
 import SongList from '../components/SongList';
 import { useEffect, useState } from 'react';
 import { refresh } from 'ionicons/icons';
 import { useHistory, useLocation } from 'react-router';
 import FabToSubmit from '../components/FabToSubmit';
-import { GET_MOST_RECENT_SONGS } from '../graphql/graphql';
+import { GET_SONGS_WITH_ISSUES } from '../graphql/graphql';
 
-const Latest: React.FC = () => {
+const Repair: React.FC = () => {
 
   const history = useHistory();
   const location = useLocation();
@@ -20,21 +20,21 @@ const Latest: React.FC = () => {
   const [isInfiniteDisabled, setInfiniteDisabled] = useState(false);
 
   // number of songs to return from backend
-  let count: number = 300;
+  let count: number = 700;
   //  pagination size for infinit scroll
   let addDataIncrement: number = 20;
 
   const [
     getSongs,
     { loading, error, data }
-  ] = useLazyQuery(GET_MOST_RECENT_SONGS, {fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache',
+  ] = useLazyQuery(GET_SONGS_WITH_ISSUES, {fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache',
     variables: { count: count }, onCompleted: (data) => {
 
       //Initialize again in case of a button click refresh
       setDisplayData([]);
       setCurrentBucketNumber(0);
 
-      let bucketCount: number = Math.ceil(data?.getMostRecentSongs.length / addDataIncrement);
+      let bucketCount: number = Math.ceil(data?.getSongsWithIssues.length / addDataIncrement);
 
       //if only one bucket no need for infinite scroll
       if(bucketCount === 1) {
@@ -56,8 +56,8 @@ const Latest: React.FC = () => {
     let min: number = addDataIncrement * (bucketNumber - 1);
     let max: number = addDataIncrement * bucketNumber;
     for (let i = min; i < max; i++) {      
-      if(typeof data?.getMostRecentSongs[i] !== 'undefined') {
-        songs.push(data?.getMostRecentSongs![i]);
+      if(typeof data?.getSongsWithIssues[i] !== 'undefined') {
+        songs.push(data?.getSongsWithIssues![i]);
       } else {
         break;
       }
@@ -75,7 +75,7 @@ const Latest: React.FC = () => {
       }
     });
     return () => {
-      // unlisten() will be called when the 'Latest' component unmounts, prevents memory leaks.
+      // unlisten() will be called when the 'Repair' component unmounts, prevents memory leaks.
       unlisten();
     }
 
@@ -124,7 +124,7 @@ const Latest: React.FC = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Latest songs</IonTitle>
+          <IonTitle>Song Repair Shop</IonTitle>
         </IonToolbar>
       </IonHeader>
 
@@ -132,7 +132,7 @@ const Latest: React.FC = () => {
         <>
           <IonHeader collapse="condense">
             <IonToolbar>
-              <IonTitle size="large">Latest songs</IonTitle>
+              <IonTitle size="large">Song Repair Shop</IonTitle>
             </IonToolbar>
           </IonHeader>
           <IonButton size="small" onClick={ () => getSongs()}> 
@@ -159,4 +159,4 @@ const Latest: React.FC = () => {
   );
 };
 
-export default Latest;
+export default Repair;

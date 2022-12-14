@@ -207,6 +207,11 @@ const SongForm: React.FC<SongFormProps> = (props) => {
                         <IonLabel>Tim Roys</IonLabel>
                         <IonRadio slot="end" value="4"></IonRadio>
                       </IonItem>
+
+                      <IonItem>
+                        <IonLabel>Mike Brown</IonLabel>
+                        <IonRadio slot="end" value="7"></IonRadio>
+                      </IonItem>
                     </IonRadioGroup>
                   </IonList>
                 </IonItem>

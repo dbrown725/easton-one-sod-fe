@@ -9,6 +9,7 @@ import Submit from './pages/Submit';
 import Download from './pages/Download';
 import Playlist from './pages/Playlist';
 import Profile from './pages/Profile';
+import Repair from './pages/Repair';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -62,6 +63,9 @@ const App: React.FC = () => {
               </Route>
               <Route path="/page/Profile" exact={true}>
                 <Profile/>
+              </Route>
+              <Route path="/page/Repair" exact={true}>
+                <Repair/>
               </Route>
               {/* <Route path="/page/:name" exact={true}>
                 <Page />

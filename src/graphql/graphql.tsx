@@ -88,6 +88,26 @@ export    const GET_MOST_RECENT_SONGS = gql`
                 }
             }
             `;  
+
+export    const GET_SONGS_WITH_ISSUES = gql`
+            query getSongsWithIssues($count: Int!) {
+              getSongsWithIssues(count: $count) {
+                id
+                bandName
+                songName
+                title
+                link
+                message
+                sortOrder
+                userId
+                userFirstName
+                userLastName
+                userAvatarColor
+                createTime
+                modifyTime
+                }
+            }
+            `;
             
  export   const INSERT_SOD = gql`
             mutation insertSodSong($title: String!, $songName: String!, $bandName: String!, $link: String!, $message: String!, $playlist: String!, $userId: ID!) {
