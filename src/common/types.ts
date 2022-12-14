@@ -1,5 +1,6 @@
 import { IonReorderGroupCustomEvent } from "@ionic/core";
 import { ItemReorderEventDetail } from "@ionic/react";
+import { DocumentNode } from "graphql";
 
 export interface Song {
     id?: number;
@@ -49,4 +50,12 @@ export interface SongFormProps {
 
 export interface SubmitProps {
     song?: Song;
+}
+
+export interface ScrollingSongListProps {
+    count: number;
+    addDataIncrement: number;
+    queryDocumentNode: DocumentNode;
+    queryDefinitionName: string;
+    pageTitleText: string;
 }
