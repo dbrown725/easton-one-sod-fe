@@ -57,5 +57,4 @@ export interface ScrollingSongListProps {
     addDataIncrement: number;
     queryDocumentNode: DocumentNode;
     queryDefinitionName: string;
-    pageTitleText: string;
 }
