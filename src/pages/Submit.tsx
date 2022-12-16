@@ -5,13 +5,15 @@ import SongForm from '../components/SongForm';
 import { useMutation } from '@apollo/client';
 import { useHistory, useLocation } from 'react-router';
 import { useEffect, useState } from 'react';
-import { ADD_BULLPEN_SONG, DELETE_BULLPEN_SONG, INSERT_SOD, UPDATE_BULLPEN_SONG } from '../graphql/graphql';
+import { ADD_BULLPEN_SONG, DELETE_BULLPEN_SONG, INSERT_SOD, UPDATE_BULLPEN_SONG, UPDATE_SOD } from '../graphql/graphql';
 
 const Submit: React.FC<SubmitProps> = (props) => {
 
   const history = useHistory();
 
-  const [insertSod, { data: sodData, loading: sodLoading, error: sodError }] = useMutation(INSERT_SOD);
+  const [insertSod, { data: sodInsertData, loading: sodInsertLoading, error: sodInsertError }] = useMutation(INSERT_SOD);
+
+  const [updateSod, { data: sodUpdateData, loading: sodUpdateLoading, error: sodUpdateError }] = useMutation(UPDATE_SOD);
 
   const [addBpSong, { data: bpData, loading: bpLoading, error: bpError }] = useMutation(ADD_BULLPEN_SONG);
 
@@ -19,11 +21,14 @@ const Submit: React.FC<SubmitProps> = (props) => {
 
   const [deleteBPSong, { data: deleteData, loading: deleteLoading , error: deleteError }] = useMutation(DELETE_BULLPEN_SONG);
 
-  const location = useLocation<{ song: Song }>();
+  const location = useLocation<{ song: Song, updateSODRequest: boolean }>();
 
   const [presentAlert] = useIonAlert();
 
+  const [updateSODRequest, setUpdateSODRequest] = useState<boolean>();
+
   const [song, setSong] = useState<Song>({
+      id: 0,
       bandName: '',
       songName: '',
       title: '',
@@ -36,6 +41,7 @@ const Submit: React.FC<SubmitProps> = (props) => {
 
   const clearSong = () => {
     setSong({
+      id: 0,
       bandName: '',
       songName: '',
       title: '',
@@ -51,6 +57,9 @@ const Submit: React.FC<SubmitProps> = (props) => {
       if(location.state.song) {
         setSong(location.state.song);
       }
+      if(location.state.updateSODRequest) {
+        setUpdateSODRequest(location.state.updateSODRequest);
+      }
     }
   }, [location.state]);
 
@@ -58,9 +67,13 @@ const Submit: React.FC<SubmitProps> = (props) => {
   bpError && console.log("error: ", bpError);
   //bpData && console.log("data: ", bpData);
 
-  //sodLoading && console.log("....sodLoading");
-  sodError && console.log("error: ", sodError);
-  //sodData && console.log("data: ", sodData);
+  //sodInsertLoading && console.log("....sodInsertLoading");
+  sodInsertError && console.log("error: ", sodInsertError);
+  //sodInsertData && console.log("data: ", sodInsertData);
+
+  //sodUpdateLoading && console.log("....sodUpdateLoading");
+  sodUpdateError && console.log("error: ", sodUpdateError);
+  //sodUpdateData && console.log("data: ", sodUpdateData);
 
   // deleteLoading && console.log("....deleteLoading");
   deleteError && console.log("deleteError: ", deleteError);
@@ -80,7 +93,7 @@ const Submit: React.FC<SubmitProps> = (props) => {
     clearSong();
   };
 
-  const handleSODFormSubmit = () => {
+  const handleSODInsertFormSubmit = () => {
     //Hard coded for now, in the future will use the authenticated person's user object
     //song.userId = 1;
     insertSod({ variables: { title: song.title, songName: song.songName, bandName: song.bandName, link: song.link, message: song.message, playlist: song.playlist, userId: song.userId } });
@@ -91,9 +104,25 @@ const Submit: React.FC<SubmitProps> = (props) => {
     clearSong();
   };
 
+  const handleSODUpdateFormSubmit = () => {
+    //Hard coded for now, in the future will use the authenticated person's user object
+    //song.userId = 1;
+    updateSod({ variables: { id: song.id, title: song.title, songName: song.songName, bandName: song.bandName, link: song.link, playlist: song.playlist, userId: song.userId } });
+    clearSong();
+  };
+
+  const handleSODCancelUpdateFormSubmit = () => {
+    clearSong();
+    history.push({pathname:'/page/Repair'});
+  };
+
   useEffect(() => {
-    sodData && showSodAlert();
-  }, [sodData]);
+    sodInsertData && showSodInsertAlert();
+  }, [sodInsertData]);
+
+  useEffect(() => {
+    sodUpdateData && showSodUpdateAlert();
+  }, [sodUpdateData]);
 
   useEffect(() => {
     bpData && showBpAlert();
@@ -118,7 +147,7 @@ const Submit: React.FC<SubmitProps> = (props) => {
       });
     };
 
-  const showSodAlert = () => {
+  const showSodInsertAlert = () => {
     presentAlert({
       header: 'Your Song submission is complete.',
       buttons: [
@@ -132,6 +161,21 @@ const Submit: React.FC<SubmitProps> = (props) => {
         ]
       });
     }; 
+
+  const showSodUpdateAlert = () => {
+    presentAlert({
+      header: 'Your Song update is complete.',
+      buttons: [
+          {
+            text: 'OK',
+            role: 'confirm',
+            handler: () => {
+              history.push({pathname:'/page/Repair'})
+            },
+          },
+        ]
+      });
+    };
 
   return (
     <IonPage>
@@ -151,7 +195,13 @@ const Submit: React.FC<SubmitProps> = (props) => {
               <IonTitle size="large">Submit</IonTitle>
             </IonToolbar>
           </IonHeader>
-          <SongForm bpCallback={handleBpFormSubmit} sodCallback={handleSODFormSubmit} song={song}></SongForm>
+          <SongForm
+            bpCallback={handleBpFormSubmit}
+            sodInsertCallback={handleSODInsertFormSubmit}
+            sodUpdateCallback={handleSODUpdateFormSubmit}
+            sodCancelUpdateCallback={handleSODCancelUpdateFormSubmit}
+            song={song}
+            updateSODRequest={updateSODRequest}></SongForm>
         </>
       </IonContent>
     </IonPage>

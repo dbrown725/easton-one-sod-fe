@@ -22,7 +22,13 @@ const Latest: React.FC = () => {
             <IonTitle size="large">Latest Songs</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ScrollingSongList count={400} addDataIncrement={20} queryDocumentNode={GET_MOST_RECENT_SONGS} queryDefinitionName={"getMostRecentSongs"} />
+        <ScrollingSongList
+          count={400}
+          addDataIncrement={20}
+          queryDocumentNode={GET_MOST_RECENT_SONGS}
+          queryDefinitionName={"getMostRecentSongs"}
+          showDeleteButton={false}
+          showEditButton={false} />
       </IonContent>
     </IonPage>
   );

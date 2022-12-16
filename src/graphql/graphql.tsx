@@ -129,7 +129,29 @@ export    const GET_SONGS_WITH_ISSUES = gql`
                 userId
               }
             }
-          `;            
+          `;
+
+  export   const UPDATE_SOD = gql`
+          mutation updateSodSong($id: ID!, $title: String!, $songName: String!, $bandName: String!, $link: String!, $playlist: String!, $userId: ID!) {
+            updateSodSong(
+              id: $id
+              title: $title
+              songName: $songName
+              bandName: $bandName
+              link: $link
+              playlist: $playlist
+              userId: $userId)
+              {
+              id
+              title
+              songName
+              bandName
+              link
+              playlist
+              userId
+            }
+          }
+        `;
 
  export   const GET_SEARCH_RESULTS = gql`
           query GetSearchResults($searchText: String!) {

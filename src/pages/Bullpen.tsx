@@ -174,7 +174,15 @@ const Bullpen: React.FC = () => {
         {
           displayData
             && 
-            <SongList showId={true} showScore={false} editCallback={editClickHandler} deleteCallback={deleteClickHandler} handleReorder={handleReorder} songs={displayData}/>
+            <SongList
+              editCallback={editClickHandler}
+              deleteCallback={deleteClickHandler}
+              handleReorder={handleReorder}
+              songs={displayData}
+              showId={true}
+              showScore={false}
+              showDeleteButton={true}
+              showEditButton={true} />
         }
         <FabToSubmit/>
       </IonContent>

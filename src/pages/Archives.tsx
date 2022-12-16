@@ -21,7 +21,7 @@ const Archives: React.FC = () => {
             <IonTitle size="large">Archives</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <SearchForSongs />
+        <SearchForSongs showEditButton={false}/>
       </IonContent>
     </IonPage>
   );

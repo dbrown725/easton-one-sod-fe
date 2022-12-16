@@ -5,12 +5,15 @@ import FabToSubmit from './FabToSubmit';
 import SongList from './SongList';
 import { GET_SEARCH_RESULTS } from '../graphql/graphql';
 import './SearchForSongs.css';
+import { SearchingForSongsProps, Song } from '../common/types';
 
-const SearchForSongs: React.FC = () => {
+const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
 
   const [searchText, setSearchText] = useState<string | undefined | null>();
 
   const [apiSearchText, setApiSearchText] = useState<string | undefined | null>();
+
+  const [displayData, setDisplayData] = useState<Song[]>([]);
 
   const WAIT_INTERVAL = 1000;
 
@@ -80,7 +83,17 @@ const SearchForSongs: React.FC = () => {
   const [
     getSongs,
     { loading, data }
-  ] = useLazyQuery(GET_SEARCH_RESULTS, { variables: { searchText: { apiSearchText } }, onCompleted: setFocus });
+  ] = useLazyQuery(GET_SEARCH_RESULTS, {
+    variables: { searchText: { apiSearchText } }, onCompleted: (data) => {
+      let songs: Song[] = [];
+      data.songBySearchText.forEach( (sng: Song)=> {
+        songs.push(JSON.parse(JSON.stringify(sng)));
+      });
+      setDisplayData(songs);
+
+      setFocus();
+    }
+  });
 
   return (
     <>
@@ -91,11 +104,11 @@ const SearchForSongs: React.FC = () => {
           </IonCol>
         </IonRow>
 
-        {data &&
+        {displayData &&
           <IonRow>
             <IonCol>
               <IonItem lines="none">
-                <IonBadge slot="start">{data.songBySearchText.length}</IonBadge>
+                <IonBadge slot="start">{displayData.length}</IonBadge>
                 <IonLabel>Results</IonLabel>
               </IonItem>
             </IonCol>
@@ -104,8 +117,8 @@ const SearchForSongs: React.FC = () => {
       </IonGrid>
 
       {
-        data && data.songBySearchText
-        && <SongList showId={true} showScore={true} songs={data.songBySearchText} />
+        displayData
+        && <SongList showId={true} showScore={true} songs={displayData} editCallback={props.editCallback} showEditButton={props.showEditButton} showDeleteButton={false} />
       }
       <FabToSubmit />
     </>

@@ -4,7 +4,6 @@ import {SongListProps} from '../common/types';
 import DOMPurify from 'dompurify';
 import { create, trash } from 'ionicons/icons';
 import './SongList.css';
-import adminPic from './../assets/images/Admin.png';
 
 const SongList: React.FC<SongListProps> = (props) => {
 
@@ -79,12 +78,12 @@ const SongList: React.FC<SongListProps> = (props) => {
                         </IonRow>
                         <IonRow>
                           <IonCol>
-                            {typeof props.editCallback !== "undefined" &&
+                            {props.showEditButton &&
                               <span id="edit" title="Edit" onClick={(event) => props.editCallback?.(event,song)}>
                                 <IonIcon icon={create} size="small"  title="Edit"></IonIcon>
                               </span>
                             }
-                            {typeof props.deleteCallback !== "undefined" &&
+                            {props.showDeleteButton &&
                               <span>
                                 <IonIcon icon={trash} size="small" onClick={(event) => props.deleteCallback?.(event,song)} title="Delete"></IonIcon>
                               </span>

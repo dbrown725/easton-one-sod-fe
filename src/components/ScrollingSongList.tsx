@@ -123,7 +123,7 @@ const ScrollingSongList: React.FC<ScrollingSongListProps> = (props) => {
       </IonButton>
       {
         displayData
-        && <SongList showId={true} showScore={false} songs={displayData} />
+        && <SongList showId={true} showScore={false} songs={displayData} editCallback={props.editCallback} showDeleteButton={props.showDeleteButton} showEditButton={props.showEditButton} />
       }
       <IonInfiniteScroll
         onIonInfinite={loadData}

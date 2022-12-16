@@ -36,6 +36,8 @@ export interface BullpenSongData {
 export interface SongListProps {
     songs: Song[];
     showScore: boolean;
+    showEditButton: boolean;
+    showDeleteButton: boolean;
     showId: boolean;
     handleReorder?: ((event: IonReorderGroupCustomEvent<ItemReorderEventDetail>) => void) | undefined;
     deleteCallback?: ((event: React.MouseEvent<HTMLIonIconElement>, song: Song) => void) | undefined;
@@ -43,13 +45,17 @@ export interface SongListProps {
 }
 
 export interface SongFormProps {
-    sodCallback: () => void;
+    sodInsertCallback: () => void;
+    sodUpdateCallback: () => void;
+    sodCancelUpdateCallback: () => void;
     bpCallback: () => void;
     song: Song;
+    updateSODRequest: boolean | undefined;
 }
 
 export interface SubmitProps {
     song?: Song;
+    updateSODRequest?: boolean | undefined;
 }
 
 export interface ScrollingSongListProps {
@@ -57,4 +63,12 @@ export interface ScrollingSongListProps {
     addDataIncrement: number;
     queryDocumentNode: DocumentNode;
     queryDefinitionName: string;
+    editCallback?: ((event: React.MouseEvent<HTMLSpanElement>, song: Song) => void) | undefined;
+    showEditButton: boolean;
+    showDeleteButton: boolean;
+}
+
+export interface SearchingForSongsProps {
+    editCallback?: ((event: React.MouseEvent<HTMLSpanElement>, song: Song) => void) | undefined;
+    showEditButton: boolean;
 }
