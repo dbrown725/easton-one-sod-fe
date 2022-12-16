@@ -89,6 +89,12 @@ export    const GET_MOST_RECENT_SONGS = gql`
             }
             `;  
 
+export    const GET_SONGS_WITH_ISSUES_COUNT = gql`
+            query getSongsWithIssuesCount {
+              getSongsWithIssuesCount
+            }
+            `;
+
 export    const GET_SONGS_WITH_ISSUES = gql`
             query getSongsWithIssues($count: Int!) {
               getSongsWithIssues(count: $count) {

@@ -13,21 +13,38 @@ import {
 import { useLocation } from 'react-router-dom';
 import { baseballOutline, baseballSharp, constructOutline, constructSharp, downloadOutline, downloadSharp, listOutline, listSharp, musicalNoteOutline, musicalNoteSharp, personCircleOutline, personCircleSharp, searchOutline, searchSharp } from 'ionicons/icons';
 import './Menu.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useLazyQuery } from '@apollo/client';
+import { GET_SONGS_WITH_ISSUES_COUNT } from '../graphql/graphql';
 
 
 
 const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
 
 const Menu: React.FC = () => {
+
+  const [repairCount, setRepairCount] = useState<string>('0');
+
+  const [
+    getIssueCount,
+    { loading, error, data }
+  ] = useLazyQuery(GET_SONGS_WITH_ISSUES_COUNT, {
+    fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache', onCompleted: (data) => {
+      setRepairCount(data.getSongsWithIssuesCount);
+    },
+  });
+
+  useEffect(() => {
+    getIssueCount();
+
+  }, []);
+
   interface AppPage {
     url: string;
     iosIcon: string;
     mdIcon: string;
     title: string;
   }
-
-  const [repairCount, setRepairCount] = useState<string>('0');
 
   const appPages: AppPage[] = [
     {
