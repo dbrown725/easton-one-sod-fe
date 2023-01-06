@@ -6,7 +6,7 @@ import { useHistory, useLocation } from 'react-router';
 
 const SongForm: React.FC<SongFormProps> = (props) => {
 
-  const playlistName = 'End of the World (And I Feel Fine)';
+  const playlistName = 'Clam Strip Night!';
   const [id, setId] = useState<number | null | undefined>();
   const [message, setMessage] = useState<string | null | undefined>('');
   const [title, setTitle] = useState<string | number | null | undefined>('');
