@@ -5,6 +5,8 @@ import './index.css';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink } from '@apollo/client';
+import { store } from './store/store'
+import { Provider } from 'react-redux'
 
 const httpLink = new HttpLink({ 
   uri: 'http://10.0.0.101:8080/easton/graphql/',
@@ -21,7 +23,9 @@ const root = createRoot(container!);
 root.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </ApolloProvider>
   </React.StrictMode>
 );

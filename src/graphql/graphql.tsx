@@ -103,6 +103,7 @@ export    const GET_SONGS_WITH_ISSUES = gql`
                 songName
                 title
                 link
+                playlist
                 message
                 sortOrder
                 userId

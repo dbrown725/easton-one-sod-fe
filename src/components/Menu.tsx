@@ -14,8 +14,10 @@ import { useLocation } from 'react-router-dom';
 import { baseballOutline, baseballSharp, constructOutline, constructSharp, downloadOutline, downloadSharp, listOutline, listSharp, musicalNoteOutline, musicalNoteSharp, personCircleOutline, personCircleSharp, searchOutline, searchSharp } from 'ionicons/icons';
 import './Menu.css';
 import { useEffect, useState } from 'react';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useQuery } from '@apollo/client';
 import { GET_SONGS_WITH_ISSUES_COUNT } from '../graphql/graphql';
+import { RootState } from '../store/store';
+import { useSelector } from 'react-redux';
 
 
 
@@ -25,9 +27,11 @@ const Menu: React.FC = () => {
 
   const [repairCount, setRepairCount] = useState<string>('0');
 
+  const songsWithIssuesCount = useSelector((state: RootState) => state.issueCount.value);
+
   const [
     getIssueCount,
-    { loading, error, data }
+    { loading: loadingCount, error: errorCount, data: dataCount }
   ] = useLazyQuery(GET_SONGS_WITH_ISSUES_COUNT, {
     fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache', onCompleted: (data) => {
       setRepairCount(data.getSongsWithIssuesCount);
@@ -36,8 +40,12 @@ const Menu: React.FC = () => {
 
   useEffect(() => {
     getIssueCount();
-
   }, []);
+
+  useEffect(() => {
+    setRepairCount(songsWithIssuesCount.toString());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [songsWithIssuesCount]);
 
   interface AppPage {
     url: string;

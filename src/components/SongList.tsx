@@ -32,7 +32,7 @@ const SongList: React.FC<SongListProps> = (props) => {
                     <IonRow>
                       <IonCol>
                         {/* Stand in check for when bullPen data */}
-                        {typeof props.deleteCallback === "undefined" &&
+                        { !props.showDeleteButton &&
                           <IonRow>
                             <IonCol>
                               <IonAvatar>

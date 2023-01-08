@@ -2,10 +2,12 @@ import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, Io
 import './Submit.css';
 import { Song, SubmitProps } from '../common/types';
 import SongForm from '../components/SongForm';
-import { useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import { useHistory, useLocation } from 'react-router';
 import { useEffect, useState } from 'react';
-import { ADD_BULLPEN_SONG, DELETE_BULLPEN_SONG, INSERT_SOD, UPDATE_BULLPEN_SONG, UPDATE_SOD } from '../graphql/graphql';
+import { ADD_BULLPEN_SONG, DELETE_BULLPEN_SONG, GET_SONGS_WITH_ISSUES_COUNT, INSERT_SOD, UPDATE_BULLPEN_SONG, UPDATE_SOD } from '../graphql/graphql';
+import { useDispatch } from 'react-redux';
+import { setIssueCount } from '../store/slices/issueCountSlice';
 
 const Submit: React.FC<SubmitProps> = (props) => {
 
@@ -26,6 +28,8 @@ const Submit: React.FC<SubmitProps> = (props) => {
   const [presentAlert] = useIonAlert();
 
   const [updateSODRequest, setUpdateSODRequest] = useState<boolean>();
+
+  const dispatch = useDispatch();
 
   const [song, setSong] = useState<Song>({
       id: 0,
@@ -57,9 +61,7 @@ const Submit: React.FC<SubmitProps> = (props) => {
       if(location.state.song) {
         setSong(location.state.song);
       }
-      if(location.state.updateSODRequest) {
-        setUpdateSODRequest(location.state.updateSODRequest);
-      }
+      setUpdateSODRequest(location.state.updateSODRequest);
     }
   }, [location.state]);
 
@@ -104,10 +106,23 @@ const Submit: React.FC<SubmitProps> = (props) => {
     clearSong();
   };
 
+  const [
+    getIssueCount,
+    { loading: countLoading, error: countError, data: countData }
+  ] = useLazyQuery(GET_SONGS_WITH_ISSUES_COUNT, {
+    fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache', onCompleted: (data) => {
+      dispatch(setIssueCount(data.getSongsWithIssuesCount));
+    },
+  });
+
+  // countLoading && console.log("....countLoading");
+  countError && console.log("countError: ", countError);
+    // countData && console.log("countData: ", countData);
+
   const handleSODUpdateFormSubmit = () => {
-    //Hard coded for now, in the future will use the authenticated person's user object
-    //song.userId = 1;
-    updateSod({ variables: { id: song.id, title: song.title, songName: song.songName, bandName: song.bandName, link: song.link, playlist: song.playlist, userId: song.userId } });
+    updateSod({ variables: { id: song.id, title: song.title, songName: song.songName, bandName: song.bandName, link: song.link, playlist: song.playlist, userId: song.userId }, onCompleted: (data) => {
+      getIssueCount();
+    }, });
     clearSong();
   };
 

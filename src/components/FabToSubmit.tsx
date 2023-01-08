@@ -7,7 +7,10 @@ const FabToSubmit: React.FC = () => {
   const history = useHistory();
 
   const handleFabClick = () => {
-    history.push({pathname:'/page/Submit'});
+    history.push({
+      pathname: '/page/Submit',
+      state: { updateSODRequest: false }
+    });
   }
 
   return (
