@@ -39,20 +39,14 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
     };
   }, []);
 
-  // trigger the timer
-  const startTimer = () => {
-    if (refTimer.current !== null) return;
-    refTimer.current = window.setTimeout(() => {
+  useEffect(() => {
+    const timeout = setTimeout(() => {
       triggerChange();
-    }, WAIT_INTERVAL);
-  };
+    }, WAIT_INTERVAL)
 
-  // stop the timer
-  const stopTimer = () => {
-    if (refTimer.current === null) return;
-    window.clearTimeout(refTimer.current);
-    refTimer.current = null;
-  };
+    // if this effect run again, because `value` changed, we remove the previous timeout
+    return () => clearTimeout(timeout)
+  }, [searchText]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLIonSearchbarElement>) => {
     if (e.key === 'Enter') {
@@ -61,9 +55,7 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
   }
 
   const handleInputChange = (e: CustomEvent<SearchbarChangeEventDetail>) => {
-    stopTimer();
     setSearchText(e.detail.value);
-    startTimer();
   };
 
   const handleSearchbarClear = (e: CustomEvent<void>) => {
@@ -84,6 +76,7 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
     getSongs,
     { loading, data }
   ] = useLazyQuery(GET_SEARCH_RESULTS, {
+    fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache',
     variables: { searchText: { apiSearchText } }, onCompleted: (data) => {
       let songs: Song[] = [];
       data.songBySearchText.forEach( (sng: Song)=> {
@@ -100,7 +93,7 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
       <IonGrid>
         <IonRow>
           <IonCol>
-            <IonSearchbar id="searchText" value={searchText} onIonClear={e => { handleSearchbarClear(e) }} onIonChange={e => { handleInputChange(e) }} onKeyDown={e => { handleKeyDown(e) }} placeholder="Enter Search Text"></IonSearchbar>
+            <IonSearchbar id="searchText" onIonClear={e => { handleSearchbarClear(e) }} onIonChange={e => { handleInputChange(e) }} onKeyDown={e => { handleKeyDown(e) }} placeholder="Enter Search Text"></IonSearchbar>
           </IonCol>
         </IonRow>
 
