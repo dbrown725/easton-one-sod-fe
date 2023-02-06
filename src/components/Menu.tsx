@@ -62,25 +62,25 @@ const Menu: React.FC = () => {
       mdIcon: musicalNoteSharp
     },
     {
-      title: 'Song Archives',
+      title: 'Archives',
       url: '/page/Archives',
       iosIcon: searchOutline,
       mdIcon: searchSharp
     },
     {
-      title: 'My Song Bullpen',
+      title: 'My Bullpen',
       url: '/page/Bullpen',
       iosIcon: baseballOutline,
       mdIcon: baseballSharp
     },
     {
-      title: 'Song Repair Shop - ' + repairCount,
+      title: 'Repair Shop - ' + repairCount + ' waiting',
       url: '/page/Repair',
       iosIcon: constructOutline,
       mdIcon: constructSharp
     },
     {
-      title: 'Download CSV',
+      title: 'Download Songs',
       url: '/page/Download',
       iosIcon: downloadOutline,
       mdIcon: downloadSharp
