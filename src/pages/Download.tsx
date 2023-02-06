@@ -1,14 +1,45 @@
-import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Download.css';
-import dorm from './../assets/images/Dorm.jpg';
 import {
   IonGrid,
   IonRow,
   IonCol,
 } from "@ionic/react";
 import FabToSubmit from '../components/FabToSubmit';
+import { cloudDownloadOutline } from 'ionicons/icons';
 
 const Download: React.FC = () => {
+
+  const downloadSongs = () => {
+    fetch('http://10.0.0.101:8080/easton/api/csv/download', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/csv',
+      },
+    })
+      .then((response) => response.blob())
+      .then((blob) =>
+        // Create blob link to download
+        const url = window.URL.createObjectURL(
+          new Blob([blob]),
+        );
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute(
+          'download',
+          `songs.csv`,
+        );
+
+        // Append to html link element page
+        document.body.appendChild(link);
+
+        // Start download
+        link.click();
+
+        // Clean up and remove the link
+        link.parentNode!.removeChild(link);
+      });
+  }
 
   return (
     <IonPage>
@@ -17,7 +48,7 @@ const Download: React.FC = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Download CSV</IonTitle>
+          <IonTitle>Download Songs</IonTitle>
         </IonToolbar>
       </IonHeader>
 
@@ -38,17 +69,12 @@ const Download: React.FC = () => {
               <IonCol>
               </IonCol>
             </IonRow>
-
-
             <IonRow>
               <IonCol>
-                <b>Coming soon!.</b>
-              </IonCol>
-            </IonRow>
-
-            <IonRow>
-              <IonCol>
-                <IonImg className='dormImg' src={dorm} alt={"dorm image"}/>
+                <IonButton size="small" onClick={() => downloadSongs()}>
+                   Download All Songs
+                  <IonIcon slot="end" icon={cloudDownloadOutline}></IonIcon>
+                </IonButton>
               </IonCol>
             </IonRow>
           </IonGrid>
