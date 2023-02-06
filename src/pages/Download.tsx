@@ -18,7 +18,7 @@ const Download: React.FC = () => {
       },
     })
       .then((response) => response.blob())
-      .then((blob) =>
+      .then((blob) => {
         // Create blob link to download
         const url = window.URL.createObjectURL(
           new Blob([blob]),
