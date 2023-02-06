@@ -1,11 +1,12 @@
 import { useLazyQuery } from '@apollo/client';
 import { SearchbarChangeEventDetail, IonBadge, IonCol, IonGrid, IonItem, IonLabel, IonRow, IonSearchbar } from '@ionic/react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import FabToSubmit from './FabToSubmit';
 import SongList from './SongList';
 import { GET_SEARCH_RESULTS } from '../graphql/graphql';
 import './SearchForSongs.css';
 import { SearchingForSongsProps, Song } from '../common/types';
+import { useHistory, useLocation } from 'react-router';
 
 const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
 
@@ -17,8 +18,9 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
 
   const WAIT_INTERVAL = 1000;
 
-  // use ref to store the timer id
-  const refTimer = useRef<number | null>(null);
+  const history = useHistory();
+
+  const location = useLocation();
 
   const triggerChange = () => {
     //state updates are batched by React which causes a delay. The below gets the true current state.
@@ -31,12 +33,17 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
 
   useEffect(() => {
     setFocus();
-    // cleanup function
-    return () => {
-      if (refTimer.current !== null) {
-        window.clearTimeout(refTimer.current);
+
+    //Add listener: When page visited again reload songs
+    const unlisten = history.listen(() => {
+      if (history.location.pathname === location.pathname) {
+        getSongs();
       }
-    };
+    });
+    return () => {
+      // unlisten() will be called when the component unmounts, prevents memory leaks.
+      unlisten();
+    }
   }, []);
 
   useEffect(() => {
