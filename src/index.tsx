@@ -7,16 +7,30 @@ import reportWebVitals from './reportWebVitals';
 import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink } from '@apollo/client';
 import { store } from './store/store'
 import { Provider } from 'react-redux'
+import { setContext } from '@apollo/client/link/context';
 
 const httpLink = new HttpLink({ 
   uri: 'http://10.0.0.101:8080/easton/graphql/',
 });
 
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const token = localStorage.getItem('token');
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : "",
+    }
+  }
+});
+
 const client = new ApolloClient({
-  link: httpLink,
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
   
 });
+
 
 const container = document.getElementById('root');
 const root = createRoot(container!);

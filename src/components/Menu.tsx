@@ -10,18 +10,18 @@ import {
   IonNote,
 } from '@ionic/react';
 
-import { useLocation } from 'react-router-dom';
-import { baseballOutline, baseballSharp, constructOutline, constructSharp, downloadOutline, downloadSharp, listOutline, listSharp, musicalNoteOutline, musicalNoteSharp, personCircleOutline, personCircleSharp, searchOutline, searchSharp } from 'ionicons/icons';
+import { useHistory, useLocation } from 'react-router-dom';
+import { baseballOutline, baseballSharp, constructOutline, constructSharp, downloadOutline, downloadSharp,
+  listOutline, listSharp, logOutOutline, logOutSharp, musicalNoteOutline, musicalNoteSharp, personCircleOutline,
+  personCircleSharp, searchOutline, searchSharp } from 'ionicons/icons';
 import './Menu.css';
 import { useEffect, useState } from 'react';
-import { useLazyQuery, useQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { GET_SONGS_WITH_ISSUES_COUNT } from '../graphql/graphql';
 import { RootState } from '../store/store';
-import { useSelector } from 'react-redux';
-
-
-
-const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../firebase';
+import { setIssueCount } from '../store/slices/issueCountSlice';
 
 const Menu: React.FC = () => {
 
@@ -29,12 +29,17 @@ const Menu: React.FC = () => {
 
   const songsWithIssuesCount = useSelector((state: RootState) => state.issueCount.value);
 
+  const history = useHistory();
+
+  const dispatch = useDispatch();
+
   const [
     getIssueCount,
     { loading: loadingCount, error: errorCount, data: dataCount }
   ] = useLazyQuery(GET_SONGS_WITH_ISSUES_COUNT, {
     fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache', onCompleted: (data) => {
       setRepairCount(data.getSongsWithIssuesCount);
+      dispatch(setIssueCount(data.getSongsWithIssuesCount));
     },
   });
 
@@ -46,6 +51,11 @@ const Menu: React.FC = () => {
     setRepairCount(songsWithIssuesCount.toString());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [songsWithIssuesCount]);
+
+  const handleLogOut = () => {
+    logout();
+    history.push({pathname:'/page/Login'});
+  };
 
   interface AppPage {
     url: string;
@@ -96,6 +106,12 @@ const Menu: React.FC = () => {
       url: '/page/Profile',
       iosIcon: personCircleOutline,
       mdIcon: personCircleSharp
+    },
+    {
+      title: 'Log Out',
+      url: '/page/Login',
+      iosIcon: logOutOutline,
+      mdIcon: logOutSharp
     }
   ];
 
@@ -110,7 +126,8 @@ const Menu: React.FC = () => {
           {appPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>
-                <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>
+                <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url}
+                  routerDirection="none" lines="none" detail={false} onClick={() => appPage.title == 'Log Out' ? handleLogOut() : undefined}>
                   <IonIcon slot="start" ios={appPage.iosIcon} md={appPage.mdIcon} />
                   <IonLabel>{appPage.title}</IonLabel>
                 </IonItem>
@@ -118,16 +135,6 @@ const Menu: React.FC = () => {
             );
           })}
         </IonList>
-{/* 
-        <IonList id="labels-list">
-          <IonListHeader>Labels</IonListHeader>
-          {labels.map((label, index) => (
-            <IonItem lines="none" key={index}>
-              <IonIcon slot="start" icon={bookmarkOutline} />
-              <IonLabel>{label}</IonLabel>
-            </IonItem>
-          ))}
-        </IonList> */}
       </IonContent>
     </IonMenu>
   );

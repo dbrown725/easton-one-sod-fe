@@ -2,16 +2,26 @@ import './Repair.css';
 import { GET_SONGS_WITH_ISSUES } from '../graphql/graphql';
 import ScrollingSongList from '../components/ScrollingSongList';
 import { IonButtons, IonContent, IonHeader, IonLabel, IonMenuButton, IonPage, IonSegment, IonSegmentButton, IonTitle, IonToolbar, SegmentChangeEventDetail } from '@ionic/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SearchForSongs from '../components/SearchForSongs';
 import { Song } from '../common/types';
 import { useHistory } from 'react-router';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/store';
 
 const Repair: React.FC = () => {
 
   const [isSearchShown, setSearchShown] = useState(false);
   const [segmentValue, setSegmentValue] = useState<string | undefined | null>('flagged');
   const history = useHistory();
+
+  const [repairCount, setRepairCount] = useState<string>('0');
+  const songsWithIssuesCount = useSelector((state: RootState) => state.issueCount.value);
+
+  useEffect(() => {
+    setRepairCount(songsWithIssuesCount.toString());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [songsWithIssuesCount]);
 
   const handleInputChangeSegment = (e: CustomEvent<SegmentChangeEventDetail>) => {
     setSegmentValue(e.detail.value);
@@ -49,10 +59,10 @@ const Repair: React.FC = () => {
         </IonHeader>
         <IonSegment value={segmentValue} onIonChange={e => { handleInputChangeSegment(e) }}>
             <IonSegmentButton value="flagged">
-              <IonLabel>Flagged Songs</IonLabel>
+              <IonLabel>{repairCount} Flagged Songs</IonLabel>
             </IonSegmentButton>
             <IonSegmentButton value="search">
-              <IonLabel>Search for Songs</IonLabel>
+              <IonLabel>Search for any Song</IonLabel>
             </IonSegmentButton>
           </IonSegment>
         {!isSearchShown &&

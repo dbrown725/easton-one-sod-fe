@@ -10,11 +10,13 @@ import { cloudDownloadOutline } from 'ionicons/icons';
 
 const Download: React.FC = () => {
 
+  const token = localStorage.getItem('token');
   const downloadSongs = () => {
     fetch('http://10.0.0.101:8080/easton/api/csv/download', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/csv',
+        'authorization': `Bearer ${token}`,
       },
     })
       .then((response) => response.blob())
