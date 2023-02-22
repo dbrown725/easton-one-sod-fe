@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { KeyboardEventHandler, useEffect, useState } from "react";
 import { auth, logInWithEmailAndPassword} from "./../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import "./Login.css";
@@ -33,32 +33,43 @@ const Login: React.FC = () => {
     }
   }, [user, loading]);
 
+  const login = (() => {
+    logInWithEmailAndPassword(email, password);
+  })
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if(e.key == 'Enter') {
+      login();
+    }
+  }
+
   return (
     <IonPage>
       <IonContent fullscreen class="background">
-    <div className="login">
-      <div className="login__container">
-        <input
-          type="text"
-          className="login__textBox"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="E-mail Address"
-        />
-        <input
-          type="password"
-          className="login__textBox"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-        />
-        <button
-          className="login__btn"
-          onClick={() => logInWithEmailAndPassword(email, password)}
-        >
-          Login
-        </button>
-        {/* <button className="login__btn login__google" onClick={signInWithGoogle}>
+        <div className="login" onKeyDown={e => { handleKeyDown(e) }}>
+          <div className="login__container">
+            <input
+              type="text"
+              className="login__textBox"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+
+              placeholder="E-mail Address"
+            />
+            <input
+              type="password"
+              className="login__textBox"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+            />
+            <button
+              className="login__btn"
+              onClick={() => login()}
+            >
+              Login
+            </button>
+            {/* <button className="login__btn login__google" onClick={signInWithGoogle}>
           Login with Google
         </button>
         <div>
@@ -67,9 +78,9 @@ const Login: React.FC = () => {
         <div>
           Don't have an account? <Link to="/register">Register</Link> now.
         </div> */}
-      </div>
-    </div>
-    </IonContent>
+          </div>
+        </div>
+      </IonContent>
     </IonPage>
   );
   
