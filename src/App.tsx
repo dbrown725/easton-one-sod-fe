@@ -1,6 +1,6 @@
 import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { Route } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 import Menu from './components/Menu';
 import Archives from './pages/Archives';
 import Bullpen from './pages/Bullpen';
@@ -11,6 +11,7 @@ import Playlist from './pages/Playlist';
 import Profile from './pages/Profile';
 import Repair from './pages/Repair';
 import Login from './pages/Login';
+import Reset from './pages/Reset';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -33,6 +34,7 @@ import { useState } from 'react';
 /* Theme variables */
 import './theme/variables.css';
 
+
 setupIonicReact();
 
 const App: React.FC = () => {
@@ -53,13 +55,17 @@ const App: React.FC = () => {
         !token &&
         <IonApp>
           <IonReactRouter>
-            <IonRouterOutlet id="main">
+            <IonRouterOutlet id="public">
+              <Route path="/" exact={true}>
+                <Login />
+              </Route>
+              <Route path="/page/Reset" exact={true}>
+                <Reset />
+              </Route>
               <Route path="/page/Login" exact={true}>
                 <Login />
               </Route>
-              <Route path="/*">
-                <Login />
-              </Route>
+              <Route render={() => <Redirect to={'/page/Login'} />} />
             </IonRouterOutlet>
           </IonReactRouter>
         </IonApp>
@@ -75,6 +81,9 @@ const App: React.FC = () => {
                 </Route>
                 <Route path="/page/Login" exact={true}>
                   <Login />
+                </Route>
+                <Route path="/page/Reset" exact={true}>
+                  <Reset />
                 </Route>
                 <Route path="/page/Archives" exact={true}>
                   <Archives />

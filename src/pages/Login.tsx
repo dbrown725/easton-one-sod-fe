@@ -1,9 +1,10 @@
-import React, { KeyboardEventHandler, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { auth, logInWithEmailAndPassword} from "./../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import "./Login.css";
 import { useHistory } from 'react-router';
 import { IonContent, IonPage } from "@ionic/react";
+import { Link, } from "react-router-dom";
 
 const Login: React.FC = () => {
 
@@ -23,7 +24,6 @@ const Login: React.FC = () => {
       setAuthenticatedOnceAlready(true);
       history.push({ pathname: '/page/Latest' });
     } else {
-      console.log('Login page NOT routing to latest, user is null');
       if (authenticatedOnceAlready) {
          //without this check the Login page keeps reloading over and over again.
 
@@ -70,14 +70,18 @@ const Login: React.FC = () => {
               Login
             </button>
             {/* <button className="login__btn login__google" onClick={signInWithGoogle}>
-          Login with Google
-        </button>
-        <div>
-          <Link to="/reset">Forgot Password</Link>
-        </div>
-        <div>
-          Don't have an account? <Link to="/register">Register</Link> now.
-        </div> */}
+              Login with Google
+              </button>
+            */}
+
+            <div>
+              <Link to="/page/Reset">Forgot Password</Link>
+            </div>
+            {/*
+            <div>
+              Don't have an account? <Link to="/register">Register</Link> now.
+            </div>
+          */}
           </div>
         </div>
       </IonContent>

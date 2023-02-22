@@ -22,7 +22,7 @@ const firebaseConfig = {
     authDomain: "<PLACEHOLDER>",
     projectId: "<PLACEHOLDER>",
     storageBucket: "<PLACEHOLDER>",
-    messagingSenderId: "<PLACEHOLDER>5",
+    messagingSenderId: "<PLACEHOLDER>",
     appId: "<PLACEHOLDER>",
     measurementId: "<PLACEHOLDER>"
 };
@@ -54,7 +54,6 @@ const signInWithGoogle = async () => {
 };
 
 const logInWithEmailAndPassword = async (email, password) => {
-  console.log('in firebase.js about to logInWithEmailAndPassword');
   try {
     await signInWithEmailAndPassword(auth, email, password);
   } catch (err) {
@@ -79,10 +78,11 @@ const registerWithEmailAndPassword = async (name, email, password) => {
   }
 };
 
-const sendPasswordReset = async (email) => {
+const sendPasswordReset = async (email, callback) => {
   try {
     await sendPasswordResetEmail(auth, email);
     alert("Password reset link sent!");
+    callback();
   } catch (err) {
     console.error(err);
     alert(err.message);
