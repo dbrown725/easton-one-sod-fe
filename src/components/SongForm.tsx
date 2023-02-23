@@ -55,7 +55,11 @@ const SongForm: React.FC<SongFormProps> = (props) => {
         setBandName(location.state.song.bandName);
         setSongName(location.state.song.songName);
         setLink(location.state.song.link);
-        setPlaylist(location.state.song.playlist);
+        if(location.state.song.playlist) {
+          setPlaylist(location.state.song.playlist);
+        } else {
+          setPlaylist(playlistName);
+        }
         setUserId(location.state.song.userId);
       }
     }
