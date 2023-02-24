@@ -170,7 +170,6 @@ const Bullpen: React.FC = () => {
           </IonToolbar>
         </IonHeader>
 
-        {loading && <h1>loading</h1>}
         {
           displayData
             && 

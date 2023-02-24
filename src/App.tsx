@@ -33,6 +33,7 @@ import { useState } from 'react';
 
 /* Theme variables */
 import './theme/variables.css';
+import { TimeoutLogic } from './components/TimeoutLogic';
 
 
 setupIonicReact();
@@ -40,14 +41,14 @@ setupIonicReact();
 const App: React.FC = () => {
   const [token, setToken] = useState<string>('');
 
-    auth.onAuthStateChanged(function (user) {
-      if (user) {
-        user!.getIdToken().then(function (idToken) {
-          setToken(idToken);
-          localStorage.setItem('token', idToken);
-        });
-      }
-    });
+  auth.onAuthStateChanged(function (user) {
+    if (user) {
+      user!.getIdToken().then(function (idToken) {
+        setToken(idToken);
+        localStorage.setItem('token', idToken);
+      });
+    }
+  });
 
   return (
     <>
@@ -112,6 +113,7 @@ const App: React.FC = () => {
               </IonRouterOutlet>
             </IonSplitPane>
           </IonReactRouter>
+          <TimeoutLogic/>
         </IonApp>
       }
     </>
