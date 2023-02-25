@@ -9,6 +9,9 @@ import Submit from './pages/Submit';
 import Download from './pages/Download';
 import Playlist from './pages/Playlist';
 import Profile from './pages/Profile';
+import Repair from './pages/Repair';
+import Login from './pages/Login';
+import Reset from './pages/Reset';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -25,51 +28,95 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
+import { auth } from "./firebase";
+import { useState } from 'react';
 
 /* Theme variables */
 import './theme/variables.css';
+import { TimeoutLogic } from './components/TimeoutLogic';
+
 
 setupIonicReact();
 
 const App: React.FC = () => {
-  
+  const [token, setToken] = useState<string>('');
+
+  auth.onAuthStateChanged(function (user) {
+    if (user) {
+      user!.getIdToken().then(function (idToken) {
+        setToken(idToken);
+        localStorage.setItem('token', idToken);
+      });
+    }
+  });
+
   return (
-      <IonApp>
-        <IonReactRouter>
-          <IonSplitPane contentId="main">
-            <Menu />
-            <IonRouterOutlet id="main">
+    <>
+      {
+        !token &&
+        <IonApp>
+          <IonReactRouter>
+            <IonRouterOutlet id="public">
               <Route path="/" exact={true}>
-                <Redirect to="/page/Latest" />
+                <Login />
               </Route>
-              <Route path="/page/Archives" exact={true}>
-                <Archives/>
+              <Route path="/page/Reset" exact={true}>
+                <Reset />
               </Route>
-              <Route path="/page/Bullpen" exact={true}>
-                <Bullpen/>
+              <Route path="/page/Login" exact={true}>
+                <Login />
               </Route>
-              <Route path="/page/Latest" exact={true}>
-                <Latest/>
-              </Route>
-              <Route path="/page/Submit" exact={true}>
-                <Submit/>
-              </Route>
-              <Route path="/page/Download" exact={true}>
-                <Download/>
-              </Route>
-              <Route path="/page/Playlist" exact={true}>
-                <Playlist/>
-              </Route>
-              <Route path="/page/Profile" exact={true}>
-                <Profile/>
-              </Route>
-              {/* <Route path="/page/:name" exact={true}>
-                <Page />
-              </Route> */}
+              <Route render={() => <Redirect to={'/page/Login'} />} />
             </IonRouterOutlet>
-          </IonSplitPane>
-        </IonReactRouter>
-      </IonApp>
+          </IonReactRouter>
+        </IonApp>
+      }
+      {token &&
+        <IonApp>
+          <IonReactRouter>
+            <IonSplitPane contentId="main">
+              <Menu />
+              <IonRouterOutlet id="main">
+                <Route path="/" exact={true}>
+                  <Login />
+                </Route>
+                <Route path="/page/Login" exact={true}>
+                  <Login />
+                </Route>
+                <Route path="/page/Reset" exact={true}>
+                  <Reset />
+                </Route>
+                <Route path="/page/Archives" exact={true}>
+                  <Archives />
+                </Route>
+                <Route path="/page/Bullpen" exact={true}>
+                  <Bullpen />
+                </Route>
+                <Route path="/page/Latest" exact={true}>
+                  <Latest />
+                </Route>
+                <Route path="/page/Submit" exact={true}>
+                  <Submit />
+                </Route>
+                <Route path="/page/Download" exact={true}>
+                  <Download />
+                </Route>
+                <Route path="/page/Playlist" exact={true}>
+                  <Playlist />
+                </Route>
+                <Route path="/page/Profile" exact={true}>
+                  <Profile />
+                </Route>
+                <Route path="/page/Repair" exact={true}>
+                  <Repair />
+                </Route>
+              </IonRouterOutlet>
+            </IonSplitPane>
+          </IonReactRouter>
+          <TimeoutLogic/>
+        </IonApp>
+      }
+    </>
   );
 };
 

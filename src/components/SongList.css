@@ -18,3 +18,7 @@ span#edit {
     line-height: 1;
     margin-right: 20px;
 }
+
+ion-chip {
+    margin-left: -5px;
+}

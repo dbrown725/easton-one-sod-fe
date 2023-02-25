@@ -1,4 +1,4 @@
-import { IonButton, IonCol, IonGrid, IonInput, IonItem, IonLabel, IonList, IonRow, IonTextarea } from '@ionic/react';
+import { IonButton, IonCol, IonGrid, IonInput, IonItem, IonLabel, IonList, IonRadio, IonRadioGroup, IonRow, IonTextarea } from '@ionic/react';
 import { useEffect, useRef, useState } from 'react';
 import {Song, SongFormProps} from '../common/types';
 import DOMPurify from 'dompurify';
@@ -6,13 +6,14 @@ import { useHistory, useLocation } from 'react-router';
 
 const SongForm: React.FC<SongFormProps> = (props) => {
 
-  const playlistName = 'End of the World (And I Feel Fine)';
+  const playlistName = 'Clam Strip Night!';
   const [id, setId] = useState<number | null | undefined>();
   const [message, setMessage] = useState<string | null | undefined>('');
   const [title, setTitle] = useState<string | number | null | undefined>('');
   const [bandName, setBandName] = useState<string |number | null | undefined>('');
   const [songName, setSongName] = useState<string | number | null | undefined>('');
   const [link, setLink] = useState<string | number |null | undefined>('');
+  const [userId, setUserId] = useState<string | number |null | undefined>(1);
   const [playlist, setPlaylist] = useState<string | number |null | undefined>(playlistName);
   const location = useLocation<{ song: Song }>();
   const history = useHistory();
@@ -54,7 +55,12 @@ const SongForm: React.FC<SongFormProps> = (props) => {
         setBandName(location.state.song.bandName);
         setSongName(location.state.song.songName);
         setLink(location.state.song.link);
-        setPlaylist(location.state.song.playlist);
+        if(location.state.song.playlist) {
+          setPlaylist(location.state.song.playlist);
+        } else {
+          setPlaylist(playlistName);
+        }
+        setUserId(location.state.song.userId);
       }
     }
   }, [location.state]);
@@ -66,20 +72,28 @@ const SongForm: React.FC<SongFormProps> = (props) => {
     return clean;
   }
 
-  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const submitData = async (buttonIdentifier: String) => {
+    if((!title || !bandName || !songName || !link) &&
+      buttonIdentifier !== 'cancelUpdateSodSong') {
+      return;
+    }
     props.song.message = sanitizeData(String(message));
     props.song.title = sanitizeData(String(title));
     props.song.bandName = sanitizeData(String(bandName));
     props.song.songName = sanitizeData(String(songName));
     props.song.link = sanitizeData(String(link));
     props.song.playlist = sanitizeData(String(playlist));
+    props.song.userId = Number(userId);
 
-    if(document.activeElement?.id === 'newSodSong') {
-      await props.sodCallback();
-    } else if(document.activeElement?.id === 'newBullpenSong') {
+    if(buttonIdentifier === 'newSodSong') {
+      await props.sodInsertCallback();
+    } else if(buttonIdentifier === 'updateSodSong') {
+      await props.sodUpdateCallback();
+    } else if(buttonIdentifier === 'cancelUpdateSodSong') {
+      await props.sodCancelUpdateCallback();
+    } else if(buttonIdentifier === 'bullpenSong') {
       await props.bpCallback();
-    } else {
+    }else {
       console.log('fell through');
     }
     clearForm();
@@ -106,7 +120,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
 
   return (
     <IonList>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={(e) => e.preventDefault()}>
         <IonGrid>
             <IonRow>
               <IonCol>
@@ -163,16 +177,88 @@ const SongForm: React.FC<SongFormProps> = (props) => {
             </IonRow>
 
             <IonRow>
-               <IonCol>
-                <IonButton id="newBullpenSong" expand="block" type="submit" className="ion-margin-top">
-                  Save to my Bullpen
-                </IonButton>
-              </IonCol>
               <IonCol>
-                <IonButton id="newSodSong" expand="block" type="submit" className="ion-margin-top">
-                  Submit your Song of the Day
-                </IonButton>
+                <IonLabel position="stacked">User Id temp solution</IonLabel>
+                <IonItem>
+                  <IonList>
+                    <IonRadioGroup allowEmptySelection={false} value={userId?.toString()} onIonChange={(e) => setUserId((e.target as HTMLIonRadioGroupElement).value)}>
+                      <IonItem>
+                        <IonLabel>Site Admin</IonLabel>
+                        <IonRadio slot="end" value="1" defaultChecked={true}></IonRadio>
+                      </IonItem>
+
+                      <IonItem>
+                        <IonLabel>David Brown</IonLabel>
+                        <IonRadio slot="end" value="8"></IonRadio>
+                      </IonItem>
+
+                      <IonItem>
+                        <IonLabel>Brian Ross</IonLabel>
+                        <IonRadio slot="end" value="6"></IonRadio>
+                      </IonItem>
+
+                      <IonItem>
+                        <IonLabel>Kevin Yant</IonLabel>
+                        <IonRadio slot="end" value="2"></IonRadio>
+                      </IonItem>
+
+                      <IonItem>
+                        <IonLabel>Lisa Roys</IonLabel>
+                        <IonRadio slot="end" value="3"></IonRadio>
+                      </IonItem>
+
+                      <IonItem>
+                        <IonLabel>Doug Roys</IonLabel>
+                        <IonRadio slot="end" value="5"></IonRadio>
+                      </IonItem>
+
+                      <IonItem>
+                        <IonLabel>Tim Roys</IonLabel>
+                        <IonRadio slot="end" value="4"></IonRadio>
+                      </IonItem>
+
+                      <IonItem>
+                        <IonLabel>Mike Brown</IonLabel>
+                        <IonRadio slot="end" value="7"></IonRadio>
+                      </IonItem>
+                    </IonRadioGroup>
+                  </IonList>
+                </IonItem>
+                {"userId: " + userId}
+                {" id: " + id}
               </IonCol>
+            </IonRow>
+
+            <IonRow>
+            {props.updateSODRequest &&
+              <>
+                <IonCol>
+                  <IonButton id="cancelUpdateSodSong" expand="block" type="submit" className="ion-margin-top" onClick={(e) => submitData('cancelUpdateSodSong')}>
+                    Cancel
+                  </IonButton>
+                </IonCol>
+                <IonCol>
+                  <IonButton id="updateSodSong" expand="block" type="submit" className="ion-margin-top" onClick={(e) => submitData('updateSodSong')}>
+                    Update Song of the Day
+                  </IonButton>
+                </IonCol>
+              </>
+            }
+
+            {!props.updateSODRequest &&
+              <>
+                <IonCol>
+                  <IonButton id="bullpenSong" expand="block" type="submit" className="ion-margin-top" onClick={(e) => {submitData('bullpenSong')}}>
+                    Save to my Bullpen
+                  </IonButton>
+                </IonCol>
+                <IonCol>
+                  <IonButton id="newSodSong" expand="block" type="submit" className="ion-margin-top" onClick={(e) => submitData('newSodSong')}>
+                    Submit your Song of the Day
+                  </IonButton>
+                </IonCol>
+              </>
+            }
             </IonRow>
         </IonGrid>      
 

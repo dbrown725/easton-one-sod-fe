@@ -75,15 +75,9 @@ query GetSearchResults {
 `;
 
   const { loading, error, data } = useQuery<BullpenSongData, SongVars>(GET_BULLPEN_SONG);
-  console.log('**** UseQuery data GET_BULLPEN_SONG', data);
 
   const onSubmit = (event: any) => {
     event.preventDefault();
-    console.log("Submitted");
-       
-    //console.log('cartItems', items);
-    //const { loading, error, data } = useQuery<SearchData, SongVars>(GET_SEARCH_RESULTS);
-    //console.log('**** UseQuery GET_SEARCH_RESULTS data', data);
   }
 
   return (
