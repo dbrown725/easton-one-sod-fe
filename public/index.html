@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Ionic App</title>
+    <title>Song of the Day</title>
 
     <base href="/" />
 
@@ -14,13 +14,24 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
 
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!-- start original -->
+    <!-- <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="shortcut icon" type="image/png" href="%PUBLIC_URL%/assets/icon/favicon.png" /> -->
+    <!-- end original -->
 
-    <link rel="shortcut icon" type="image/png" href="%PUBLIC_URL%/assets/icon/favicon.png" />
+    <!-- start new -->
+    <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/assets/icon/new/apple-touch-icon.png">
+    <link rel="shortcut icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/assets/icon/new/favicon-32x32.png">
+    <link rel="shortcuticon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/assets/icon/new/favicon-16x16.png">
+    <link rel="manifest" href="%PUBLIC_URL%/assets/icon/new/site.webmanifest">
+    <link rel="mask-icon" href="%PUBLIC_URL%/assets/icon/new/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <!-- end new -->
 
     <!-- add to homescreen for ios -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-title" content="Ionic App" />
+    <meta name="apple-mobile-web-app-title" content="Song of the Day" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   </head>
 
