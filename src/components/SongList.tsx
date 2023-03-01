@@ -36,7 +36,7 @@ const SongList: React.FC<SongListProps> = (props) => {
                           <IonRow>
                             <IonCol>
                               <IonAvatar>
-                                <img alt="Silhouette of a person's head" 
+                                <img alt={song.userFirstName + " " + song.userLastName}
                                   src={"https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=" + song.userFirstName + "+" + song.userLastName + "&rounded=true&background=" + song.userAvatarColor} 
                                   title={song.userFirstName + " " + song.userLastName}/>
                                 {/* <img alt="Silhouette of a person's head" src={adminPic} /> */}
