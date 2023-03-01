@@ -26,6 +26,9 @@ export const TimeoutLogic = () => {
     },modalDisplayPeriod) 
 
     const trackTotalTimeSinceActivity = () => {
+      //Function only called if there has been user activity, safe to kill any existing timers
+      clearTimeout(activityTimer);
+
       var lastActivityStart = Date.now();
       activityTimer = setInterval(function () {
         if (Date.now() - lastActivityStart > (awayFromKeyboardPeriod + modalDisplayPeriod)) {

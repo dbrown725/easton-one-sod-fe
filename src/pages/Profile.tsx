@@ -29,7 +29,6 @@ const Profile: React.FC = () => {
 
   useEffect(() => {
     getUserInfo();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -50,8 +49,8 @@ const Profile: React.FC = () => {
           </IonToolbar>
         </IonHeader>
 
-          <IonGrid>
-            <IonRow class="top-row">
+          <IonGrid className='profile-ion-grid'>
+            <IonRow className='profile-top-row'>
               <IonCol size='4' size-md='2'>
                 <img alt={userInfo?.firstName + " " + userInfo?.lastName}
                                     src={"https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=" + userInfo?.firstName + "+" + userInfo?.lastName + "&rounded=true&background=" + userInfo?.avatarColor}
@@ -60,7 +59,7 @@ const Profile: React.FC = () => {
               <IonCol size='8' size-md='10'>
               </IonCol>
             </IonRow>
-            <IonRow class='second-row'>
+            <IonRow className='profile-second-row'>
               <IonCol size='4' size-md='2'>
                 Screen Name:
               </IonCol>
