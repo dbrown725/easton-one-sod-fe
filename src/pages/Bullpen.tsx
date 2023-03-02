@@ -163,7 +163,8 @@ const Bullpen: React.FC = () => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent fullscreen>
+      {/* https://github.com/ionic-team/ionic-framework/issues/5198 */}
+      <IonContent fullscreen overflow-scroll="true">
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">My Bullpen</IonTitle>
