@@ -72,7 +72,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
 
   const submitData = async (buttonIdentifier: String) => {
     if((!title || !bandName || !songName || !link) &&
-      buttonIdentifier !== 'cancelUpdateSodSong') {
+      buttonIdentifier !== 'cancelUpdateSodSong' && buttonIdentifier !== 'cancelNewOrBPSong') {
       return;
     }
     props.song.message = sanitizeData(String(message));
@@ -90,7 +90,9 @@ const SongForm: React.FC<SongFormProps> = (props) => {
       await props.sodCancelUpdateCallback();
     } else if(buttonIdentifier === 'bullpenSong') {
       await props.bpCallback();
-    }else {
+    } else if(buttonIdentifier === 'cancelNewOrBPSong') {
+      history.goBack();
+    } else {
       console.log('fell through');
     }
     clearForm();
@@ -191,6 +193,11 @@ const SongForm: React.FC<SongFormProps> = (props) => {
 
             {!props.updateSODRequest &&
               <>
+                <IonCol>
+                  <IonButton id="cancelNewOrBPSong" expand="block" type="submit" className="ion-margin-top" onClick={(e) => submitData('cancelNewOrBPSong')}>
+                    Cancel
+                  </IonButton>
+                </IonCol>
                 <IonCol>
                   <IonButton id="bullpenSong" expand="block" type="submit" className="ion-margin-top" onClick={(e) => {submitData('bullpenSong')}}>
                     Save to my Bullpen

@@ -118,3 +118,7 @@ ion-img.menu-logo::part(image) {
   margin-left: 20px;
   margin-bottom: 20px;
 }
+
+ion-menu ion-note {
+  margin-top: 5px;
+}
