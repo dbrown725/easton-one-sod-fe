@@ -1,0 +1,27 @@
+.home-ion-grid {
+    margin-left: 20px
+}
+
+.home-top-row {
+    margin-top: 30px;
+}
+
+.home-second-row {
+    margin-top: 20px;
+}
+
+/* https://stackoverflow.com/questions/26421274/css-circular-cropping-of-rectangle-image */
+ion-img.home-img-cropper::part(img) {
+    display: inline;
+    margin: 0 auto;
+    height: 100%;
+    width: auto;
+}
+
+.home-img-cropper {
+    /* width: 100px;
+    height: 100px; */
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+}

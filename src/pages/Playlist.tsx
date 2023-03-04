@@ -48,7 +48,7 @@ const Playlist: React.FC = () => {
 
             <IonRow>
               <IonCol>
-                <IonImg className='dormImg' src={dorm} alt={"dorm image"}/>
+              <IonImg src="assets/images/Dorm.jpg" className='menu-logo' alt="Song of the day!"></IonImg>
               </IonCol>
             </IonRow>
           

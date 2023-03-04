@@ -3,7 +3,7 @@ import { auth, logInWithEmailAndPassword} from "./../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import "./Login.css";
 import { useHistory } from 'react-router';
-import { IonContent, IonPage } from "@ionic/react";
+import { IonContent, IonImg, IonPage } from "@ionic/react";
 import { Link, } from "react-router-dom";
 
 const Login: React.FC = () => {
@@ -22,7 +22,7 @@ const Login: React.FC = () => {
 
     if (user != null) {
       setAuthenticatedOnceAlready(true);
-      history.push({ pathname: '/page/Latest' });
+      history.push({ pathname: '/page/Home' });
     } else {
       if (authenticatedOnceAlready) {
          //without this check the Login page keeps reloading over and over again.

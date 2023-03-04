@@ -1,6 +1,7 @@
 import {
   IonContent,
   IonIcon,
+  IonImg,
   IonItem,
   IonLabel,
   IonList,
@@ -12,6 +13,8 @@ import {
 
 import { useHistory, useLocation } from 'react-router-dom';
 import { baseballOutline, baseballSharp, constructOutline, constructSharp, downloadOutline, downloadSharp,
+  homeOutline,
+  homeSharp,
   listOutline, listSharp, logOutOutline, logOutSharp, musicalNoteOutline, musicalNoteSharp, personCircleOutline,
   personCircleSharp, searchOutline, searchSharp } from 'ionicons/icons';
 import './Menu.css';
@@ -66,6 +69,12 @@ const Menu: React.FC = () => {
 
   const appPages: AppPage[] = [
     {
+      title: 'Home',
+      url: '/page/Home',
+      iosIcon: homeOutline,
+      mdIcon: homeSharp
+    },
+    {
       title: 'Latest songs',
       url: '/page/Latest',
       iosIcon: musicalNoteOutline,
@@ -95,12 +104,12 @@ const Menu: React.FC = () => {
       iosIcon: downloadOutline,
       mdIcon: downloadSharp
     },
-    {
-      title: 'Generate Playlist',
-      url: '/page/Playlist',
-      iosIcon: listOutline,
-      mdIcon: listSharp
-    },
+    // {
+    //   title: 'Generate Playlist',
+    //   url: '/page/Playlist',
+    //   iosIcon: listOutline,
+    //   mdIcon: listSharp
+    // },
     {
       title: 'My Profile',
       url: '/page/Profile',
@@ -121,6 +130,7 @@ const Menu: React.FC = () => {
     <IonMenu contentId="main" type="overlay">
       <IonContent>
         <IonList id="inbox-list">
+          <IonImg src="assets/images/sod.png" className='menu-logo' alt="Song of the day!"></IonImg>
           <IonListHeader>Song of the Day</IonListHeader>
           <IonNote>All the music that is fit to be played!</IonNote>
           {appPages.map((appPage, index) => {
