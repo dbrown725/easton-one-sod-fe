@@ -82,6 +82,21 @@ const Home: React.FC = () => {
               <IonImg className='home-img-cropper' src="https://e-cdns-images.dzcdn.net/images/artist/2ceac184bc846327f60c5b0d4247cc7a/500x500-000000-80-0-0.jpg" alt="home page artist image"></IonImg>
             </IonCol>
           </IonRow>
+
+          <IonRow className='home-second-row'>
+            <IonCol size='3'>
+              <IonImg className='home-img-cropper' src="https://e-cdns-images.dzcdn.net/images/artist/4f172683209890085533af4668166ab9/500x500-000000-80-0-0.jpg" alt="home page artist image"></IonImg>
+            </IonCol>
+            <IonCol size='3'>
+              <IonImg className='home-img-cropper' src="https://e-cdns-images.dzcdn.net/images/artist/abb38a8ec624344816b92e24070a4f1c/500x500-000000-80-0-0.jpg" alt="home page artist image"></IonImg>
+            </IonCol>
+            <IonCol size='3'>
+              <IonImg className='home-img-cropper' src="https://e-cdns-images.dzcdn.net/images/artist/a1d999187aa7d9a1bdc17825aa844284/500x500-000000-80-0-0.jpg" alt="home page artist image"></IonImg>
+            </IonCol>
+            <IonCol size='3'>
+              <IonImg className='home-img-cropper' src="https://e-cdns-images.dzcdn.net/images/artist/b70e19feb83c794c394db4a14283ffe6/500x500-000000-80-0-0.jpg" alt="home page artist image"></IonImg>
+            </IonCol>
+          </IonRow>
         </IonGrid>
         <FabToSubmit />
       </IonContent>

@@ -18,42 +18,11 @@ import { baseballOutline, baseballSharp, constructOutline, constructSharp, downl
   listOutline, listSharp, logOutOutline, logOutSharp, musicalNoteOutline, musicalNoteSharp, personCircleOutline,
   personCircleSharp, searchOutline, searchSharp } from 'ionicons/icons';
 import './Menu.css';
-import { useEffect, useState } from 'react';
-import { useLazyQuery } from '@apollo/client';
-import { GET_SONGS_WITH_ISSUES_COUNT } from '../graphql/graphql';
-import { RootState } from '../store/store';
-import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../firebase';
-import { setIssueCount } from '../store/slices/issueCountSlice';
 
 const Menu: React.FC = () => {
 
-  const [repairCount, setRepairCount] = useState<string>('0');
-
-  const songsWithIssuesCount = useSelector((state: RootState) => state.issueCount.value);
-
   const history = useHistory();
-
-  const dispatch = useDispatch();
-
-  const [
-    getIssueCount,
-    { loading: loadingCount, error: errorCount, data: dataCount }
-  ] = useLazyQuery(GET_SONGS_WITH_ISSUES_COUNT, {
-    fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache', onCompleted: (data) => {
-      setRepairCount(data.getSongsWithIssuesCount);
-      dispatch(setIssueCount(data.getSongsWithIssuesCount));
-    },
-  });
-
-  useEffect(() => {
-    getIssueCount();
-  }, []);
-
-  useEffect(() => {
-    setRepairCount(songsWithIssuesCount.toString());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [songsWithIssuesCount]);
 
   const handleLogOut = () => {
     logout();
@@ -93,13 +62,13 @@ const Menu: React.FC = () => {
       mdIcon: baseballSharp
     },
     {
-      title: 'Repair Shop - ' + repairCount + ' waiting',
+      title: 'Repair Shop',
       url: '/page/Repair',
       iosIcon: constructOutline,
       mdIcon: constructSharp
     },
     {
-      title: 'Download Songs',
+      title: 'Download',
       url: '/page/Download',
       iosIcon: downloadOutline,
       mdIcon: downloadSharp
