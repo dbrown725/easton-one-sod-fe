@@ -55,6 +55,19 @@ const SongList: React.FC<SongListProps> = (props) => {
                                 </a>
                             </h3>
                           </IonCol>
+                          <IonCol>
+                            <IonLabel position="floating">
+                              {props.showDeleteButton
+                                && <>Added</>
+                                }
+                              {!props.showDeleteButton
+                                && <>Submitted</>
+                              }
+                            </IonLabel>
+                            <h3
+                              dangerouslySetInnerHTML={{__html: sanitizeData(song.createTime?song.createTime.substring(0,10):'')}}>
+                            </h3>
+                          </IonCol>
                         </IonRow>
 
                         <IonRow>

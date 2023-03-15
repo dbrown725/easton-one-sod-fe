@@ -182,6 +182,8 @@ export    const GET_SONGS_WITH_ISSUES = gql`
               userAvatarColor
               message
               score
+              createTime
+              modifyTime
             }
           }
           `;          
