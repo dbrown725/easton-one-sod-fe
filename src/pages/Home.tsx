@@ -64,7 +64,7 @@ const Home: React.FC = () => {
               <IonImg className='home-img-cropper' src="https://e-cdns-images.dzcdn.net/images/artist/c4dc588c1a5e87253eace21204e25da7/500x500-000000-80-0-0.jpg" alt="home page artist image"></IonImg>
             </IonCol>
             <IonCol size='3'>
-              <IonImg className='home-img-cropper' src="https://e-cdns-images.dzcdn.net/images/artist/9ebfae8d20deb0fcc9ae8a4c180993f9/500x500-000000-80-0-0.jpg" alt="home page artist image"></IonImg>
+              <IonImg className='home-img-cropper' src="https://e-cdns-images.dzcdn.net/images/artist/64d2b3ba8117b2a414f72130c49f40ca/500x500-000000-80-0-0.jpg" alt="home page artist image"></IonImg>
             </IonCol>
           </IonRow>
 
@@ -95,6 +95,21 @@ const Home: React.FC = () => {
             </IonCol>
             <IonCol size='3'>
               <IonImg className='home-img-cropper' src="https://e-cdns-images.dzcdn.net/images/artist/b70e19feb83c794c394db4a14283ffe6/500x500-000000-80-0-0.jpg" alt="home page artist image"></IonImg>
+            </IonCol>
+          </IonRow>
+
+          <IonRow className='home-second-row'>
+            <IonCol size='3'>
+              <IonImg className='home-img-cropper' src="https://e-cdns-images.dzcdn.net/images/artist/9ebfae8d20deb0fcc9ae8a4c180993f9/500x500-000000-80-0-0.jpg" alt="home page artist image"></IonImg>
+            </IonCol>
+            <IonCol size='3'>
+              <IonImg className='home-img-cropper' src="https://e-cdns-images.dzcdn.net/images/artist/b0240b776c1cf0dc0abfd147cd2b5d49/500x500-000000-80-0-0.jpg" alt="home page artist image"></IonImg>
+            </IonCol>
+            <IonCol size='3'>
+              <IonImg className='home-img-cropper' src="https://e-cdns-images.dzcdn.net/images/artist/2deec542fc75d5691434c407ee077ff7/500x500-000000-80-0-0.jpg" alt="home page artist image"></IonImg>
+            </IonCol>
+            <IonCol size='3'>
+              <IonImg className='home-img-cropper' src="https://e-cdns-images.dzcdn.net/images/artist/340809d8bdd3341a65d6c658003e86ef/500x500-000000-80-0-0.jpg" alt="home page artist image"></IonImg>
             </IonCol>
           </IonRow>
         </IonGrid>
