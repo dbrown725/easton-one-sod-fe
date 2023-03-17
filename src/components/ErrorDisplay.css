@@ -1,0 +1,6 @@
+ion-img.error-display-logo::part(image) {
+  width: 20%;
+  height: 20%;
+  margin-left: 20px;
+  margin-bottom: -30px;
+}

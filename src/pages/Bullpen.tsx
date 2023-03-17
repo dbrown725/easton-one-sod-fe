@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import FabToSubmit from '../components/FabToSubmit';
 import { DELETE_BULLPEN_SONG, GET_ALL_BULLPEN_SONGS, UPDATE_BULLPEN_SONG } from '../graphql/graphql';
 import { useHistory, useLocation } from 'react-router';
+import ErrorDisplay from '../components/ErrorDisplay';
 
 const Bullpen: React.FC = () => {
 
@@ -172,6 +173,9 @@ const Bullpen: React.FC = () => {
         </IonHeader>
 
         {
+          error != null ? <ErrorDisplay message={error.message} detail={error.stack} /> :
+          deleteError != null ? <ErrorDisplay message={deleteError.message} detail={deleteError.stack} /> :
+          updateError != null ? <ErrorDisplay message={updateError.message} detail={updateError.stack} /> :
           displayData
             && 
             <SongList

@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import { GET_USER_INFO } from '../graphql/graphql';
 import { UserInfo } from '../common/types';
+import ErrorDisplay from '../components/ErrorDisplay';
 
 
 const Profile: React.FC = () => {
@@ -19,7 +20,7 @@ const Profile: React.FC = () => {
 
   const [
     getUserInfo,
-    { loading: countLoading, error: countError, data: countData }
+    { loading, error, data }
   ] = useLazyQuery(GET_USER_INFO, {
     fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache', onCompleted: (data) => {
       console.log('userInfo: ' , data.getUserInfo);
@@ -48,7 +49,9 @@ const Profile: React.FC = () => {
             <IonTitle size="large">My Profile</IonTitle>
           </IonToolbar>
         </IonHeader>
-
+          {
+          error != null ? <ErrorDisplay message={error.message} detail={error.stack} /> :
+          userInfo &&
           <IonGrid className='profile-ion-grid'>
             <IonRow className='profile-top-row'>
               <IonCol size='4' size-md='2'>
@@ -104,6 +107,7 @@ const Profile: React.FC = () => {
               </IonCol>
             </IonRow>
           </IonGrid>
+          }
           <FabToSubmit/>
       </IonContent>
     </IonPage>

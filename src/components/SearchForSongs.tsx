@@ -7,6 +7,7 @@ import { GET_SEARCH_RESULTS } from '../graphql/graphql';
 import './SearchForSongs.css';
 import { SearchingForSongsProps, Song } from '../common/types';
 import { useHistory, useLocation } from 'react-router';
+import ErrorDisplay from './ErrorDisplay';
 
 const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
 
@@ -81,7 +82,7 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
 
   const [
     getSongs,
-    { loading, data }
+    { loading, error, data }
   ] = useLazyQuery(GET_SEARCH_RESULTS, {
     fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache',
     variables: { searchText: { apiSearchText } }, onCompleted: (data) => {
@@ -117,6 +118,7 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
       </IonGrid>
 
       {
+        error != null ? <ErrorDisplay message={error.message} detail={error.stack} /> :
         displayData
         && <SongList showId={true} showScore={true} songs={displayData} editCallback={props.editCallback} showEditButton={props.showEditButton} showDeleteButton={false} />
       }

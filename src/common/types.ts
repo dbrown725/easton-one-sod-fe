@@ -72,6 +72,11 @@ export interface SearchingForSongsProps {
     showEditButton: boolean;
 }
 
+export interface ErrorDisplayProps {
+    message: string;
+    detail?: string;
+}
+
 export interface UserInfo {
     email: string;
     isEmailVerified: boolean;

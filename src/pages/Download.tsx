@@ -7,8 +7,12 @@ import {
 } from "@ionic/react";
 import FabToSubmit from '../components/FabToSubmit';
 import { cloudDownloadOutline } from 'ionicons/icons';
+import { useState } from 'react';
+import ErrorDisplay from '../components/ErrorDisplay';
 
 const Download: React.FC = () => {
+
+  const [errorDetail, setErrorDetail] = useState<TypeError>();
 
   const token = localStorage.getItem('token');
   const downloadSongs = () => {
@@ -40,6 +44,9 @@ const Download: React.FC = () => {
 
         // Clean up and remove the link
         link.parentNode!.removeChild(link);
+      }).catch((error) => {
+        setErrorDetail(error);
+        console.log('in Catch block: ', error);
       });
   }
 
@@ -60,6 +67,8 @@ const Download: React.FC = () => {
             <IonTitle size="large">Download CSV</IonTitle>
           </IonToolbar>
         </IonHeader>
+          {
+            errorDetail != null ? <ErrorDisplay message={errorDetail.message} detail={errorDetail.stack} /> :
           <IonGrid>
 
             {/* Temp hack to replace css for top margin */}
@@ -80,6 +89,7 @@ const Download: React.FC = () => {
               </IonCol>
             </IonRow>
           </IonGrid>
+          }
           <FabToSubmit/>
       </IonContent>
     </IonPage>
