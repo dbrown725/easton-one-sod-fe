@@ -1,9 +1,9 @@
-.home-top-row {
-    margin-top: 30px;
+.home-images-top-row {
+    margin-top: 20px;
 }
 
-.home-second-row {
-    margin-top: 20px;
+.home-image-rows {
+    margin-top: 10px;
 }
 
 /* https://stackoverflow.com/questions/26421274/css-circular-cropping-of-rectangle-image */
