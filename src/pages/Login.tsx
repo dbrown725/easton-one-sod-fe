@@ -35,6 +35,7 @@ const Login: React.FC = () => {
 
   const login = (() => {
     logInWithEmailAndPassword(email, password);
+    localStorage.setItem('lastActvity', Date.now().toString());
   })
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
