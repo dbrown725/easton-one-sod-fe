@@ -18,11 +18,16 @@ import { baseballOutline, baseballSharp, constructOutline, constructSharp, downl
   listOutline, listSharp, logOutOutline, logOutSharp, musicalNoteOutline, musicalNoteSharp, personCircleOutline,
   personCircleSharp, searchOutline, searchSharp } from 'ionicons/icons';
 import './Menu.css';
-import { logout } from '../firebase';
+import { role, logout, refreshRole } from '../firebase';
+import { useEffect } from 'react';
 
 const Menu: React.FC = () => {
 
   const history = useHistory();
+
+  useEffect(() => {
+    refreshRole();
+  }, []);
 
   const handleLogOut = () => {
     logout();
@@ -96,26 +101,34 @@ const Menu: React.FC = () => {
   const location = useLocation();
 
   return (
-    <IonMenu contentId="main" type="overlay">
-      <IonContent>
-        <IonList id="inbox-list">
-          <IonImg src="assets/images/sod.png" className='menu-logo' alt="Song of the day!"></IonImg>
-          <IonListHeader>Song of the Day</IonListHeader>
-          <IonNote>All the music that is fit to be played!</IonNote>
-          {appPages.map((appPage, index) => {
-            return (
-              <IonMenuToggle key={index} autoHide={false}>
-                <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url}
-                  routerDirection="none" lines="none" detail={false} onClick={() => appPage.title == 'Log Out' ? handleLogOut() : undefined}>
-                  <IonIcon slot="start" ios={appPage.iosIcon} md={appPage.mdIcon} />
-                  <IonLabel>{appPage.title}</IonLabel>
-                </IonItem>
-              </IonMenuToggle>
-            );
-          })}
-        </IonList>
-      </IonContent>
-    </IonMenu>
+    <>
+      <IonMenu contentId="main" type="overlay">
+        <IonContent>
+          {role &&
+            <IonList id="inbox-list">
+              <IonImg src="assets/images/sod.png" className='menu-logo' alt="Song of the day!"></IonImg>
+              <IonListHeader>Song of the Day</IonListHeader>
+              <IonNote>All the music that is fit to be played!</IonNote>
+              {appPages.map((appPage, index) => {
+                if((appPage.title === 'My Bullpen' || appPage.title === 'Repair Shop')
+                      && role !== 'ADMIN' && role !== 'SUBMITTER') {
+                  return false;
+                }
+                return (
+                  <IonMenuToggle key={index} autoHide={false}>
+                    <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url}
+                      routerDirection="none" lines="none" detail={false} onClick={() => appPage.title == 'Log Out' ? handleLogOut() : undefined}>
+                      <IonIcon slot="start" ios={appPage.iosIcon} md={appPage.mdIcon} />
+                      <IonLabel>{appPage.title}</IonLabel>
+                    </IonItem>
+                  </IonMenuToggle>
+                );
+              })}
+            </IonList>
+          }
+        </IonContent>
+      </IonMenu>
+    </>
   );
 };
 

@@ -18,18 +18,20 @@ import {
 } from "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "<PLACEHOLDER>",
-    authDomain: "<PLACEHOLDER>",
-    projectId: "<PLACEHOLDER>",
-    storageBucket: "<PLACEHOLDER>",
-    messagingSenderId: "<PLACEHOLDER>",
-    appId: "<PLACEHOLDER>",
-    measurementId: "<PLACEHOLDER>"
+     apiKey: "<PLACEHOLDER>",
+     authDomain: "<PLACEHOLDER>",
+     projectId: "<PLACEHOLDER>",
+     storageBucket: "<PLACEHOLDER>",
+     messagingSenderId: "<PLACEHOLDER>",
+     appId: "<PLACEHOLDER>",
+     measurementId: "<PLACEHOLDER>"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
+let role = "";
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -53,9 +55,33 @@ const signInWithGoogle = async () => {
   }
 };
 
+const refreshRole =  () => {
+  retreiveRole();
+}
+
+const retreiveRole =  () => {
+  auth.currentUser && auth.currentUser.getIdTokenResult()
+  .then((idTokenResult) => {
+    if (!!idTokenResult.claims.ADMIN) {
+      role = 'ADMIN';
+    } else if (!!idTokenResult.claims.GUEST) {
+      role = 'GUEST';
+    } else if (!!idTokenResult.claims.SUBMITTER) {
+      role = 'SUBMITTER';
+    } else{
+      role = 'NONE"'
+    }
+  })
+  .catch((error) => {
+    console.log(error);
+    logout();
+  });
+}
+
 const logInWithEmailAndPassword = async (email, password) => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
+    retreiveRole();
   } catch (err) {
     console.error(err);
     alert(err.message);
@@ -102,4 +128,6 @@ export {
   registerWithEmailAndPassword,
   sendPasswordReset,
   logout,
+  role,
+  refreshRole,
 };

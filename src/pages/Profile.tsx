@@ -12,7 +12,7 @@ import { useLazyQuery } from '@apollo/client';
 import { GET_USER_INFO } from '../graphql/graphql';
 import { UserInfo } from '../common/types';
 import ErrorDisplay from '../components/ErrorDisplay';
-
+import { refreshRole, role } from '../firebase';
 
 const Profile: React.FC = () => {
 
@@ -30,6 +30,7 @@ const Profile: React.FC = () => {
 
   useEffect(() => {
     getUserInfo();
+    refreshRole();
   }, []);
 
   return (
@@ -104,6 +105,15 @@ const Profile: React.FC = () => {
               </IonCol>
               <IonCol size='8' size-md='10'>
                 {userInfo?.isEmailVerified? 'True':'False'}
+              </IonCol>
+            </IonRow>
+
+            <IonRow>
+              <IonCol size='4' size-md='2'>
+                Role:
+              </IonCol>
+              <IonCol size='8' size-md='10'>
+                {role}
               </IonCol>
             </IonRow>
           </IonGrid>
