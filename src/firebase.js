@@ -18,13 +18,13 @@ import {
 } from "firebase/firestore";
 
 const firebaseConfig = {
-     apiKey: "<PLACEHOLDER>",
-     authDomain: "<PLACEHOLDER>",
-     projectId: "<PLACEHOLDER>",
-     storageBucket: "<PLACEHOLDER>",
-     messagingSenderId: "<PLACEHOLDER>",
-     appId: "<PLACEHOLDER>",
-     measurementId: "<PLACEHOLDER>"
+    apiKey: "********************************",
+    authDomain: "********************************",
+    projectId: "********************************",
+    storageBucket: "********************************",
+    messagingSenderId: "********************************",
+    appId: "********************************",
+    measurementId: "********************************",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -69,7 +69,7 @@ const retreiveRole =  () => {
     } else if (!!idTokenResult.claims.SUBMITTER) {
       role = 'SUBMITTER';
     } else{
-      role = 'NONE"'
+      role = 'NONE'
     }
   })
   .catch((error) => {
