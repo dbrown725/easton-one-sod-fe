@@ -101,7 +101,7 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
       <IonGrid>
         <IonRow>
           <IonCol>
-            <IonSearchbar id="searchText" onIonClear={e => { handleSearchbarClear(e) }} onIonChange={e => { handleInputChange(e) }} onKeyDown={e => { handleKeyDown(e) }} placeholder="Enter Search Text"></IonSearchbar>
+            <IonSearchbar id="searchText" onIonClear={e => { handleSearchbarClear(e) }} onIonChange={e => { handleInputChange(e) }} onKeyDown={e => { handleKeyDown(e) }} placeholder="Whole word match: 'Stone' and 'Stones' return very different results."></IonSearchbar>
           </IonCol>
         </IonRow>
 

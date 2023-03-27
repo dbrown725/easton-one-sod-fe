@@ -123,27 +123,27 @@ const SongForm: React.FC<SongFormProps> = (props) => {
       <form onSubmit={(e) => e.preventDefault()} className='ion-padding'>
         <IonItem>
           <IonLabel position="floating">Message (for email only)</IonLabel>
-          <IonTextarea value={message} onIonChange={(e) => setMessage((e.target as HTMLIonTextareaElement).value)} placeholder="Enter a message for your email"></IonTextarea>
+          <IonTextarea value={message} onIonChange={(e) => setMessage((e.target as HTMLIonTextareaElement).value)} placeholder="A great live performance by the Allman Brothers!"></IonTextarea>
         </IonItem>
 
         <IonItem>
           <IonLabel position="floating">Title</IonLabel>
-          <IonInput autofocus value={title} onIonChange={(e) => setTitle((e.target as HTMLIonInputElement).value)} required clear-input placeholder="Enter title"></IonInput>
+          <IonInput autofocus value={title} onIonChange={(e) => setTitle((e.target as HTMLIonInputElement).value)} required clear-input placeholder="Allman Brothers Band - One Way Out - Closing Night At The Fillmore (6/27/71)"></IonInput>
         </IonItem>
 
         <IonItem>
           <IonLabel position="floating">Band/Artist</IonLabel>
-          <IonInput value={bandName} onIonChange={(e) => setBandName((e.target as HTMLIonInputElement).value)} required clear-input placeholder="Enter band or artist's name"></IonInput>
+          <IonInput value={bandName} onIonChange={(e) => setBandName((e.target as HTMLIonInputElement).value)} required clear-input placeholder="The Allman Brothers Band"></IonInput>
         </IonItem>
 
         <IonItem>
           <IonLabel position="floating">Song</IonLabel>
-          <IonInput value={songName} onIonChange={(e) => setSongName((e.target as HTMLIonInputElement).value)} required clear-input placeholder="Enter song name"></IonInput>
+          <IonInput value={songName} onIonChange={(e) => setSongName((e.target as HTMLIonInputElement).value)} required clear-input placeholder="One Way Out"></IonInput>
         </IonItem>
 
         <IonItem>
           <IonLabel position="floating">YouTube url</IonLabel>
-          <IonInput value={link} onIonChange={(e) => setLink((e.target as HTMLIonInputElement).value)} required clear-input pattern="https://.*" type="url" placeholder="Enter the YouTube url: https://...."></IonInput>
+          <IonInput value={link} onIonChange={(e) => setLink((e.target as HTMLIonInputElement).value)} required clear-input pattern="https://.*" type="url" placeholder="https://www.youtube.com/watch?v=XAyaw4ktO5g"></IonInput>
         </IonItem>
 
         <IonItem>

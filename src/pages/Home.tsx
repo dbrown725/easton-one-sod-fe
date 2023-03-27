@@ -23,7 +23,7 @@ const Home: React.FC = () => {
       <IonContent fullscreen>
 
         <IonGrid>
-          <IonRow className='home-images-top-row'>
+          <IonRow className='home-image-rows'>
             <IonCol size='3'>
               <IonImg src="assets/images/sod.png" alt="Song of the day!"></IonImg>
             </IonCol>
