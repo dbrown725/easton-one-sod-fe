@@ -1,4 +1,4 @@
-import { IonButton, IonInput, IonItem, IonLabel, IonList, IonTextarea } from '@ionic/react';
+import { IonButton, IonInput, IonItem, IonLabel, IonList, IonNote, IonTextarea } from '@ionic/react';
 import { useEffect, useRef, useState } from 'react';
 import { Song, SongFormProps } from '../common/types';
 import DOMPurify from 'dompurify';
@@ -122,23 +122,31 @@ const SongForm: React.FC<SongFormProps> = (props) => {
     <IonList>
       <form onSubmit={(e) => e.preventDefault()} className='ion-padding'>
         <IonItem>
-          <IonLabel position="floating">Message (for email only)</IonLabel>
+          <IonLabel position="floating">Message</IonLabel>
           <IonTextarea value={message} onIonChange={(e) => setMessage((e.target as HTMLIonTextareaElement).value)} placeholder="A great live performance by the Allman Brothers!"></IonTextarea>
+          <IonNote slot="helper">Optional: Will only be included in the email.</IonNote>
         </IonItem>
 
         <IonItem>
           <IonLabel position="floating">Title</IonLabel>
           <IonInput autofocus value={title} onIonChange={(e) => setTitle((e.target as HTMLIonInputElement).value)} required clear-input placeholder="Allman Brothers Band - One Way Out - Closing Night At The Fillmore (6/27/71)"></IonInput>
+          <IonNote slot="helper">The band/artist(s) and song name with any additional descriptors you desire like live, acoustic, location, date etc..</IonNote>
         </IonItem>
 
         <IonItem>
-          <IonLabel position="floating">Band/Artist</IonLabel>
-          <IonInput value={bandName} onIonChange={(e) => setBandName((e.target as HTMLIonInputElement).value)} required clear-input placeholder="The Allman Brothers Band"></IonInput>
+          <IonLabel position="floating">
+            Band/Artist(s)
+          </IonLabel>
+          <IonInput className="song-form-ion-input" value={bandName} onIonChange={(e) => setBandName((e.target as HTMLIonInputElement).value)} required clear-input placeholder="The Allman Brothers Band"></IonInput>
+          <IonNote slot="helper">Just who is performing in the video. </IonNote>
         </IonItem>
 
         <IonItem>
-          <IonLabel position="floating">Song</IonLabel>
+          <IonLabel position="floating">
+            Song name
+          </IonLabel>
           <IonInput value={songName} onIonChange={(e) => setSongName((e.target as HTMLIonInputElement).value)} required clear-input placeholder="One Way Out"></IonInput>
+          <IonNote slot="helper">Just the name of the song. </IonNote>
         </IonItem>
 
         <IonItem>
