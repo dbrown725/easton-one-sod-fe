@@ -86,3 +86,8 @@ export interface UserInfo {
     screenName: string;
     avatarColor: string;
 }
+
+export interface BandStats {
+    bandName: string;
+    songCount: number;
+}

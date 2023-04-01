@@ -23,7 +23,6 @@ const Profile: React.FC = () => {
     { loading, error, data }
   ] = useLazyQuery(GET_USER_INFO, {
     fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache', onCompleted: (data) => {
-      console.log('userInfo: ' , data.getUserInfo);
       setUserInfo(data.getUserInfo);
     }
   });

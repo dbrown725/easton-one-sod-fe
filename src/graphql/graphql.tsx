@@ -186,4 +186,13 @@ export    const GET_SONGS_WITH_ISSUES = gql`
               modifyTime
             }
           }
-          `;          
+          `;
+
+export    const GET_BAND_STATS = gql`
+    query getBandStats($count: Int!) {
+      getBandStats(count: $count) {
+        bandName
+        songCount
+        }
+    }
+    `;
