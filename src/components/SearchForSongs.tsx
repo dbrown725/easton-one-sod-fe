@@ -36,7 +36,7 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
     { loading: bsLoading, error: bsError, data: bsData }
   ] = useLazyQuery(GET_BAND_STATS, {
     fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache',
-    variables: { count: 500 }, onCompleted: (data) => {
+    variables: { count: 100 }, onCompleted: (data) => {
       let bandStats: BandStats[] = [];
       data.getBandStats.forEach( (bs: BandStats)=> {
         bandStats.push(JSON.parse(JSON.stringify(bs)));
