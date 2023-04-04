@@ -22,9 +22,11 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
 
   const refTimer = useRef<number | undefined>(undefined);
 
-  const refTimerTrigger = useRef<number | undefined>(undefined);
-
   const [bandStats, setBandStats] = useState<BandStats[]>([]);
+
+  const [clearClicked, setClearClicked] = useState<boolean>(false);
+
+  const [enterPressed, setEnterPressed] = useState<boolean>(false);
 
   const [bubbleDivId, setBubbleDivId] = useState<string | undefined>();
 
@@ -48,6 +50,7 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
   });
 
   const svgCallback = (bandName: string) => {
+    cleanAndSetSearchText(bandName);
     setInputValue(bandName);
   }
 
@@ -99,41 +102,56 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    refTimerTrigger.current = window.setTimeout(() => {
+    if(searchText == "") {
+      setDisplayData([]);
+    } else {
       triggerChange();
-    }, 1000);
-
-    // if this effect run again, because `value` changed, we remove the previous timeout
-    return () => clearTimeout(refTimerTrigger.current);
+    }
   }, [searchText]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLIonSearchbarElement>) => {
     if (e.key === 'Enter') {
+      setEnterPressed(true);
+      clearTimeout(refTimer.current);
+      cleanAndSetSearchText(inputValue);
       triggerChange();
     }
   }
 
   const handleInputChange = (e: CustomEvent<SearchbarChangeEventDetail>) => {
-    setInputValue(e.detail.value);
+    
     clearTimeout(refTimer.current);
-    clearTimeout(refTimerTrigger.current);
+    setInputValue(e.detail.value);
 
-    refTimer.current = window.setTimeout(() => {
-      var clean = e.detail.value;
-      if(e.detail.value?.toLowerCase().includes("the the") == false
-          &&
-          e.detail.value?.toLowerCase().includes("the ") == true
-          ) {
-            clean = e.detail.value?.replace("The ", "");
-      }
-      setSearchText(clean);
-    }, 2000);
+    if(clearClicked || enterPressed) {
+      setClearClicked(false);
+      setEnterPressed(false);
+    } else {
+      refTimer.current = window.setTimeout(() => {
+        cleanAndSetSearchText(e.detail.value);
+      }, 2000);
+    }
   };
 
+  const cleanAndSetSearchText = ((rawSearchText: string | undefined | null) => {
+    var clean = rawSearchText;
+    if(rawSearchText?.toLowerCase().includes("the the") == false
+        &&
+        rawSearchText?.toLowerCase().includes("the ") == true
+        ) {
+          if(rawSearchText.startsWith("the ")) {
+            clean = rawSearchText?.replace("the ", "");
+          } else {
+            clean = rawSearchText?.replace("The ", "");
+          }
+    }
+    setSearchText(clean);
+  })
+
   const handleSearchbarClear = (e: CustomEvent<void>) => {
+    setClearClicked(true);
     setSearchText('');
     setInputValue('');
-    triggerChange();
   };
 
   const setFocus = () => {
