@@ -9,3 +9,15 @@
         margin-bottom: 20px;
     }
 }
+
+.submit-form .hide {
+    display:none
+}
+
+.submit-form .bottom-guide {
+    margin-left: 20px;
+}
+
+.submit-form .required {
+    margin-left: 5px;
+}
