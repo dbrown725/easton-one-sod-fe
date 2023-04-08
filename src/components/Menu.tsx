@@ -19,11 +19,15 @@ import { baseballOutline, baseballSharp, constructOutline, constructSharp, downl
   personCircleSharp, searchOutline, searchSharp } from 'ionicons/icons';
 import './Menu.css';
 import { role, logout, refreshRole } from '../firebase';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 const Menu: React.FC = () => {
 
   const history = useHistory();
+
+  const location = useLocation();
+
+  const menuRef = useRef<HTMLIonMenuElement>(null);
 
   useEffect(() => {
     refreshRole();
@@ -33,6 +37,11 @@ const Menu: React.FC = () => {
     logout();
     history.push({pathname:'/page/Login'});
   };
+
+  const handleSodIconClick = () => {
+    history.push({ pathname: '/page/Home' });
+    menuRef.current?.close();
+  }
 
   interface AppPage {
     url: string;
@@ -98,15 +107,15 @@ const Menu: React.FC = () => {
     }
   ];
 
-  const location = useLocation();
-
   return (
     <>
-      <IonMenu contentId="main" type="overlay">
+      <IonMenu contentId="main" type="overlay" ref={menuRef}>
         <IonContent>
           {role &&
             <IonList id="inbox-list">
-              <IonImg src="assets/images/sod.png" className='menu-logo' alt="Song of the day!"></IonImg>
+              <IonImg src="assets/images/sod.png" className='menu-logo' alt="Song of the day!"
+                onClick={() => handleSodIconClick()}>
+              </IonImg>
               <IonListHeader>Song of the Day</IonListHeader>
               <IonNote>All the music that is fit to be played!</IonNote>
               {appPages.map((appPage, index) => {
