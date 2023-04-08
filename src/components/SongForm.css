@@ -21,3 +21,7 @@
 .submit-form .required {
     margin-left: 5px;
 }
+
+.submit-form ion-item.ion-invalid.ion-touched{
+    border-bottom: 2px solid var(--ion-color-danger) !important;
+}
