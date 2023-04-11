@@ -30,6 +30,8 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
 
   const [bubbleDivId, setBubbleDivId] = useState<string | undefined>();
 
+  const [showZeroResults, setShowZeroResults] = useState<boolean>(false);
+
   const history = useHistory();
 
   const location = useLocation();
@@ -174,6 +176,13 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
         songs.push(JSON.parse(JSON.stringify(sng)));
       });
       setDisplayData(songs);
+      if(songs.length == 0) {
+        setShowZeroResults(true);
+        window.setTimeout(() => {
+          setShowZeroResults(false);
+        }, 5000);
+
+      }
 
       setFocus();
     }
@@ -188,7 +197,7 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
           </IonCol>
         </IonRow>
 
-        {displayData.length > 0 &&
+        {(displayData.length > 0 || showZeroResults) &&
           <IonRow>
             <IonCol>
               <IonItem lines="none">
