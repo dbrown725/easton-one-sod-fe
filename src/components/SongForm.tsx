@@ -292,18 +292,20 @@ const SongForm: React.FC<SongFormProps> = (props) => {
           </IonInput>
         </IonItem>
 
-        <IonItem>
-          <IonLabel>Comment:</IonLabel>
-          <IonTextarea
-            className="comment"
-            maxlength={250}
-            value={message}
-            onFocus={(e) => handleTextFocusEvent((e as unknown as React.FormEvent<HTMLIonInputElement>))}
-            onIonChange={(e) => setMessage((e.target as HTMLIonTextareaElement).value)}
-            placeholder="A great live performance by the Allman Brothers!">
-          </IonTextarea>
-          <IonNote className="hide commentNote" slot="helper">Optional: Will only be included in the email.</IonNote>
-        </IonItem>
+        {!props.updateSODRequest &&
+          <IonItem>
+            <IonLabel>Comment:</IonLabel>
+            <IonTextarea
+              className="comment"
+              maxlength={250}
+              value={message}
+              onFocus={(e) => handleTextFocusEvent((e as unknown as React.FormEvent<HTMLIonInputElement>))}
+              onIonChange={(e) => setMessage((e.target as HTMLIonTextareaElement).value)}
+              placeholder="A great live performance by the Allman Brothers!">
+            </IonTextarea>
+            <IonNote className="hide commentNote" slot="helper">Optional: Will only be included in the email.</IonNote>
+          </IonItem>
+        }
 
         <div className="bottom-guide"><span>*</span><span className="required">required</span></div>
 
