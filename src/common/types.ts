@@ -20,6 +20,7 @@ export interface Song {
     userFirstName?: string;
     userLastName?: string;
     userAvatarColor?: string;
+    userIsTheSubmitter: boolean;
 }
 
 export interface SongResult {

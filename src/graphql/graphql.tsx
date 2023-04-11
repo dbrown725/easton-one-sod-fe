@@ -68,6 +68,7 @@ export    const GET_ALL_BULLPEN_SONGS = gql`
                 sortOrder
                 createTime
                 modifyTime
+                userIsTheSubmitter
                 }
             }
             `;  
@@ -95,6 +96,7 @@ export    const GET_MOST_RECENT_SONGS = gql`
                 userAvatarColor
                 createTime
                 modifyTime
+                userIsTheSubmitter
                 }
             }
             `;  
@@ -121,6 +123,7 @@ export    const GET_SONGS_WITH_ISSUES = gql`
                 userAvatarColor
                 createTime
                 modifyTime
+                userIsTheSubmitter
                 }
             }
             `;
@@ -184,6 +187,7 @@ export    const GET_SONGS_WITH_ISSUES = gql`
               score
               createTime
               modifyTime
+              userIsTheSubmitter
             }
           }
           `;

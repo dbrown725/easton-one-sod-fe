@@ -38,7 +38,8 @@ const Submit: React.FC<SubmitProps> = (props) => {
       title: '',
       link: '',
       message: '',
-      playlist: ''
+      playlist: '',
+      userIsTheSubmitter: false
     });
 
 
@@ -50,7 +51,8 @@ const Submit: React.FC<SubmitProps> = (props) => {
       title: '',
       link: '',
       message: '',
-      playlist: ''
+      playlist: '',
+      userIsTheSubmitter: false
     });
   }
 
