@@ -4,7 +4,7 @@ function BuildSVG(targetDivId, data, callback) {
 
   var width =  window.innerWidth;
   var height =  window.innerHeight;
-  var diameter = height;
+  var diameter = height  - 150;
   if(height > width) {
     diameter = width;
   }
@@ -27,8 +27,8 @@ function BuildSVG(targetDivId, data, callback) {
     chartTitleFontSize = 10;
   } else if(width < 1500) {
     textSize = 8;
-    chartTitleX = 20;
-    chartTitleY = 40;
+    chartTitleX = 10;
+    chartTitleY = 20;
     chartTitleFontSize = 14;
   }
   const svg = BubbleChart(data, {  
