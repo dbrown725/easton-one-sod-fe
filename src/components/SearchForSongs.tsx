@@ -12,7 +12,7 @@ import { BuildSVG } from './BubbleChart';
 
 const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
 
-  const [searchText, setSearchText] = useState<string | undefined | null>();
+  const [searchText, setSearchText] = useState<string | undefined | null>("");
 
   const [apiSearchText, setApiSearchText] = useState<string | undefined | null>();
 
