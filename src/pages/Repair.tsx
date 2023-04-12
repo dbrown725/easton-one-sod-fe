@@ -14,6 +14,7 @@ import { useLazyQuery } from '@apollo/client';
 const Repair: React.FC = () => {
 
   const [isSearchShown, setSearchShown] = useState(false);
+  const [isAndroid, setAndroid] = useState(false);
   const [segmentValue, setSegmentValue] = useState<string | undefined | null>('flagged');
   const history = useHistory();
 
@@ -33,6 +34,9 @@ const Repair: React.FC = () => {
   });
 
   useEffect(() => {
+    if(window?.navigator?.userAgent.includes("Android")) {
+      setAndroid(true);
+    }
     getIssueCount();
   }, []);
 
@@ -77,10 +81,10 @@ const Repair: React.FC = () => {
         </IonHeader>
         <IonSegment value={segmentValue} onIonChange={e => { handleInputChangeSegment(e) }}>
             <IonSegmentButton value="flagged">
-              <IonLabel>{repairCount} Flagged Songs</IonLabel>
+              <IonLabel style={{fontSize: isAndroid ? '12px' : '14px' }}>{repairCount} Flagged Songs</IonLabel>
             </IonSegmentButton>
             <IonSegmentButton value="search">
-              <IonLabel>Search for any Song</IonLabel>
+              <IonLabel style={{fontSize: isAndroid ? '12px' : '14px' }}>Search for any Song</IonLabel>
             </IonSegmentButton>
           </IonSegment>
         {!isSearchShown &&
