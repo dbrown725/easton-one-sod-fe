@@ -262,7 +262,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
           </IonLabel>
           <IonInput
             className="title"
-            maxlength={100}
+            maxlength={203} //band (max 100) + " - " + //song (max 100)
             value={title}
             onIonChange={(e) => {setTitle((e.target as HTMLIonInputElement).value); onChanged(e.target)}}
             onBlur={(e) => handleTextBlurEvent((e as React.FormEvent<HTMLIonInputElement>))}
