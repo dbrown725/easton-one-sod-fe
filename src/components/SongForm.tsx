@@ -161,7 +161,8 @@ const SongForm: React.FC<SongFormProps> = (props) => {
     document.getElementsByClassName("bandArtistNote")[0].classList.add("hide");
     document.getElementsByClassName("songNameNote")[0].classList.add("hide");
     document.getElementsByClassName("titleNote")[0].classList.add("hide");
-    document.getElementsByClassName("commentNote")[0].classList.add("hide");
+    document.getElementsByClassName("commentNote")[0] && 
+      document.getElementsByClassName("commentNote")[0].classList.add("hide");
     if(classList?.contains("bandArtist")) {
       document.getElementsByClassName("bandArtistNote")[0].classList.remove("hide");
       (e.target as HTMLFormElement).parentElement?.parentElement?.classList.add("item-has-focus");
