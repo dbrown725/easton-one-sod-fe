@@ -12,7 +12,7 @@ import { BuildSVG } from './BubbleChart';
 
 const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
 
-  const [searchText, setSearchText] = useState<string | undefined | null>("");
+  const [searchText, setSearchText] = useState<string | undefined | null>();
 
   const [apiSearchText, setApiSearchText] = useState<string | undefined | null>();
 
@@ -59,11 +59,13 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
   const triggerChange = () => {
     //state updates are batched by React which causes a delay. The below gets the true current state.
     setSearchText((state) => {
-      if(state == null) {
+      if(!state) {
         state = "";
       }
       setApiSearchText(state);
-      getSongs();
+      if(state.length > 0) {
+        getSongs();
+      }
       return state;
     });
   }
@@ -93,7 +95,7 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
     //Add listener: When page visited again reload songs
     const unlisten = history.listen(() => {
       if (history.location.pathname === location.pathname) {
-        getSongs();
+        triggerChange();
         getBandStatsList();
       }
     });
@@ -104,8 +106,9 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    if(searchText == "") {
+    if(searchText === "") {
       setDisplayData([]);
+      setApiSearchText("");
     } else {
       triggerChange();
     }
@@ -176,12 +179,11 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
         songs.push(JSON.parse(JSON.stringify(sng)));
       });
       setDisplayData(songs);
-      if(songs.length == 0) {
+      if(apiSearchText && songs.length === 0) {
         setShowZeroResults(true);
         window.setTimeout(() => {
           setShowZeroResults(false);
         }, 5000);
-
       }
 
       setFocus();
@@ -193,7 +195,14 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
       <IonGrid>
         <IonRow>
           <IonCol>
-            <IonSearchbar id="searchText" value = {inputValue} onIonClear={e => { handleSearchbarClear(e) }} onIonChange={e => { handleInputChange(e) }} onKeyDown={e => { handleKeyDown(e) }} placeholder="Whole word match: 'Stone' and 'Stones' return very different results."></IonSearchbar>
+            <IonSearchbar
+              id="searchText"
+              value = {inputValue}
+              onIonClear={e => { handleSearchbarClear(e) }}
+              onIonChange={e => { handleInputChange(e) }}
+              onKeyDown={e => { handleKeyDown(e) }}
+              placeholder="Whole word match: Stone and Stones return very different results.">
+            </IonSearchbar>
           </IonCol>
         </IonRow>
 
@@ -213,7 +222,13 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
       {
         error != null ? <ErrorDisplay message={error.message} detail={error.stack} /> :
         displayData
-        && <SongList showId={true} showScore={true} songs={displayData} editCallback={props.editCallback} showEditButton={props.showEditButton} showDeleteButton={false} />
+        && <SongList
+              showId={true}
+              showScore={true}
+              songs={displayData}
+              editCallback={props.editCallback}
+              showEditButton={props.showEditButton}
+              showDeleteButton={false} />
       }
 
       <div className="bubbleChart" id={bubbleDivId} style={{display: displayData.length == 0 ? '' : 'none' }}></div>
