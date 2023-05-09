@@ -19,7 +19,8 @@ const SongForm: React.FC<SongFormProps> = (props) => {
   const location = useLocation<{ song: Song }>();
   const history = useHistory();
 
-  const urlStartsWith = "https://www.youtu";
+  const urlStartsWith1 = "https://www.youtu";
+  const urlStartsWith2 = "https://youtu";
 
   // Start logic related to clearing form when user navigates away without submitting.
   // There must be an easier way.
@@ -194,7 +195,8 @@ const SongForm: React.FC<SongFormProps> = (props) => {
       (e.target as HTMLFormElement).parentElement?.parentElement?.classList.add("ion-invalid");
     } else if(classList?.contains("title") && !title) {
       (e.target as HTMLFormElement).parentElement?.parentElement?.classList.add("ion-invalid");
-    } else if(classList?.contains("url") && !link?.toString().startsWith(urlStartsWith)) {
+    } else if(classList?.contains("url") && !link?.toString().startsWith(urlStartsWith1)
+          && !link?.toString().startsWith(urlStartsWith2)) {
       (e.target as HTMLFormElement).parentElement?.parentElement?.classList.add("ion-invalid");
     }
     validateForm();
@@ -208,7 +210,8 @@ const SongForm: React.FC<SongFormProps> = (props) => {
       &&
       document.getElementsByClassName("title")[0].querySelector("input")?.value.trim()
       &&
-      document.getElementsByClassName("url")[0].querySelector("input")?.value?.trim().startsWith(urlStartsWith)) {
+      (document.getElementsByClassName("url")[0].querySelector("input")?.value?.trim().startsWith(urlStartsWith1)
+        || document.getElementsByClassName("url")[0].querySelector("input")?.value?.trim().startsWith(urlStartsWith2))) {
         setFormValidated(true);
     } else {
       setFormValidated(false);
@@ -286,7 +289,6 @@ const SongForm: React.FC<SongFormProps> = (props) => {
             onBlur={(e) => handleTextBlurEvent((e as React.FormEvent<HTMLIonInputElement>))}
             onFocus={(e) => handleTextFocusEvent((e as React.FormEvent<HTMLIonInputElement>))}
             required
-            pattern="https://www.youtube.*"
             type="url"
             clear-input
             placeholder="https://www.youtube.com/watch?v=XAyaw4ktO5g">
