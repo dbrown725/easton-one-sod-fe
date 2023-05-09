@@ -16,7 +16,7 @@ const Download: React.FC = () => {
 
   const token = localStorage.getItem('token');
   const downloadSongs = () => {
-    fetch('http://10.0.0.101:8080/easton/api/csv/download', {
+    fetch(`${process.env.REACT_APP_API_ENDPOINT_DOWNLOAD}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/csv',
