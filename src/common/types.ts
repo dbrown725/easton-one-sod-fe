@@ -17,10 +17,10 @@ export interface Song {
     createTime?: string;
     modifyTime?: string;
     score?: number;
-    userId?: number;
     userFirstName?: string;
     userLastName?: string;
     userAvatarColor?: string;
+    userIsTheSubmitter: boolean;
 }
 
 export interface SongResult {
@@ -71,4 +71,24 @@ export interface ScrollingSongListProps {
 export interface SearchingForSongsProps {
     editCallback?: ((event: React.MouseEvent<HTMLSpanElement>, song: Song) => void) | undefined;
     showEditButton: boolean;
+}
+
+export interface ErrorDisplayProps {
+    message: string;
+    detail?: string;
+}
+
+export interface UserInfo {
+    email: string;
+    isEmailVerified: boolean;
+    issuer: string;
+    firstName: string;
+    lastName: string;
+    screenName: string;
+    avatarColor: string;
+}
+
+export interface BandStats {
+    bandName: string;
+    songCount: number;
 }

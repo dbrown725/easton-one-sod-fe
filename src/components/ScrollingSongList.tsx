@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { refresh } from 'ionicons/icons';
 import { useHistory, useLocation } from 'react-router';
 import FabToSubmit from './FabToSubmit';
+import ErrorDisplay from './ErrorDisplay';
 
 const ScrollingSongList: React.FC<ScrollingSongListProps> = (props) => {
 
@@ -122,6 +123,7 @@ const ScrollingSongList: React.FC<ScrollingSongListProps> = (props) => {
         <IonIcon slot="icon-only" icon={refresh}></IonIcon>
       </IonButton>
       {
+        error != null ? <ErrorDisplay message={error.message} detail={error.stack} /> :
         displayData
         && <SongList showId={true} showScore={false} songs={displayData} editCallback={props.editCallback} showDeleteButton={props.showDeleteButton} showEditButton={props.showEditButton} />
       }

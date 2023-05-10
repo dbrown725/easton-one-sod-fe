@@ -1,22 +1,44 @@
 import './Repair.css';
-import { GET_SONGS_WITH_ISSUES } from '../graphql/graphql';
+import { GET_SONGS_WITH_ISSUES, GET_SONGS_WITH_ISSUES_COUNT } from '../graphql/graphql';
 import ScrollingSongList from '../components/ScrollingSongList';
 import { IonButtons, IonContent, IonHeader, IonLabel, IonMenuButton, IonPage, IonSegment, IonSegmentButton, IonTitle, IonToolbar, SegmentChangeEventDetail } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import SearchForSongs from '../components/SearchForSongs';
 import { Song } from '../common/types';
 import { useHistory } from 'react-router';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
+import { setIssueCount } from '../store/slices/issueCountSlice';
+import { useLazyQuery } from '@apollo/client';
 
 const Repair: React.FC = () => {
 
   const [isSearchShown, setSearchShown] = useState(false);
+  const [isAndroid, setAndroid] = useState(false);
   const [segmentValue, setSegmentValue] = useState<string | undefined | null>('flagged');
   const history = useHistory();
 
   const [repairCount, setRepairCount] = useState<string>('0');
   const songsWithIssuesCount = useSelector((state: RootState) => state.issueCount.value);
+
+  const dispatch = useDispatch();
+
+  const [
+    getIssueCount,
+    { loading: loadingCount, error: errorCount, data: dataCount }
+  ] = useLazyQuery(GET_SONGS_WITH_ISSUES_COUNT, {
+    fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache', onCompleted: (data) => {
+      setRepairCount(data.getSongsWithIssuesCount);
+      dispatch(setIssueCount(data.getSongsWithIssuesCount));
+    },
+  });
+
+  useEffect(() => {
+    if(window?.navigator?.userAgent.includes("Android")) {
+      setAndroid(true);
+    }
+    getIssueCount();
+  }, []);
 
   useEffect(() => {
     setRepairCount(songsWithIssuesCount.toString());
@@ -59,10 +81,10 @@ const Repair: React.FC = () => {
         </IonHeader>
         <IonSegment value={segmentValue} onIonChange={e => { handleInputChangeSegment(e) }}>
             <IonSegmentButton value="flagged">
-              <IonLabel>{repairCount} Flagged Songs</IonLabel>
+              <IonLabel style={{fontSize: isAndroid ? '12px' : '14px' }}>{repairCount} Flagged Songs</IonLabel>
             </IonSegmentButton>
             <IonSegmentButton value="search">
-              <IonLabel>Search for any Song</IonLabel>
+              <IonLabel style={{fontSize: isAndroid ? '12px' : '14px' }}>Search for any Song</IonLabel>
             </IonSegmentButton>
           </IonSegment>
         {!isSearchShown &&

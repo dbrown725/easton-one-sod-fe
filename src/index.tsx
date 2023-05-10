@@ -10,7 +10,7 @@ import { Provider } from 'react-redux'
 import { setContext } from '@apollo/client/link/context';
 
 const httpLink = new HttpLink({ 
-  uri: 'http://10.0.0.101:8080/easton/graphql/',
+  uri: `${process.env.REACT_APP_API_ENDPOINT_GRAPHQL}`
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -30,7 +30,6 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
   
 });
-
 
 const container = document.getElementById('root');
 const root = createRoot(container!);

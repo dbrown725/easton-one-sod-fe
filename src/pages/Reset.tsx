@@ -1,6 +1,7 @@
 import { IonContent, IonPage } from "@ionic/react";
 import { useState } from "react";
 import { useHistory } from 'react-router';
+import { Link } from "react-router-dom";
 import { sendPasswordReset } from "./../firebase";
 import "./Reset.css";
 
@@ -52,6 +53,9 @@ function Reset() {
                                 <a onClick={() => backToLogin()}>Back to Login</a>
                             </div>
                         }
+                        <div>
+                         <Link to="/page/Login">Back to Login</Link>
+                        </div>
                     </div>
                 </div>
             </IonContent>

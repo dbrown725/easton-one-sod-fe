@@ -110,4 +110,15 @@ ion-note {
 
 ion-item.selected {
   --color: var(--ion-color-primary);
-} 
+}
+
+ion-img.menu-logo::part(image) {
+  width: 20%;
+  height: 20%;
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+ion-menu ion-note {
+  margin-top: 5px;
+}

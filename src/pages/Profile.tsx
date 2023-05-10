@@ -7,8 +7,30 @@ import {
   IonCol,
 } from "@ionic/react";
 import FabToSubmit from '../components/FabToSubmit';
+import { useEffect, useState } from 'react';
+import { useLazyQuery } from '@apollo/client';
+import { GET_USER_INFO } from '../graphql/graphql';
+import { UserInfo } from '../common/types';
+import ErrorDisplay from '../components/ErrorDisplay';
+import { refreshRole, role } from '../firebase';
 
 const Profile: React.FC = () => {
+
+  const [userInfo, setUserInfo] = useState<UserInfo>();
+
+  const [
+    getUserInfo,
+    { loading, error, data }
+  ] = useLazyQuery(GET_USER_INFO, {
+    fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache', onCompleted: (data) => {
+      setUserInfo(data.getUserInfo);
+    }
+  });
+
+  useEffect(() => {
+    getUserInfo();
+    refreshRole();
+  }, []);
 
   return (
     <IonPage>
@@ -27,32 +49,74 @@ const Profile: React.FC = () => {
             <IonTitle size="large">My Profile</IonTitle>
           </IonToolbar>
         </IonHeader>
-
-          <IonGrid>
-
-            {/* Temp hack to replace css for top margin */}
-            <IonRow>
-              <IonCol>
+          {
+          error != null ? <ErrorDisplay message={error.message} detail={error.stack} /> :
+          userInfo &&
+          <IonGrid className='profile-ion-grid'>
+            <IonRow className='profile-top-row'>
+              <IonCol size='4' size-md='2'>
+                <img alt={userInfo?.firstName + " " + userInfo?.lastName}
+                                    src={"https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=" + userInfo?.firstName + "+" + userInfo?.lastName + "&rounded=true&background=" + userInfo?.avatarColor}
+                                    title={userInfo?.firstName + " " + userInfo?.lastName}/>
+              </IonCol>
+              <IonCol size='8' size-md='10'>
               </IonCol>
             </IonRow>
-            <IonRow>
-              <IonCol>
+            <IonRow className='profile-second-row'>
+              <IonCol size='4' size-md='2'>
+                Screen Name:
+              </IonCol>
+              <IonCol size='8' size-md='10'>
+                {userInfo?.screenName}
               </IonCol>
             </IonRow>
 
-
             <IonRow>
-              <IonCol>
-                <b>Coming soon!.</b>
+              <IonCol size='4' size-md='2'>
+                First Name:
+              </IonCol>
+              <IonCol size='8' size-md='10'>
+                {userInfo?.firstName}
               </IonCol>
             </IonRow>
 
             <IonRow>
-              <IonCol>
-                <IonImg className='dormImg' src={dorm} alt={"dorm image"}/>
+              <IonCol size='4' size-md='2'>
+                Last Name:
+              </IonCol>
+              <IonCol size='8' size-md='10'>
+                {userInfo?.lastName}
+              </IonCol>
+            </IonRow>
+
+            <IonRow>
+              <IonCol size='4' size-md='2'>
+                Email:
+              </IonCol>
+              <IonCol size='8' size-md='10'>
+                {userInfo?.email}
+              </IonCol>
+            </IonRow>
+
+            <IonRow>
+              <IonCol size='4' size-md='2'>
+                Email Verified:
+              </IonCol>
+              <IonCol size='8' size-md='10'>
+                {userInfo?.isEmailVerified? 'True':'False'}
+              </IonCol>
+            </IonRow>
+
+            <IonRow>
+              <IonCol size='4' size-md='2'>
+                Role:
+              </IonCol>
+              <IonCol size='8' size-md='10'>
+                {role}
               </IonCol>
             </IonRow>
           </IonGrid>
+          }
           <FabToSubmit/>
       </IonContent>
     </IonPage>

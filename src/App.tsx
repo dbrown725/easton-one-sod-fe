@@ -12,6 +12,7 @@ import Profile from './pages/Profile';
 import Repair from './pages/Repair';
 import Login from './pages/Login';
 import Reset from './pages/Reset';
+import Home from './pages/Home';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -109,6 +110,9 @@ const App: React.FC = () => {
                 </Route>
                 <Route path="/page/Repair" exact={true}>
                   <Repair />
+                </Route>
+                <Route path="/page/Home" exact={true}>
+                  <Home />
                 </Route>
               </IonRouterOutlet>
             </IonSplitPane>

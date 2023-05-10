@@ -1,0 +1,9 @@
+.bubbleChart {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+circle, text{
+    cursor: pointer;
+}

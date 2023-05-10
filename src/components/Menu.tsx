@@ -1,6 +1,7 @@
 import {
   IonContent,
   IonIcon,
+  IonImg,
   IonItem,
   IonLabel,
   IonList,
@@ -12,50 +13,35 @@ import {
 
 import { useHistory, useLocation } from 'react-router-dom';
 import { baseballOutline, baseballSharp, constructOutline, constructSharp, downloadOutline, downloadSharp,
+  homeOutline,
+  homeSharp,
   listOutline, listSharp, logOutOutline, logOutSharp, musicalNoteOutline, musicalNoteSharp, personCircleOutline,
   personCircleSharp, searchOutline, searchSharp } from 'ionicons/icons';
 import './Menu.css';
-import { useEffect, useState } from 'react';
-import { useLazyQuery } from '@apollo/client';
-import { GET_SONGS_WITH_ISSUES_COUNT } from '../graphql/graphql';
-import { RootState } from '../store/store';
-import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../firebase';
-import { setIssueCount } from '../store/slices/issueCountSlice';
+import { role, logout, refreshRole } from '../firebase';
+import { useEffect, useRef } from 'react';
 
 const Menu: React.FC = () => {
 
-  const [repairCount, setRepairCount] = useState<string>('0');
-
-  const songsWithIssuesCount = useSelector((state: RootState) => state.issueCount.value);
-
   const history = useHistory();
 
-  const dispatch = useDispatch();
+  const location = useLocation();
 
-  const [
-    getIssueCount,
-    { loading: loadingCount, error: errorCount, data: dataCount }
-  ] = useLazyQuery(GET_SONGS_WITH_ISSUES_COUNT, {
-    fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache', onCompleted: (data) => {
-      setRepairCount(data.getSongsWithIssuesCount);
-      dispatch(setIssueCount(data.getSongsWithIssuesCount));
-    },
-  });
+  const menuRef = useRef<HTMLIonMenuElement>(null);
 
   useEffect(() => {
-    getIssueCount();
+    refreshRole();
   }, []);
-
-  useEffect(() => {
-    setRepairCount(songsWithIssuesCount.toString());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [songsWithIssuesCount]);
 
   const handleLogOut = () => {
     logout();
     history.push({pathname:'/page/Login'});
   };
+
+  const handleSodIconClick = () => {
+    history.push({ pathname: '/page/Home' });
+    menuRef.current?.close();
+  }
 
   interface AppPage {
     url: string;
@@ -65,6 +51,12 @@ const Menu: React.FC = () => {
   }
 
   const appPages: AppPage[] = [
+    {
+      title: 'Home',
+      url: '/page/Home',
+      iosIcon: homeOutline,
+      mdIcon: homeSharp
+    },
     {
       title: 'Latest songs',
       url: '/page/Latest',
@@ -84,23 +76,23 @@ const Menu: React.FC = () => {
       mdIcon: baseballSharp
     },
     {
-      title: 'Repair Shop - ' + repairCount + ' waiting',
+      title: 'Repair Shop',
       url: '/page/Repair',
       iosIcon: constructOutline,
       mdIcon: constructSharp
     },
     {
-      title: 'Download Songs',
+      title: 'Download',
       url: '/page/Download',
       iosIcon: downloadOutline,
       mdIcon: downloadSharp
     },
-    {
-      title: 'Generate Playlist',
-      url: '/page/Playlist',
-      iosIcon: listOutline,
-      mdIcon: listSharp
-    },
+    // {
+    //   title: 'Generate Playlist',
+    //   url: '/page/Playlist',
+    //   iosIcon: listOutline,
+    //   mdIcon: listSharp
+    // },
     {
       title: 'My Profile',
       url: '/page/Profile',
@@ -115,28 +107,37 @@ const Menu: React.FC = () => {
     }
   ];
 
-  const location = useLocation();
-
   return (
-    <IonMenu contentId="main" type="overlay">
-      <IonContent>
-        <IonList id="inbox-list">
-          <IonListHeader>Song of the Day</IonListHeader>
-          <IonNote>All the music that is fit to be played!</IonNote>
-          {appPages.map((appPage, index) => {
-            return (
-              <IonMenuToggle key={index} autoHide={false}>
-                <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url}
-                  routerDirection="none" lines="none" detail={false} onClick={() => appPage.title == 'Log Out' ? handleLogOut() : undefined}>
-                  <IonIcon slot="start" ios={appPage.iosIcon} md={appPage.mdIcon} />
-                  <IonLabel>{appPage.title}</IonLabel>
-                </IonItem>
-              </IonMenuToggle>
-            );
-          })}
-        </IonList>
-      </IonContent>
-    </IonMenu>
+    <>
+      <IonMenu contentId="main" type="overlay" ref={menuRef}>
+        <IonContent>
+          {role &&
+            <IonList id="inbox-list">
+              <IonImg src="assets/images/sod.png" className='menu-logo' alt="Song of the day!"
+                onClick={() => handleSodIconClick()}>
+              </IonImg>
+              <IonListHeader>Song of the Day</IonListHeader>
+              <IonNote>All the music that is fit to be played!</IonNote>
+              {appPages.map((appPage, index) => {
+                if((appPage.title === 'My Bullpen' || appPage.title === 'Repair Shop')
+                      && role !== 'ADMIN' && role !== 'SUBMITTER') {
+                  return false;
+                }
+                return (
+                  <IonMenuToggle key={index} autoHide={false}>
+                    <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url}
+                      routerDirection="none" lines="none" detail={false} onClick={() => appPage.title == 'Log Out' ? handleLogOut() : undefined}>
+                      <IonIcon slot="start" ios={appPage.iosIcon} md={appPage.mdIcon} />
+                      <IonLabel>{appPage.title}</IonLabel>
+                    </IonItem>
+                  </IonMenuToggle>
+                );
+              })}
+            </IonList>
+          }
+        </IonContent>
+      </IonMenu>
+    </>
   );
 };
 

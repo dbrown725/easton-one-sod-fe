@@ -39,7 +39,7 @@ const Submit: React.FC<SubmitProps> = (props) => {
       link: '',
       message: '',
       playlist: '',
-      userId: 1
+      userIsTheSubmitter: false
     });
 
 
@@ -52,7 +52,7 @@ const Submit: React.FC<SubmitProps> = (props) => {
       link: '',
       message: '',
       playlist: '',
-      userId: 1
+      userIsTheSubmitter: false
     });
   }
 
@@ -90,7 +90,7 @@ const Submit: React.FC<SubmitProps> = (props) => {
         link: song.link, message: song.message, 
         sortOrder: song.sortOrder } });
     } else {
-      addBpSong({ variables: { title: song.title, songName: song.songName, bandName: song.bandName, link: song.link, message: song.message, userId: song.userId } });
+      addBpSong({ variables: { title: song.title, songName: song.songName, bandName: song.bandName, link: song.link, message: song.message } });
     }
     clearSong();
   };
@@ -98,7 +98,7 @@ const Submit: React.FC<SubmitProps> = (props) => {
   const handleSODInsertFormSubmit = () => {
     //Hard coded for now, in the future will use the authenticated person's user object
     //song.userId = 1;
-    insertSod({ variables: { title: song.title, songName: song.songName, bandName: song.bandName, link: song.link, message: song.message, playlist: song.playlist, userId: song.userId } });
+    insertSod({ variables: { title: song.title, songName: song.songName, bandName: song.bandName, link: song.link, message: song.message, playlist: song.playlist } });
     
     if(song.id) {
       deleteBPSong({ variables: { id: song.id } });
@@ -120,7 +120,7 @@ const Submit: React.FC<SubmitProps> = (props) => {
     // countData && console.log("countData: ", countData);
 
   const handleSODUpdateFormSubmit = () => {
-    updateSod({ variables: { id: song.id, title: song.title, songName: song.songName, bandName: song.bandName, link: song.link, playlist: song.playlist, userId: song.userId }, onCompleted: (data) => {
+    updateSod({ variables: { id: song.id, title: song.title, songName: song.songName, bandName: song.bandName, link: song.link, playlist: song.playlist }, onCompleted: (data) => {
       getIssueCount();
     }, });
     clearSong();

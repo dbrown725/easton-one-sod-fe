@@ -1,14 +1,27 @@
 import { gql } from "@apollo/client";
 
+export    const GET_USER_INFO = gql`
+            query getUserInfo {
+              getUserInfo {
+                email
+                isEmailVerified
+                issuer
+                firstName
+                lastName
+                screenName
+                avatarColor
+              }
+            }
+            `;
+
 export   const ADD_BULLPEN_SONG = gql`
-            mutation addBullpenSong($title: String!, $songName: String!, $bandName: String!, $link: String!, $message: String!, $userId: ID!) {
+            mutation addBullpenSong($title: String!, $songName: String!, $bandName: String!, $link: String!, $message: String!) {
             addBullpenSong(
                 title: $title
                 songName: $songName
                 bandName: $bandName
                 link: $link
-                message: $message
-                userId: $userId) 
+                message: $message)
                 {
                 id  
                 title
@@ -17,7 +30,6 @@ export   const ADD_BULLPEN_SONG = gql`
                 link
                 message
                 sortOrder
-                userId
                 }
             }
             `;
@@ -54,9 +66,9 @@ export    const GET_ALL_BULLPEN_SONGS = gql`
                 link
                 message
                 sortOrder
-                userId
                 createTime
                 modifyTime
+                userIsTheSubmitter
                 }
             }
             `;  
@@ -79,12 +91,12 @@ export    const GET_MOST_RECENT_SONGS = gql`
                 link
                 message
                 sortOrder
-                userId
                 userFirstName
                 userLastName
                 userAvatarColor
                 createTime
                 modifyTime
+                userIsTheSubmitter
                 }
             }
             `;  
@@ -106,26 +118,25 @@ export    const GET_SONGS_WITH_ISSUES = gql`
                 playlist
                 message
                 sortOrder
-                userId
                 userFirstName
                 userLastName
                 userAvatarColor
                 createTime
                 modifyTime
+                userIsTheSubmitter
                 }
             }
             `;
             
  export   const INSERT_SOD = gql`
-            mutation insertSodSong($title: String!, $songName: String!, $bandName: String!, $link: String!, $message: String!, $playlist: String!, $userId: ID!) {
+            mutation insertSodSong($title: String!, $songName: String!, $bandName: String!, $link: String!, $message: String!, $playlist: String!) {
               insertSodSong(
                 title: $title
                 songName: $songName
                 bandName: $bandName
                 link: $link
                 message: $message
-                playlist: $playlist
-                userId: $userId) 
+                playlist: $playlist)
                 {
                 title
                 songName
@@ -133,21 +144,19 @@ export    const GET_SONGS_WITH_ISSUES = gql`
                 link
                 message
                 playlist
-                userId
               }
             }
           `;
 
   export   const UPDATE_SOD = gql`
-          mutation updateSodSong($id: ID!, $title: String!, $songName: String!, $bandName: String!, $link: String!, $playlist: String!, $userId: ID!) {
+          mutation updateSodSong($id: ID!, $title: String!, $songName: String!, $bandName: String!, $link: String!, $playlist: String!) {
             updateSodSong(
               id: $id
               title: $title
               songName: $songName
               bandName: $bandName
               link: $link
-              playlist: $playlist
-              userId: $userId)
+              playlist: $playlist)
               {
               id
               title
@@ -155,7 +164,6 @@ export    const GET_SONGS_WITH_ISSUES = gql`
               bandName
               link
               playlist
-              userId
             }
           }
         `;
@@ -172,12 +180,23 @@ export    const GET_SONGS_WITH_ISSUES = gql`
               songNameHighlighted
               link
               playlist
-              userId
               userFirstName
               userLastName
               userAvatarColor
               message
               score
+              createTime
+              modifyTime
+              userIsTheSubmitter
             }
           }
-          `;          
+          `;
+
+export    const GET_BAND_STATS = gql`
+    query getBandStats($count: Int!) {
+      getBandStats(count: $count) {
+        bandName
+        songCount
+        }
+    }
+    `;

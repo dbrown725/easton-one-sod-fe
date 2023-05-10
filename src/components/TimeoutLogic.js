@@ -9,8 +9,29 @@ import { logout } from "./../firebase";
     
 export const TimeoutLogic = () => { 
   const [isWarningModalOpen, setWarningModalOpen] = useState(false);
-  const awayFromKeyboardPeriod = 15 * 60 * 1000; // Fifteen minutes of user inactivity then modal opens.
-  const modalDisplayPeriod = 5 * 60 * 1000; // Five minutes before the modal closes and the user is logged out.
+  const awayMinutes = 15;
+  const modalDisplayMinutes = 5;
+  const awayFromKeyboardPeriod = awayMinutes * 60 * 1000; // Fifteen minutes of user inactivity then modal opens.
+  const modalDisplayPeriod = modalDisplayMinutes * 60 * 1000; // Five minutes before the modal closes and the user is logged out.
+
+  const checkLocalStorage = () => {
+    let lastActivity = localStorage.getItem('lastActvity');
+    let lastActivityNumber = new Number(lastActivity).valueOf()
+    var diffMs = Math.abs(lastActivityNumber - new Date().getTime()); // milliseconds between now & last activity
+    var seconds = Math.floor((diffMs/1000));
+    var minute = Math.floor((seconds/60));
+    if(diffMs >= awayFromKeyboardPeriod + modalDisplayPeriod){
+      logout();
+      console.log('No activity from last ' + (awayMinutes + modalDisplayMinutes) + ' minutes... Logging Out');
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('visibilitychange', checkLocalStorage, false);
+    return () => {
+      window.removeEventListener('visibilitychange', checkLocalStorage, false);
+    }
+  }, []);
 
   useEffect(() => {
 
@@ -26,6 +47,9 @@ export const TimeoutLogic = () => {
     },modalDisplayPeriod) 
 
     const trackTotalTimeSinceActivity = () => {
+      //Function only called if there has been user activity, safe to kill any existing timers
+      clearTimeout(activityTimer);
+
       var lastActivityStart = Date.now();
       activityTimer = setInterval(function () {
         if (Date.now() - lastActivityStart > (awayFromKeyboardPeriod + modalDisplayPeriod)) {
@@ -44,6 +68,12 @@ export const TimeoutLogic = () => {
         clearTimeout(timeout)
         timeout = createTimeout1();
       }
+
+      //Backup plan: Javascript (timers) stops when browser closed, need to rely on localStorage always.
+      //Reopening browser after timeout period will display the page but will log you out as
+      //soon as you click on anything.
+      checkLocalStorage();
+      localStorage.setItem('lastActvity', Date.now().toString());
     } 
 
     // Initialization

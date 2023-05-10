@@ -1,8 +1,9 @@
-import { IonButton, IonCol, IonGrid, IonInput, IonItem, IonLabel, IonList, IonRadio, IonRadioGroup, IonRow, IonTextarea } from '@ionic/react';
+import { IonButton, IonInput, IonItem, IonLabel, IonList, IonNote, IonTextarea } from '@ionic/react';
 import { useEffect, useRef, useState } from 'react';
-import {Song, SongFormProps} from '../common/types';
+import { Song, SongFormProps } from '../common/types';
 import DOMPurify from 'dompurify';
 import { useHistory, useLocation } from 'react-router';
+import './SongForm.css';
 
 const SongForm: React.FC<SongFormProps> = (props) => {
 
@@ -10,13 +11,16 @@ const SongForm: React.FC<SongFormProps> = (props) => {
   const [id, setId] = useState<number | null | undefined>();
   const [message, setMessage] = useState<string | null | undefined>('');
   const [title, setTitle] = useState<string | number | null | undefined>('');
-  const [bandName, setBandName] = useState<string |number | null | undefined>('');
+  const [bandName, setBandName] = useState<string | number | null | undefined>('');
   const [songName, setSongName] = useState<string | number | null | undefined>('');
-  const [link, setLink] = useState<string | number |null | undefined>('');
-  const [userId, setUserId] = useState<string | number |null | undefined>(1);
-  const [playlist, setPlaylist] = useState<string | number |null | undefined>(playlistName);
+  const [link, setLink] = useState<string | number | null | undefined>('');
+  const [playlist, setPlaylist] = useState<string | number | null | undefined>(playlistName);
+  const [isFormValidated, setFormValidated] = useState<boolean>(false);
   const location = useLocation<{ song: Song }>();
   const history = useHistory();
+
+  const urlStartsWith1 = "https://www.youtu";
+  const urlStartsWith2 = "https://youtu";
 
   // Start logic related to clearing form when user navigates away without submitting.
   // There must be an easier way.
@@ -28,11 +32,18 @@ const SongForm: React.FC<SongFormProps> = (props) => {
   };
 
   useEffect(() => {
+    const timeout = setTimeout(() => {
+      document.getElementsByClassName("bandArtist")[0]?.querySelector("input")?.focus();
+      document.getElementsByClassName("bandArtist")[0].parentElement?.classList.remove("ion-invalid");
+      document.getElementsByClassName("songName")[0].parentElement?.classList.remove("ion-invalid");
+      document.getElementsByClassName("title")[0].parentElement?.classList.remove("ion-invalid");
+      document.getElementsByClassName("url")[0].parentElement?.classList.remove("ion-invalid");
+    }, 500);
     setMyState(location.pathname);
     const unlisten = history.listen((location) => {
       //myStateRef.current is the previous page
       //clear everything if you just left /page/Submit
-      if(myStateRef.current === '/page/Submit') {
+      if (myStateRef.current === '/page/Submit') {
         clearForm();
         clearState();
       }
@@ -45,22 +56,21 @@ const SongForm: React.FC<SongFormProps> = (props) => {
   // End logic related to clearing form when user navigates away without submitting.
 
   useEffect(() => {
-    if(location.state){
-      if(location.state.song) {
+    if (location.state) {
+      if (location.state.song) {
         setId(location.state.song.id);
-        if(location.state.song.message) {
+        if (location.state.song.message) {
           setMessage(location.state.song.message);
         }
         setTitle(location.state.song.title);
         setBandName(location.state.song.bandName);
         setSongName(location.state.song.songName);
         setLink(location.state.song.link);
-        if(location.state.song.playlist) {
+        if (location.state.song.playlist) {
           setPlaylist(location.state.song.playlist);
         } else {
           setPlaylist(playlistName);
         }
-        setUserId(location.state.song.userId);
       }
     }
   }, [location.state]);
@@ -73,8 +83,8 @@ const SongForm: React.FC<SongFormProps> = (props) => {
   }
 
   const submitData = async (buttonIdentifier: String) => {
-    if((!title || !bandName || !songName || !link) &&
-      buttonIdentifier !== 'cancelUpdateSodSong') {
+    if ((!title || !bandName || !songName || !link) &&
+      buttonIdentifier !== 'cancelUpdateSodSong' && buttonIdentifier !== 'cancelNewOrBPSong') {
       return;
     }
     props.song.message = sanitizeData(String(message));
@@ -83,17 +93,18 @@ const SongForm: React.FC<SongFormProps> = (props) => {
     props.song.songName = sanitizeData(String(songName));
     props.song.link = sanitizeData(String(link));
     props.song.playlist = sanitizeData(String(playlist));
-    props.song.userId = Number(userId);
 
-    if(buttonIdentifier === 'newSodSong') {
+    if (buttonIdentifier === 'newSodSong') {
       await props.sodInsertCallback();
-    } else if(buttonIdentifier === 'updateSodSong') {
+    } else if (buttonIdentifier === 'updateSodSong') {
       await props.sodUpdateCallback();
-    } else if(buttonIdentifier === 'cancelUpdateSodSong') {
+    } else if (buttonIdentifier === 'cancelUpdateSodSong') {
       await props.sodCancelUpdateCallback();
-    } else if(buttonIdentifier === 'bullpenSong') {
+    } else if (buttonIdentifier === 'bullpenSong') {
       await props.bpCallback();
-    }else {
+    } else if (buttonIdentifier === 'cancelNewOrBPSong') {
+      history.goBack();
+    } else {
       console.log('fell through');
     }
     clearForm();
@@ -118,153 +129,221 @@ const SongForm: React.FC<SongFormProps> = (props) => {
     setPlaylist(playlistName);
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === 'Tab') {
+      var classList = (e.target as HTMLFormElement).parentElement?.classList;
+      if(classList?.contains("bandArtist")) {
+        e.preventDefault();
+        e.stopPropagation();
+        document.getElementsByClassName("songName")[0]?.querySelector("input")?.focus();
+      } else if(classList?.contains("songName")) {
+        e.preventDefault();
+        e.stopPropagation();
+        document.getElementsByClassName("title")[0]?.querySelector("input")?.focus();
+      } else if(classList?.contains("title")) {
+        e.preventDefault();
+        e.stopPropagation();
+        document.getElementsByClassName("url")[0]?.querySelector("input")?.focus();
+      } else if(classList?.contains("url")) {
+        e.preventDefault();
+        e.stopPropagation();
+        document.getElementsByClassName("comment")[0]?.querySelector("textarea")?.focus();
+      }
+    }
+    const timeout = setTimeout(() => {
+      validateForm();
+  }, 500);
+  }
+
+  const handleTextFocusEvent = (e: React.FormEvent<HTMLIonInputElement>) => {
+    (e.target as HTMLFormElement).parentElement?.parentElement?.classList.remove("ion-invalid");
+    var classList = (e.target as HTMLFormElement).parentElement?.classList;
+    var classListTextArea = (e.target as HTMLFormElement).parentElement?.parentElement?.classList;
+    document.getElementsByClassName("bandArtistNote")[0].classList.add("hide");
+    document.getElementsByClassName("songNameNote")[0].classList.add("hide");
+    document.getElementsByClassName("titleNote")[0].classList.add("hide");
+    document.getElementsByClassName("commentNote")[0] && 
+      document.getElementsByClassName("commentNote")[0].classList.add("hide");
+    if(classList?.contains("bandArtist")) {
+      document.getElementsByClassName("bandArtistNote")[0].classList.remove("hide");
+      (e.target as HTMLFormElement).parentElement?.parentElement?.classList.add("item-has-focus");
+    } else if(classList?.contains("songName")) {
+      document.getElementsByClassName("songNameNote")[0].classList.remove("hide");
+    } else if(classList?.contains("title")) {
+      document.getElementsByClassName("titleNote")[0].classList.remove("hide");
+      if(!title && bandName && songName) {
+        setTitle(bandName + " - " + songName);
+      }
+    } else if(classListTextArea?.contains("comment")) {
+      document.getElementsByClassName("commentNote")[0].classList.remove("hide");
+    }
+    const timeout = setTimeout(() => {
+        validateForm();
+    }, 500);
+  };
+
+  //Handles clear button click and mouse paste events
+  const onChanged = (target: HTMLIonInputElement) => {
+    validateForm();
+  };
+
+  const handleTextBlurEvent = (e: React.FormEvent<HTMLIonInputElement>) => {
+    var classList = (e.target as HTMLFormElement).parentElement?.classList;
+    if(classList?.contains("bandArtist") && !bandName) {
+      (e.target as HTMLFormElement).parentElement?.parentElement?.classList.add("ion-invalid");
+    } else if(classList?.contains("songName") && !songName) {
+      (e.target as HTMLFormElement).parentElement?.parentElement?.classList.add("ion-invalid");
+    } else if(classList?.contains("title") && !title) {
+      (e.target as HTMLFormElement).parentElement?.parentElement?.classList.add("ion-invalid");
+    } else if(classList?.contains("url") && !link?.toString().startsWith(urlStartsWith1)
+          && !link?.toString().startsWith(urlStartsWith2)) {
+      (e.target as HTMLFormElement).parentElement?.parentElement?.classList.add("ion-invalid");
+    }
+    validateForm();
+  };
+
+  const validateForm = () => {
+    if(
+      document.getElementsByClassName("bandArtist")[0].querySelector("input")?.value?.trim()
+      &&
+      document.getElementsByClassName("songName")[0].querySelector("input")?.value.trim()
+      &&
+      document.getElementsByClassName("title")[0].querySelector("input")?.value.trim()
+      &&
+      (document.getElementsByClassName("url")[0].querySelector("input")?.value?.trim().startsWith(urlStartsWith1)
+        || document.getElementsByClassName("url")[0].querySelector("input")?.value?.trim().startsWith(urlStartsWith2))) {
+        setFormValidated(true);
+    } else {
+      setFormValidated(false);
+    }
+  }
+
   return (
     <IonList>
-      <form onSubmit={(e) => e.preventDefault()}>
-        <IonGrid>
-            <IonRow>
-              <IonCol>
-                <IonItem>
-                  <IonLabel position="stacked">Message (for email only)</IonLabel>
-                  <IonTextarea value={message} onIonChange={(e) => setMessage((e.target as HTMLIonTextareaElement).value)} placeholder="Enter a message for your email"></IonTextarea>
-                </IonItem>
-              </IonCol>
-            </IonRow>
+      <form onSubmit={(e) => e.preventDefault()} className='submit-form ion-padding' onKeyDown={e => { handleKeyDown(e) }}>
+        <IonItem
+          className="item-has-focus ion-touched">
+          <IonLabel>
+            Band/Artist(s) <span className="asterisk">*</span>:
+          </IonLabel>
+          <IonInput
+            className="bandArtist"
+            maxlength={100}
+            autofocus
+            value={bandName}
+            onIonChange={(e) => {setBandName((e.target as HTMLIonInputElement).value); onChanged(e.target)}}
+            onBlur={(e) => handleTextBlurEvent((e as React.FormEvent<HTMLIonInputElement>))}
+            onFocus={(e) => handleTextFocusEvent((e as React.FormEvent<HTMLIonInputElement>))}
+            required
+            clear-input
+            placeholder="The Allman Brothers Band">
+          </IonInput>
+          <IonNote className="bandArtistNote" slot="helper">Just who is performing in the video.</IonNote>
+        </IonItem>
 
-            <IonRow>
-              <IonCol>
-                <IonItem>
-                  <IonLabel position="stacked">Title</IonLabel>
-                  <IonInput autofocus value={title} onIonChange={(e) => setTitle((e.target as HTMLIonInputElement).value)} required clear-input placeholder="Enter title"></IonInput>
-                </IonItem>
-              </IonCol>
-            </IonRow>
+        <IonItem className="item-has-focus ion-touched">
+          <IonLabel>
+            Song name <span className="asterisk">*</span>:
+          </IonLabel>
+          <IonInput
+            className="songName"
+            maxlength={100}
+            value={songName}
+            onIonChange={(e) => {setSongName((e.target as HTMLIonInputElement).value); onChanged(e.target)}}
+            onBlur={(e) => handleTextBlurEvent((e as React.FormEvent<HTMLIonInputElement>))}
+            onFocus={(e) => handleTextFocusEvent((e as React.FormEvent<HTMLIonInputElement>))}
+            required
+            clear-input
+            placeholder="One Way Out">
+          </IonInput>
+          <IonNote className="hide songNameNote" slot="helper">Just the name of the song. </IonNote>
+        </IonItem>
 
-            <IonRow>
-              <IonCol>
-                <IonItem>
-                  <IonLabel position="stacked">Band/Artist</IonLabel>
-                  <IonInput value={bandName} onIonChange={(e) => setBandName((e.target as HTMLIonInputElement).value)} required clear-input placeholder="Enter band or artist's name"></IonInput>
-                </IonItem>
-              </IonCol>
-            </IonRow>
+        <IonItem className="item-has-focus ion-touched">
+          <IonLabel>
+            Title <span className="asterisk">*</span>:
+          </IonLabel>
+          <IonInput
+            className="title"
+            maxlength={203} //band (max 100) + " - " + //song (max 100)
+            value={title}
+            onIonChange={(e) => {setTitle((e.target as HTMLIonInputElement).value); onChanged(e.target)}}
+            onBlur={(e) => handleTextBlurEvent((e as React.FormEvent<HTMLIonInputElement>))}
+            onFocus={(e) => handleTextFocusEvent((e as React.FormEvent<HTMLIonInputElement>))}
+            required
+            clear-input
+            placeholder="Allman Brothers Band - One Way Out - Closing Night At The Fillmore (6/27/71)">
+          </IonInput>
+          <IonNote className="hide titleNote" slot="helper">The band/artist(s) and song name with any additional descriptors you desire like live, acoustic, location, date etc..</IonNote>
+        </IonItem>
 
-            <IonRow>
-              <IonCol>
-                <IonItem>
-                  <IonLabel position="stacked">Song</IonLabel>
-                  <IonInput value={songName} onIonChange={(e) => setSongName((e.target as HTMLIonInputElement).value)} required clear-input placeholder="Enter song name"></IonInput>
-                </IonItem>
-              </IonCol>
-            </IonRow>
+        <IonItem className="item-has-focus ion-touched">
+          <IonLabel>
+            YouTube URL <span className="asterisk">*</span>:
+          </IonLabel>
+          <IonInput
+            className="url"
+            maxlength={100}
+            value={link}
+            onIonChange={(e) => {setLink((e.target as HTMLIonInputElement).value); onChanged(e.target)}}
+            onBlur={(e) => handleTextBlurEvent((e as React.FormEvent<HTMLIonInputElement>))}
+            onFocus={(e) => handleTextFocusEvent((e as React.FormEvent<HTMLIonInputElement>))}
+            required
+            type="url"
+            clear-input
+            placeholder="https://www.youtube.com/watch?v=XAyaw4ktO5g">
+          </IonInput>
+        </IonItem>
 
-            <IonRow>
-              <IonCol>
-                <IonItem>
-                  <IonLabel position="stacked">YouTube url</IonLabel>
-                  <IonInput value={link} onIonChange={(e) => setLink((e.target as HTMLIonInputElement).value)} required clear-input pattern="https://.*" type="url" placeholder="Enter the YouTube url: https://...."></IonInput>
-                </IonItem>
-              </IonCol>
-            </IonRow>
+        {!props.updateSODRequest &&
+          <IonItem>
+            <IonLabel>Comment:</IonLabel>
+            <IonTextarea
+              className="comment"
+              maxlength={250}
+              value={message}
+              onFocus={(e) => handleTextFocusEvent((e as unknown as React.FormEvent<HTMLIonInputElement>))}
+              onIonChange={(e) => setMessage((e.target as HTMLIonTextareaElement).value)}
+              placeholder="A great live performance by the Allman Brothers!">
+            </IonTextarea>
+            <IonNote className="hide commentNote" slot="helper">Optional: Will only be included in the email.</IonNote>
+          </IonItem>
+        }
 
-            <IonRow>
-              <IonCol>
-                <IonItem>
-                  <IonLabel position="stacked">YouTube Playlist</IonLabel>
-                  <IonInput value={playlist} readonly={true}></IonInput>
-                </IonItem>
-              </IonCol>
-            </IonRow>
+        <div className="bottom-guide"><span>*</span><span className="required">required</span></div>
 
-            <IonRow>
-              <IonCol>
-                <IonLabel position="stacked">User Id temp solution</IonLabel>
-                <IonItem>
-                  <IonList>
-                    <IonRadioGroup allowEmptySelection={false} value={userId?.toString()} onIonChange={(e) => setUserId((e.target as HTMLIonRadioGroupElement).value)}>
-                      <IonItem>
-                        <IonLabel>Site Admin</IonLabel>
-                        <IonRadio slot="end" value="1" defaultChecked={true}></IonRadio>
-                      </IonItem>
+        {props.updateSODRequest &&
+          <>
 
-                      <IonItem>
-                        <IonLabel>David Brown</IonLabel>
-                        <IonRadio slot="end" value="8"></IonRadio>
-                      </IonItem>
+            <IonButton id="cancelUpdateSodSong" expand="block" type="submit" className="ion-margin-top" onClick={(e) => submitData('cancelUpdateSodSong')}>
+              Cancel
+            </IonButton>
+            <IonButton id="updateSodSong" disabled={!isFormValidated} expand="block" type="submit" className="ion-margin-top" onClick={(e) => submitData('updateSodSong')}>
+              Update Song of the Day
+            </IonButton>
 
-                      <IonItem>
-                        <IonLabel>Brian Ross</IonLabel>
-                        <IonRadio slot="end" value="6"></IonRadio>
-                      </IonItem>
+          </>
+        }
 
-                      <IonItem>
-                        <IonLabel>Kevin Yant</IonLabel>
-                        <IonRadio slot="end" value="2"></IonRadio>
-                      </IonItem>
+        {!props.updateSODRequest &&
+          <>
+            <IonButton id="bullpenSong" disabled={!isFormValidated} type="submit" className="ion-margin-top" onClick={(e) => { submitData('bullpenSong') }}>
+              Save to my Bullpen
+            </IonButton>
 
-                      <IonItem>
-                        <IonLabel>Lisa Roys</IonLabel>
-                        <IonRadio slot="end" value="3"></IonRadio>
-                      </IonItem>
+            <IonButton id="newSodSong" disabled={!isFormValidated} type="submit" className="ion-margin-top" onClick={(e) => submitData('newSodSong')}>
+              Submit your Song of the Day
+            </IonButton>
 
-                      <IonItem>
-                        <IonLabel>Doug Roys</IonLabel>
-                        <IonRadio slot="end" value="5"></IonRadio>
-                      </IonItem>
-
-                      <IonItem>
-                        <IonLabel>Tim Roys</IonLabel>
-                        <IonRadio slot="end" value="4"></IonRadio>
-                      </IonItem>
-
-                      <IonItem>
-                        <IonLabel>Mike Brown</IonLabel>
-                        <IonRadio slot="end" value="7"></IonRadio>
-                      </IonItem>
-                    </IonRadioGroup>
-                  </IonList>
-                </IonItem>
-                {"userId: " + userId}
-                {" id: " + id}
-              </IonCol>
-            </IonRow>
-
-            <IonRow>
-            {props.updateSODRequest &&
-              <>
-                <IonCol>
-                  <IonButton id="cancelUpdateSodSong" expand="block" type="submit" className="ion-margin-top" onClick={(e) => submitData('cancelUpdateSodSong')}>
-                    Cancel
-                  </IonButton>
-                </IonCol>
-                <IonCol>
-                  <IonButton id="updateSodSong" expand="block" type="submit" className="ion-margin-top" onClick={(e) => submitData('updateSodSong')}>
-                    Update Song of the Day
-                  </IonButton>
-                </IonCol>
-              </>
-            }
-
-            {!props.updateSODRequest &&
-              <>
-                <IonCol>
-                  <IonButton id="bullpenSong" expand="block" type="submit" className="ion-margin-top" onClick={(e) => {submitData('bullpenSong')}}>
-                    Save to my Bullpen
-                  </IonButton>
-                </IonCol>
-                <IonCol>
-                  <IonButton id="newSodSong" expand="block" type="submit" className="ion-margin-top" onClick={(e) => submitData('newSodSong')}>
-                    Submit your Song of the Day
-                  </IonButton>
-                </IonCol>
-              </>
-            }
-            </IonRow>
-        </IonGrid>      
+            <IonButton id="cancelNewOrBPSong" type="submit" className="ion-margin-top" onClick={(e) => submitData('cancelNewOrBPSong')}>
+              Cancel
+            </IonButton>
+          </>
+        }
 
       </form>
     </IonList>
   );
 }
- 
+
 export default SongForm;
