@@ -92,3 +92,23 @@ export interface BandStats {
     bandName: string;
     songCount: number;
 }
+
+export interface SongWrapper {
+    song: Song;
+    displayEditButton: boolean;
+}
+
+export interface SongListItemProps {
+    songListProps: SongListProps;
+    songWrapper: SongWrapper;
+}
+
+export interface SongListItemProps {
+    songListProps: SongListProps;
+    songWrapper: SongWrapper;
+}
+
+export interface SongListDesktopProps {
+    songListProps: SongListProps;
+    songWrapperList: SongWrapper[];
+}

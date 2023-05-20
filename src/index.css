@@ -29,3 +29,8 @@ ion-content {
     -ms-user-select: text;
     user-select: text;
 }
+
+ion-split-pane {
+    --side-width: 350px;
+    --side-max-width: 350px;
+}

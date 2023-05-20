@@ -1,0 +1,106 @@
+.desktop ion-icon[title="Edit"] {
+    pointer-events: none;
+    padding-top: 10px;
+    cursor:pointer;
+    text-decoration:underline;
+}
+
+.desktop span#edit {
+    font-size: x-large;
+    cursor:pointer;
+    text-decoration:underline;
+    line-height: 1;
+    margin-right: 20px;
+}
+
+.desktop {
+    color: rgb(115, 115, 115);
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 16.8px;
+}
+
+.desktop .thumbnail-image::part(image) {    
+    /* original image ratio height 75% of width */
+    /* display image ratio should be height 56% of width */
+    height: 90px;
+    width: 160px;
+    object-fit: cover;
+    margin-top: 9px;
+    margin-bottom: 0px;
+}
+
+.desktop ion-item {
+    --border-style: none;
+}
+
+.desktop .title {
+    margin-top: 30px;
+}
+
+.desktop ion-avatar img  {
+    width:75% !important;
+    height: 75% !important;
+    max-width: 100px !important;
+    max-height: 100px !important;
+}
+
+.desktop .avatar-column {
+    padding-top: 15px;
+    padding-left: 17px;
+}
+
+.desktop .date-div {
+    margin-top: -15px;
+}
+
+.desktop .item-row::after {
+    display:block;
+    clear:both;
+    content : "";
+    position: relative;
+    left    : 0;
+    bottom  : 0;
+    max-width: 98%;
+    height  : 1px;
+    width   : 98%;
+    border-bottom:1px dashed gray;
+    margin:0 auto;
+    padding:4px 0px;
+}
+
+@media (max-width: 2200px) {
+    .desktop .item-row::after {
+        width   : 97%;
+    }
+}
+
+@media (max-width: 1700px) {
+    .desktop .item-row::after {
+        width   : 96%;
+    }
+}
+
+@media (max-width: 1500px) {
+    .desktop .item-row::after {
+        width   : 95%;
+    }
+}
+
+@media (max-width: 1100px) {
+    .desktop .item-row::after {
+        width   : 94%;
+    }
+}
+
+.desktop .edit-column {
+    padding-top: 20px;
+    padding-left: 25px;
+}
+
+
+
+
+
+

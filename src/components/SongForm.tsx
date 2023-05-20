@@ -1,9 +1,10 @@
-import { IonButton, IonInput, IonItem, IonLabel, IonList, IonNote, IonTextarea } from '@ionic/react';
+import { IonButton, IonImg, IonInput, IonItem, IonLabel, IonList, IonNote, IonTextarea } from '@ionic/react';
 import { useEffect, useRef, useState } from 'react';
 import { Song, SongFormProps } from '../common/types';
 import DOMPurify from 'dompurify';
 import { useHistory, useLocation } from 'react-router';
 import './SongForm.css';
+import { getThumbnailLink } from '../common/helper';
 
 const SongForm: React.FC<SongFormProps> = (props) => {
 
@@ -16,6 +17,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
   const [link, setLink] = useState<string | number | null | undefined>('');
   const [playlist, setPlaylist] = useState<string | number | null | undefined>(playlistName);
   const [isFormValidated, setFormValidated] = useState<boolean>(false);
+  const [thumbnailLink, setThumbnailLink] = useState<string | null | undefined>('');
   const location = useLocation<{ song: Song }>();
   const history = useHistory();
 
@@ -152,7 +154,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
     }
     const timeout = setTimeout(() => {
       validateForm();
-  }, 500);
+    }, 500);
   }
 
   const handleTextFocusEvent = (e: React.FormEvent<HTMLIonInputElement>) => {
@@ -185,7 +187,17 @@ const SongForm: React.FC<SongFormProps> = (props) => {
   //Handles clear button click and mouse paste events
   const onChanged = (target: HTMLIonInputElement) => {
     validateForm();
+    const timeout = setTimeout(() => {
+      setThumnailLink();
+    }, 1000);
   };
+
+  const setThumnailLink = () => {
+    setLink((state) => {
+      setThumbnailLink(getThumbnailLink(state, "high"));
+      return state;
+    });
+  }
 
   const handleTextBlurEvent = (e: React.FormEvent<HTMLIonInputElement>) => {
     var classList = (e.target as HTMLFormElement).parentElement?.classList;
@@ -221,6 +233,11 @@ const SongForm: React.FC<SongFormProps> = (props) => {
   return (
     <IonList>
       <form onSubmit={(e) => e.preventDefault()} className='submit-form ion-padding' onKeyDown={e => { handleKeyDown(e) }}>
+        { thumbnailLink &&
+          <div className="image-wrapper">
+            <IonImg src={thumbnailLink} className='form-image' alt="Song of the day!" />
+          </div>
+        }
         <IonItem
           className="item-has-focus ion-touched">
           <IonLabel>
