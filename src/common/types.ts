@@ -103,11 +103,6 @@ export interface SongListItemProps {
     songWrapper: SongWrapper;
 }
 
-export interface SongListItemProps {
-    songListProps: SongListProps;
-    songWrapper: SongWrapper;
-}
-
 export interface SongListDesktopProps {
     songListProps: SongListProps;
     songWrapperList: SongWrapper[];

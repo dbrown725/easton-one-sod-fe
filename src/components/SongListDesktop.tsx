@@ -27,7 +27,7 @@ const SongListDesktop: React.FC<SongListDesktopProps> = (props) => {
                     <IonImg src={getThumbnailLink(wrapper.song.link, "high")} className='thumbnail-image' alt="Song of the day!" />
                    </a>
                   <IonLabel>
-                    <h1 className="song-name" title={sanitizeData(wrapper.song.songName)}
+                    <h1 title={sanitizeData(wrapper.song.songName)}
                       dangerouslySetInnerHTML={{ __html: wrapper.song.songNameHighlighted ? highlightMatches(sanitizeData(wrapper.song.songNameHighlighted)) : sanitizeData(wrapper.song.songName) }}>
                     </h1>
                     <p dangerouslySetInnerHTML={{ __html: wrapper.song.bandNameHighlighted ? highlightMatches(sanitizeData(wrapper.song.bandNameHighlighted)) : sanitizeData(wrapper.song.bandName) }}></p>

@@ -5,8 +5,9 @@ import './SongList.css';
 import { useEffect, useState } from 'react';
 import { refreshRole } from '../firebase';
 import { role } from '../firebase';
-import SongListItemNotDesktop from './SongListItemNotDesktop';
 import SongListDesktop from './SongListDesktop';
+import SongListCardItem from './SongListCardItem';
+import { getScreenDimensions } from '../common/helper';
 
 const SongList: React.FC<SongListProps> = (props) => {
 
@@ -18,14 +19,7 @@ const SongList: React.FC<SongListProps> = (props) => {
 
   useEffect(() => {
     refreshRole();
-
-    var win = window,
-      doc = document,
-      docElem = doc.documentElement,
-      body = doc.getElementsByTagName('body')[0],
-      x = win.innerWidth || docElem.clientWidth || body.clientWidth,
-      y = win.innerHeight || docElem.clientHeight || body.clientHeight;
-    setScreenWidth(x as number);
+    setScreenWidth(getScreenDimensions().width);
   }, []);
 
   useEffect(() => {
@@ -54,7 +48,7 @@ const SongList: React.FC<SongListProps> = (props) => {
               songWrapperList.map((wrapper: SongWrapper) => {
                 return (
                   <div key={wrapper.song.id}>
-                    <SongListItemNotDesktop songListProps={props} songWrapper={wrapper}/>
+                    <SongListCardItem songListProps={props} songWrapper={wrapper}/>
                   </div>
                 );
               })
