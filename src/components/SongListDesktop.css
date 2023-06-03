@@ -24,11 +24,12 @@
 .desktop .thumbnail-image::part(image) {    
     /* original image ratio height 75% of width */
     /* display image ratio should be height 56% of width */
-    height: 90px;
-    width: 160px;
+    height: 123px;
+    width: 220px;
     object-fit: cover;
     margin-top: 9px;
     margin-bottom: 0px;
+    border-radius: 12px;
 }
 
 .desktop ion-item {
@@ -36,7 +37,7 @@
 }
 
 .desktop .title {
-    margin-top: 30px;
+    margin-top: 45px;
 }
 
 .desktop ion-avatar img  {
@@ -47,7 +48,7 @@
 }
 
 .desktop .avatar-column {
-    padding-top: 15px;
+    padding-top: 23px;
     padding-left: 17px;
 }
 
@@ -95,7 +96,7 @@
 }
 
 .desktop .edit-column {
-    padding-top: 20px;
+    padding-top: 40px;
     padding-left: 25px;
 }
 

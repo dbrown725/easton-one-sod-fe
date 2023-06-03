@@ -137,7 +137,7 @@ function BubbleChart(data, {
         .attr("font-family", "sans-serif") 
         .attr("font-weight", "bold") 
         .style("font-size", chartTitleFontSize + "px") 
-        .text("Top 100 Bands");
+        .text("Top 50 Bands");
 
       svg.append("text")
         .attr("x", chartTitleX)             

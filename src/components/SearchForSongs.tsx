@@ -1,5 +1,5 @@
 import { useLazyQuery } from '@apollo/client';
-import { SearchbarChangeEventDetail, IonBadge, IonCol, IonGrid, IonItem, IonLabel, IonRow, IonSearchbar } from '@ionic/react';
+import { SearchbarChangeEventDetail, IonBadge, IonCol, IonGrid, IonItem, IonLabel, IonRow, IonSearchbar, IonButton, IonSelect, IonSelectOption, IonToggle, ToggleChangeEventDetail } from '@ionic/react';
 import { useEffect, useRef, useState } from 'react';
 import FabToSubmit from './FabToSubmit';
 import SongList from './SongList';
@@ -32,16 +32,22 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
 
   const [showZeroResults, setShowZeroResults] = useState<boolean>(false);
 
+  const [submitterSelected, setSubmitterSelected] = useState<string | undefined>("0");
+
+  const [showBubbles, setShowBubbles] = useState<boolean>(false);
+
   const history = useHistory();
 
   const location = useLocation();
+
+  const maxNumberOfBubbles = 50;
 
   const [
     getBandStatsList,
     { loading: bsLoading, error: bsError, data: bsData }
   ] = useLazyQuery(GET_BAND_STATS, {
     fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache',
-    variables: { count: 100 }, onCompleted: (data) => {
+    variables: { count: 1000, userId: submitterSelected}, onCompleted: (data) => {
       let bandStats: BandStats[] = [];
       data.getBandStats.forEach( (bs: BandStats)=> {
         bandStats.push(JSON.parse(JSON.stringify(bs)));
@@ -76,10 +82,13 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
       setBubbleDivId(id);
       const timeout = setTimeout(() => {
         const bandStatsArray: Object[] = [];
-        state.forEach(function (bs, index) {
-          const obj = { id: bs.bandName, value: bs.songCount };
+        for (var i = 0; i < state.length; i++) {
+          if(bandStatsArray.length == maxNumberOfBubbles) {
+            break;
+          }
+          const obj = { id: state[i].bandName, value: state[i].songCount };
           bandStatsArray.push(obj);
-        })
+        }
         if (bandStatsArray.length > 0) {
           BuildSVG(id, bandStatsArray, svgCallback);
         }
@@ -190,6 +199,10 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
     }
   });
 
+  const toggleInputChange = (e: CustomEvent<ToggleChangeEventDetail>) => {
+    setShowBubbles(!showBubbles);
+  };
+
   return (
     <>
       <IonGrid>
@@ -231,7 +244,57 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
               showDeleteButton={false} />
       }
 
-      <div className="bubbleChart" id={bubbleDivId} style={{display: displayData.length == 0 ? '' : 'none' }}></div>
+      {displayData.length == 0 &&
+        <div className="bandstats-options-row">
+          <IonItem className="select-submitter-input">
+            <IonLabel>Submitted by:</IonLabel>
+            <IonSelect aria-label="submitter"
+                interface="popover"
+                onIonChange={(e) => setSubmitterSelected(e.detail.value)} value={submitterSelected}>
+              <IonSelectOption value="0">All</IonSelectOption>
+              <IonSelectOption value="6">Brian</IonSelectOption>
+              <IonSelectOption value="8">Dave</IonSelectOption>
+              <IonSelectOption value="5">Doug</IonSelectOption>
+              <IonSelectOption value="2">Kevin</IonSelectOption>
+              <IonSelectOption value="3">Lisa</IonSelectOption>
+              <IonSelectOption value="7">Mike</IonSelectOption>
+              <IonSelectOption value="4">Tim</IonSelectOption>
+            </IonSelect>
+          </IonItem>
+          <IonItem className="show-bubble-chart-toggle">
+            <IonLabel>Show Bubbles</IonLabel>
+            <IonToggle slot="end" checked={showBubbles} onIonChange={e => { toggleInputChange(e) }}></IonToggle>
+          </IonItem>
+        </div>
+      }
+
+      <div className="bubbleChart" id={bubbleDivId} style={{display: displayData.length == 0 && showBubbles ? '' : 'none' }}></div>
+
+      {displayData.length == 0 &&
+        <>
+        <div className="bandstats-grid-label">
+          Top 1000 Bands
+        </div>
+        <IonGrid className="bandstats-grid">
+          <IonRow>
+            {
+              bandStats.map((bandStats: BandStats, index) => {
+                return (
+                  <IonCol size="6" size-md="4" size-xl="3" key={index}>
+                      <IonButton className="ion-text-wrap" fill="clear" expand="block" onClick={(event) => {
+                            cleanAndSetSearchText(bandStats.bandName);
+                            setInputValue(bandStats.bandName);
+                          }}>
+                        {bandStats.bandName + ' - ' + bandStats.songCount}
+                      </IonButton>
+                  </IonCol>
+                );
+              })
+            }
+          </IonRow>
+        </IonGrid>
+        </>
+      }
 
       <FabToSubmit />
     </>

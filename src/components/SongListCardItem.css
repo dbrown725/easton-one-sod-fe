@@ -32,12 +32,21 @@ span#edit {
     object-fit: cover;
     margin-bottom: 15px;
     margin: auto;
+    border-radius: 18px;
 }
 
 .card-item .bullpen-wide-screen .thumbnail-image::part(image) {    
     margin: 0px;
-    height: 90px;
-    width: 160px;
+    height: 123px;
+    width: 220px;
+    border-radius: 12px;
+}
+
+@media (max-width: 1200px) {
+    .card-item .bullpen-wide-screen .thumbnail-image::part(image) {
+        height: 90px;
+        width: 160px;
+    }
 }
 
 @media (max-width: 500px) {
@@ -94,11 +103,12 @@ span#edit {
 }
 
 .card-item .title {
-    margin-top: 15px;
+    margin-top: 28px;
 }
 
 .card-item .edit-column {
     padding-left: 25px;
+    padding-top: 18px;
 }
 
 .card-item ion-card-content {

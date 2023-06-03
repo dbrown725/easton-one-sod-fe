@@ -193,8 +193,8 @@ export    const GET_SONGS_WITH_ISSUES = gql`
           `;
 
 export    const GET_BAND_STATS = gql`
-    query getBandStats($count: Int!) {
-      getBandStats(count: $count) {
+    query getBandStats($count: Int!, $userId: ID!) {
+      getBandStats(count: $count, userId: $userId) {
         bandName
         songCount
         }
