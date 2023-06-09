@@ -17,14 +17,19 @@ circle, text{
     border-bottom: 1px solid rgb(115, 115, 115, .5);
     margin-left: 6%;
     margin-right: 6%;
+    margin-top: 15px;
     font-family: Roboto, "Helvetica Neue", sans-serif;
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 400;
 }
 
-.select-submitter-input {
+.submitter-select-item {
     max-width: 250px;
     margin-left: 5%;
+}
+
+.submitter-select {
+    min-height: 48px;
 }
 
 .show-bubble-chart-toggle {
@@ -34,6 +39,7 @@ circle, text{
 
 .bandstats-options-row {
     display: flex;
+    margin-top: -20px;
 }
 
 @media (max-width: 500px) {

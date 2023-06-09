@@ -246,9 +246,11 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
 
       {displayData.length == 0 &&
         <div className="bandstats-options-row">
-          <IonItem className="select-submitter-input">
+          <IonItem className="submitter-select-item">
             <IonLabel>Submitted by:</IonLabel>
-            <IonSelect aria-label="submitter"
+            <IonSelect
+                className="submitter-select"
+                aria-label="Submitter"
                 interface="popover"
                 onIonChange={(e) => setSubmitterSelected(e.detail.value)} value={submitterSelected}>
               <IonSelectOption value="0">All</IonSelectOption>
@@ -263,7 +265,7 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
           </IonItem>
           <IonItem className="show-bubble-chart-toggle">
             <IonLabel>Show Bubbles</IonLabel>
-            <IonToggle slot="end" checked={showBubbles} onIonChange={e => { toggleInputChange(e) }}></IonToggle>
+            <IonToggle aria-label="archive toggle" slot="end" checked={showBubbles} onIonChange={e => { toggleInputChange(e) }}></IonToggle>
           </IonItem>
         </div>
       }

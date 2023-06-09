@@ -9,7 +9,7 @@ import { logout } from "./../firebase";
     
 export const TimeoutLogic = () => { 
   const [isWarningModalOpen, setWarningModalOpen] = useState(false);
-  const awayMinutes = 15;
+  const awayMinutes = 30;
   const modalDisplayMinutes = 5;
   const awayFromKeyboardPeriod = awayMinutes * 60 * 1000; // Fifteen minutes of user inactivity then modal opens.
   const modalDisplayPeriod = modalDisplayMinutes * 60 * 1000; // Five minutes before the modal closes and the user is logged out.

@@ -24,7 +24,7 @@ const Latest: React.FC = () => {
         </IonHeader>
         <ScrollingSongList
           count={400}
-          addDataIncrement={20}
+          addDataIncrement={40}
           queryDocumentNode={GET_MOST_RECENT_SONGS}
           queryDefinitionName={"getMostRecentSongs"}
           showDeleteButton={false}

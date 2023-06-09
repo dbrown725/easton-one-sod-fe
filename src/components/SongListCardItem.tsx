@@ -9,7 +9,7 @@ const SongListCardItem: React.FC<SongListItemProps> = (props) => {
   return (
     <>
       {props.songWrapper.song.id && props.songListProps.showDeleteButton && getScreenDimensions().width >= 992 &&
-        <IonCard id={props.songWrapper.song.id!.toString()} key={props.songWrapper.song.id} class="card-item">
+        <IonCard id={props.songWrapper.song.id!.toString()} key={props.songWrapper.song.id} className="card-item">
           <IonCardContent className="bullpen-wide-screen">
             <IonReorder slot="end" style={{ float: "right" }}></IonReorder>
               <IonGrid>
@@ -68,7 +68,7 @@ const SongListCardItem: React.FC<SongListItemProps> = (props) => {
         </IonCard>
       }
       {props.songWrapper.song.id && getScreenDimensions().width < 992 &&
-        <IonCard id={props.songWrapper.song.id!.toString()} key={props.songWrapper.song.id} class="card-item">
+        <IonCard id={props.songWrapper.song.id!.toString()} key={props.songWrapper.song.id} className="card-item">
           <IonCardContent className="small-screen">
             <IonReorder slot="end" style={{ float: "right" }}></IonReorder>
             <IonGrid>
