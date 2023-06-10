@@ -212,7 +212,7 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
               id="searchText"
               value = {inputValue}
               onIonClear={e => { handleSearchbarClear(e) }}
-              onIonChange={e => { handleInputChange(e) }}
+              onIonInput={e => { handleInputChange(e) }}
               onKeyDown={e => { handleKeyDown(e) }}
               placeholder="Whole word match: Stone and Stones return very different results.">
             </IonSearchbar>
