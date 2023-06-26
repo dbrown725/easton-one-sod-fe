@@ -1,0 +1,92 @@
+.comment-modal .thumbnail-image::part(image) {    
+    /* original image ratio height 75% of width */
+    /* display image ratio should be height 56% of width */
+    /* height: 278px;
+    width: 500px; */
+    height: 194px;
+    width: 350px;
+    object-fit: cover;
+    margin-bottom: 15px;
+    margin: auto;
+    border-radius: 18px;
+}
+
+@media (max-width: 500px) {
+    .comment-modal .thumbnail-image::part(image) {    
+        height: 154px;
+        width: 280px;
+        border-radius: 12px;
+    }
+}
+
+.comment-modal .comment-row {    
+    border-bottom: 1px solid rgb(211, 211, 211);
+    margin:0 auto;
+    width   : 90%;
+}
+
+.comment-modal ion-avatar {
+    margin-bottom: -10px;
+    /* margin-top: -10px; */
+    margin-left: 20px;
+}
+
+.comment-modal ion-avatar img  {
+    width: 60%;
+    height: 60%;
+    max-width: 100px !important;
+    max-height: 100px !important;
+}
+
+@media (max-width: 600px) {
+    .comment-modal ion-avatar img  {
+        width: 50%;
+        height: 50%;
+    }
+}
+
+.comment-modal .thumbnail-row {
+    margin-top: 10px;
+}
+
+.comment-modal .song-band-row {
+    margin:0 auto 10px;
+    width   : 90%;
+    text-align: center;
+}
+
+.comment-modal .input-row {
+    margin:0 auto;
+    width   : 90%;
+}
+
+.comment-modal .toolbar-title {
+    text-align: center;
+}
+
+.comment-modal ion-icon[title="enter"] {
+    pointer-events: none;
+    cursor:pointer;
+    text-decoration:underline;
+}
+
+.comment-modal ion-icon[title="update"] {
+    pointer-events: none;
+    cursor:pointer;
+    text-decoration:underline;
+}
+
+@media (max-width: 600px) {
+    .comment-modal ion-icon[title="enter"] {
+        margin-left: 25px;
+    }
+}
+
+.comment-modal .date-div {
+    font-size: 12px;
+    margin-top: -15px;
+}
+
+.hidden { 
+    display:none; 
+}

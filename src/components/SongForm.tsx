@@ -242,7 +242,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
             maxlength={100}
             autofocus
             value={bandName}
-            onIonChange={(e) => {setBandName((e.target as HTMLIonInputElement).value); onChanged(e.target)}}
+            onIonInput={(e) => {setBandName((e.target as HTMLIonInputElement).value); onChanged(e.target)}}
             onBlur={(e) => handleTextBlurEvent((e as React.FormEvent<HTMLIonInputElement>))}
             onFocus={(e) => handleTextFocusEvent((e as React.FormEvent<HTMLIonInputElement>))}
             required
@@ -260,7 +260,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
             className="songName"
             maxlength={100}
             value={songName}
-            onIonChange={(e) => {setSongName((e.target as HTMLIonInputElement).value); onChanged(e.target)}}
+            onIonInput={(e) => {setSongName((e.target as HTMLIonInputElement).value); onChanged(e.target)}}
             onBlur={(e) => handleTextBlurEvent((e as React.FormEvent<HTMLIonInputElement>))}
             onFocus={(e) => handleTextFocusEvent((e as React.FormEvent<HTMLIonInputElement>))}
             required
@@ -278,7 +278,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
             className="titleClass" //"title" alone caused issues. Reserved name?
             maxlength={203} //band (max 100) + " - " + //song (max 100)
             value={title}
-            onIonChange={(e) => {setTitle((e.target as HTMLIonInputElement).value); onChanged(e.target)}}
+            onIonInput={(e) => {setTitle((e.target as HTMLIonInputElement).value); onChanged(e.target)}}
             onBlur={(e) => handleTextBlurEvent((e as React.FormEvent<HTMLIonInputElement>))}
             onFocus={(e) => handleTextFocusEvent((e as React.FormEvent<HTMLIonInputElement>))}
             required
@@ -296,7 +296,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
             className="url"
             maxlength={100}
             value={link}
-            onIonChange={(e) => {setLink((e.target as HTMLIonInputElement).value); onChanged(e.target)}}
+            onIonInput={(e) => {setLink((e.target as HTMLIonInputElement).value); onChanged(e.target)}}
             onBlur={(e) => handleTextBlurEvent((e as React.FormEvent<HTMLIonInputElement>))}
             onFocus={(e) => handleTextFocusEvent((e as React.FormEvent<HTMLIonInputElement>))}
             required
@@ -314,7 +314,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
               maxlength={250}
               value={message}
               onFocus={(e) => handleTextFocusEvent((e as unknown as React.FormEvent<HTMLIonInputElement>))}
-              onIonChange={(e) => setMessage((e.target as HTMLIonTextareaElement).value)}
+              onIonInput={(e) => setMessage((e.target as HTMLIonTextareaElement).value)}
               placeholder="A great live performance by the Allman Brothers!">
             </IonTextarea>
             <IonNote className="hide commentNote" slot="helper">Optional: Will only be included in the email.</IonNote>

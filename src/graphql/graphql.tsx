@@ -101,6 +101,37 @@ export    const GET_MOST_RECENT_SONGS = gql`
             }
             `;  
 
+export    const GET_SONG_BY_ID = gql`
+            query getSongById($songId: ID!) {
+              getSongById(songId: $songId) {
+                id
+                bandName
+                songName
+                title
+                link
+                message
+                sortOrder
+                songComments {
+                  id
+                  songId
+                  comment
+                  userId
+                  userFirstName
+                  userLastName
+                  userAvatarColor
+                  createTime
+                  modifyTime
+                }
+                userFirstName
+                userLastName
+                userAvatarColor
+                createTime
+                modifyTime
+                userIsTheSubmitter
+                }
+            }
+            `;
+
 export    const GET_SONGS_WITH_ISSUES_COUNT = gql`
             query getSongsWithIssuesCount {
               getSongsWithIssuesCount
@@ -200,3 +231,50 @@ export    const GET_BAND_STATS = gql`
         }
     }
     `;
+
+export   const ADD_SONG_COMMENT= gql`
+    mutation insertSongComment($songId: Int!, $comment: String!) {
+      insertSongComment(
+        songId: $songId,
+        comment: $comment)
+        {
+          id
+          songId
+          comment
+          userId
+          userFirstName
+          userLastName
+          userAvatarColor
+          createTime
+          modifyTime
+        }
+    }
+    `;
+
+  export   const DELETE_SONG_COMMENT = gql`
+    mutation deleteSongComment($id: ID!) {
+      deleteSongComment(
+        id: $id
+        )
+    }
+    `;
+
+  export   const UPDATE_SONG_COMMENT = gql`
+    mutation updateSongComment($id: ID!, $comment: String!) {
+      updateSongComment(
+        id: $id
+        comment: $comment)
+        {
+          id
+          songId
+          comment
+          userId
+          userFirstName
+          userLastName
+          userAvatarColor
+          createTime
+          modifyTime
+        }
+    }
+  `;
+

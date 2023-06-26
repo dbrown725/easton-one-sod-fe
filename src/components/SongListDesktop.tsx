@@ -24,7 +24,7 @@ const SongListDesktop: React.FC<SongListDesktopProps> = (props) => {
               <IonCol size="7">
                 <IonItem>
                   <a slot="start" href={wrapper.song.link} target='_blank' rel="noreferrer">
-                    <IonImg src={getThumbnailLink(wrapper.song.link, "high")} className='thumbnail-image' alt="Song of the day!" />
+                    <IonImg src={getThumbnailLink(wrapper.song.link, "high")} className='thumbnail-image'/>
                    </a>
                   <IonLabel>
                     <h1 title={sanitizeData(wrapper.song.songName)}
@@ -43,10 +43,9 @@ const SongListDesktop: React.FC<SongListDesktopProps> = (props) => {
                 <IonRow>
                   <IonCol className="avatar-column">
                     <IonAvatar>
-                      <img alt={wrapper.song.userFirstName + " " + wrapper.song.userLastName}
+                      <img
                         src={"https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=" + wrapper.song.userFirstName + "+" + wrapper.song.userLastName + "&rounded=true&background=" + wrapper.song.userAvatarColor}
                         title={wrapper.song.userFirstName + " " + wrapper.song.userLastName} />
-                      {/* <img alt="Silhouette of a person's head" src={adminPic} /> */}
                   </IonAvatar>
                   </IonCol>
                 </IonRow>

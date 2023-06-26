@@ -17,7 +17,7 @@ const SongListCardItem: React.FC<SongListItemProps> = (props) => {
                   <IonCol size="7">
                     <IonItem>
                       <a slot="start" href={props.songWrapper.song.link} target='_blank' rel="noreferrer">
-                        <IonImg src={getThumbnailLink(props.songWrapper.song.link, "high")} className='thumbnail-image' alt="Song of the day!" />
+                        <IonImg src={getThumbnailLink(props.songWrapper.song.link, "high")} className='thumbnail-image'/>
                       </a>
                       <IonLabel>
                         <h1 title={sanitizeData(props.songWrapper.song.songName)}
@@ -76,7 +76,7 @@ const SongListCardItem: React.FC<SongListItemProps> = (props) => {
                 <IonCol>
                   <a href={props.songWrapper.song.link} target='_blank' rel="noreferrer">
                     <IonImg src={getThumbnailLink(props.songWrapper.song.link, "high")} 
-                      className={props.songListProps.showDeleteButton?"bullpen thumbnail-image":"thumbnail-image"} alt="Song of the day!" />
+                      className={props.songListProps.showDeleteButton?"bullpen thumbnail-image":"thumbnail-image"}/>
                   </a>  
                 </IonCol>
               </IonRow>
@@ -102,11 +102,10 @@ const SongListCardItem: React.FC<SongListItemProps> = (props) => {
                 {!props.songListProps.showDeleteButton &&
                 <IonCol size="2" className="avatar-column">
                   <IonAvatar>
-                    <img alt={props.songWrapper.song.userFirstName + " " + props.songWrapper.song.userLastName}
+                    <img
                       src={"https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=" + props.songWrapper.song.userFirstName + "+"
                         + props.songWrapper.song.userLastName + "&rounded=true&background=" + props.songWrapper.song.userAvatarColor}
                       title={props.songWrapper.song.userFirstName + " " + props.songWrapper.song.userLastName} />
-
                   </IonAvatar>
                 </IonCol>  
                  }

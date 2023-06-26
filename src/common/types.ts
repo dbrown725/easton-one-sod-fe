@@ -17,10 +17,23 @@ export interface Song {
     createTime?: string;
     modifyTime?: string;
     score?: number;
+    songComments?: [SongComment];
     userFirstName?: string;
     userLastName?: string;
     userAvatarColor?: string;
     userIsTheSubmitter: boolean;
+}
+
+export interface SongComment {
+    id: number;
+    songId: number;
+    comment: string;
+    userId: number;
+    userFirstName: string;
+    userLastName: string;
+    userAvatarColor: string;
+    createTime: string;
+    modifyTime: string;
 }
 
 export interface SongResult {
@@ -106,4 +119,8 @@ export interface SongListItemProps {
 export interface SongListDesktopProps {
     songListProps: SongListProps;
     songWrapperList: SongWrapper[];
+}
+
+export interface CommentModalProps {
+    songId: number;
 }
