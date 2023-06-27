@@ -51,14 +51,11 @@ const CommentModal: React.FC<CommentModalProps> = (props) => {
     setComment("");
     const timeout = setTimeout(() => {
       getSongById();
-    }, 1000);
+    }, 2000);
   };
 
-  const handleUpdateClick = (id: number) => {
+  const handleUpdate = (id: number) => {
     
-
-
-
     updateSongComment({ variables: { id: id, comment: refUpdateValue.current } });
 
     setTimeout(() => {
@@ -79,6 +76,18 @@ const CommentModal: React.FC<CommentModalProps> = (props) => {
       getSongById();
     }, 1000);
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLIonInputElement>) => {
+    if(e.key == 'Enter') {
+      handleSubmitClick();
+    }
+  }
+
+  const handleUpdateKeyDown = (e: React.KeyboardEvent<HTMLIonInputElement>, id: number) => {
+    if(e.key == 'Enter') {
+      handleUpdate(id);
+    }
+  }
 
   const handleDeleteClick = (id: number) => {
     presentAlert({
@@ -162,11 +171,12 @@ const CommentModal: React.FC<CommentModalProps> = (props) => {
                   <IonCol size="10">
                     <IonInput label="New Comment" value={comment}
                       onIonInput={(e) => { setComment((e.target as HTMLIonInputElement).value); }}
+                      onKeyDown={e => { handleKeyDown(e) }}
                       labelPlacement="floating" fill="outline" 
                       maxlength={250} placeholder="Enter text">
                     </IonInput>
                   </IonCol>
-                  <IonCol size="2" onClick={(e) => handleSubmitClick()}>
+                  <IonCol title="Submit" size="2" onClick={(e) => handleSubmitClick()}>
                     <IonButton fill='clear'>
                       <IonIcon className="submit-icon" slot="icon-only" size="large" title="enter" color="primary" icon={enterSharp}></IonIcon>
                     </IonButton>
@@ -189,12 +199,13 @@ const CommentModal: React.FC<CommentModalProps> = (props) => {
                                     <IonCol size='10'>
                                       <IonInput value={comment.comment}
                                         onIonInput={(e) => { refUpdateValue.current = (e.target as HTMLIonInputElement).value as string; }}
+                                        onKeyDown={e => { handleUpdateKeyDown(e, comment.id) }}
                                         fill="outline"
                                         maxlength={250}>
                                       </IonInput>
                                     </IonCol>
                                     <IonCol size='2'>
-                                      <IonButton fill='clear' onClick={(e) => handleUpdateClick(comment.id)}>
+                                      <IonButton fill='clear' title="Submit Update" onClick={(e) => handleUpdate(comment.id)}>
                                         <IonIcon slot="icon-only"
                                           className="update-icon" size="large" title="update" color="primary" icon={enterSharp}></IonIcon>
                                       </IonButton>
