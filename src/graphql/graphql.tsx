@@ -119,6 +119,7 @@ export    const GET_SONG_BY_ID = gql`
                   userFirstName
                   userLastName
                   userAvatarColor
+                  userIsTheSubmitter
                   createTime
                   modifyTime
                 }

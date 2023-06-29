@@ -1,10 +1,10 @@
 import { IonAvatar, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonModal, IonRow, IonTitle, IonToolbar, useIonAlert } from '@ionic/react';
 import { useEffect, useRef, useState } from 'react';
-import { CommentModalProps, Song, SongComment } from '../common/types';
+import { CommentModalProps, Song, SongComment, UserInfo } from '../common/types';
 import { create, enterSharp, trash } from 'ionicons/icons';
 import './CommentModal.css';
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { ADD_SONG_COMMENT, DELETE_SONG_COMMENT, GET_SONG_BY_ID, UPDATE_SONG_COMMENT } from '../graphql/graphql';
+import { ADD_SONG_COMMENT, DELETE_SONG_COMMENT, GET_SONG_BY_ID, GET_USER_INFO, UPDATE_SONG_COMMENT } from '../graphql/graphql';
 import { getThumbnailLink, sanitizeData } from '../common/helper';
 
 const CommentModal: React.FC<CommentModalProps> = (props) => {
@@ -13,6 +13,16 @@ const CommentModal: React.FC<CommentModalProps> = (props) => {
   const [comment, setComment] = useState<string | number | null | undefined>('');
   const refUpdateValue = useRef<string>('');
   const [presentAlert] = useIonAlert();
+  const [userInfo, setUserInfo] = useState<UserInfo>();
+
+  const [
+    getUserInfo,
+    { loading: userLoading, error: userError, data: userData }
+  ] = useLazyQuery(GET_USER_INFO, {
+    fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache', onCompleted: (data) => {
+      setUserInfo(data.getUserInfo);
+    }
+  });
 
   const [addSongComment, { data: cmmtData, loading: cmmtLoading, error: cmmtError }] = useMutation(ADD_SONG_COMMENT);
   // cmmtData && console.log("cmmtData: ", cmmtData);
@@ -231,15 +241,15 @@ const CommentModal: React.FC<CommentModalProps> = (props) => {
                             </IonCol>
                           </IonRow>
                           <IonRow>
-                            {true &&
-                              <span id="edit" title="Edit" onClick={(event) => handleUpdateButtonClick(comment)}>
-                                <IonIcon icon={create} size="small" title="Edit"></IonIcon>
-                              </span>
-                            }
-                            {true &&
-                              <span onClick={(e) => handleDeleteClick(comment.id)}>
-                                <IonIcon icon={trash} size="small" title="Delete"></IonIcon>
-                              </span>
+                            {comment.userIsTheSubmitter &&
+                              <>
+                                <span id="edit" title="Edit" onClick={(event) => handleUpdateButtonClick(comment)}>
+                                  <IonIcon icon={create} size="small" title="Edit"></IonIcon>
+                                </span>
+                                <span onClick={(e) => handleDeleteClick(comment.id)}>
+                                  <IonIcon icon={trash} size="small" title="Delete"></IonIcon>
+                                </span>
+                              </>
                             }
                           </IonRow>
                         </IonCol>

@@ -32,6 +32,7 @@ export interface SongComment {
     userFirstName: string;
     userLastName: string;
     userAvatarColor: string;
+    userIsTheSubmitter: boolean;
     createTime: string;
     modifyTime: string;
 }
