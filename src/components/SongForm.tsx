@@ -68,6 +68,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
         setBandName(location.state.song.bandName);
         setSongName(location.state.song.songName);
         setLink(location.state.song.link);
+        setThumbnailLink(getThumbnailLink(location.state.song.link, "high"));
         if (location.state.song.playlist) {
           setPlaylist(location.state.song.playlist);
         } else {
