@@ -75,12 +75,12 @@ const Menu: React.FC = () => {
       iosIcon: baseballOutline,
       mdIcon: baseballSharp
     },
-    {
-      title: 'Repair Shop',
-      url: '/page/Repair',
-      iosIcon: constructOutline,
-      mdIcon: constructSharp
-    },
+    // {
+    //   title: 'Repair Shop',
+    //   url: '/page/Repair',
+    //   iosIcon: constructOutline,
+    //   mdIcon: constructSharp
+    // },
     {
       title: 'Download',
       url: '/page/Download',
