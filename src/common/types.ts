@@ -124,4 +124,5 @@ export interface SongListDesktopProps {
 
 export interface CommentModalProps {
     songId: number;
+    closeModalCallback?: () => void;
 }

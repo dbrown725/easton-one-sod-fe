@@ -1,10 +1,19 @@
 import { IonAvatar, IonCard, IonCardContent, IonCol, IonGrid, IonIcon, IonImg, IonItem, IonLabel, IonReorder, IonRow } from '@ionic/react';
 import { SongListItemProps } from '../common/types';
-import { create, trash } from 'ionicons/icons';
+import { chatbubbleEllipsesOutline, create, trash } from 'ionicons/icons';
 import './SongListCardItem.css';
 import { getScreenDimensions, getThumbnailLink, highlightMatches, sanitizeData } from '../common/helper';
+import CommentModal from './CommentModal';
+import { useEffect, useState } from 'react';
+import { role, refreshRole } from '../firebase';
 
 const SongListCardItem: React.FC<SongListItemProps> = (props) => {
+
+  const [commentSongId, setCommentSongId] = useState<number>(0);
+
+  useEffect(() => {
+    refreshRole();
+  }, []);
 
   return (
     <>
@@ -128,12 +137,21 @@ const SongListCardItem: React.FC<SongListItemProps> = (props) => {
                       <IonIcon icon={trash} size="small" onClick={(event) => props.songListProps.deleteCallback?.(event, props.songWrapper.song)} title="Delete"></IonIcon>
                     </span>
                   }
+                  {role !== 'GUEST' && !props.songListProps.showDeleteButton &&
+                    <>
+                      <span id="comment" title="Comment" onClick={(event) => setCommentSongId(props.songWrapper.song.id as number)}>
+                        <IonIcon icon={chatbubbleEllipsesOutline} size="1" title="Comment"></IonIcon>
+                      </span>
+                      <span>{props.songWrapper.song.songComments?.length}</span>
+                    </>
+                  }
                 </IonCol>
               </IonRow>
             </IonGrid>
           </IonCardContent>
         </IonCard>
       }
+      {commentSongId > 0 && <CommentModal songId={commentSongId} closeModalCallback={() => setCommentSongId(0)}/>}
     </>
   );
 }

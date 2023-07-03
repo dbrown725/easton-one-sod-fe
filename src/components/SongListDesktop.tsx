@@ -1,15 +1,19 @@
 import { IonAvatar, IonCol, IonGrid, IonIcon, IonImg, IonItem, IonLabel, IonRow } from '@ionic/react';
 import { SongListDesktopProps, SongWrapper } from '../common/types';
-import { create } from 'ionicons/icons';
+import { chatbubble, chatbubbleEllipses, chatbubbleEllipsesOutline, chatbubbleOutline, create } from 'ionicons/icons';
 import './SongListDesktop.css';
 import { getThumbnailLink, highlightMatches, sanitizeData } from '../common/helper';
 import { useEffect, useState } from 'react';
+import { role, refreshRole } from '../firebase';
+import CommentModal from './CommentModal';
 
 const SongListDesktop: React.FC<SongListDesktopProps> = (props) => {
 
   const [titleColumSize, setTitleColumnSize] = useState<string>("2.5");
+  const [commentSongId, setCommentSongId] = useState<number>(0);
 
   useEffect(() => {
+    refreshRole();
     if(!props.songListProps.showEditButton) {
       setTitleColumnSize("3.5");
     }
@@ -57,17 +61,28 @@ const SongListDesktop: React.FC<SongListDesktopProps> = (props) => {
                   </IonCol>
                 </IonRow>
               </IonCol>
-              {wrapper.displayEditButton &&
+
                 <IonCol size="1" className="edit-column">
-                  <span id="edit" title="Edit" onClick={(event) => props.songListProps.editCallback?.(event, wrapper.song)}>
-                    <IonIcon icon={create} size="1" title="Edit"></IonIcon>
-                  </span>
+                  {wrapper.displayEditButton &&
+                    <span id="edit" title="Edit" onClick={(event) => props.songListProps.editCallback?.(event, wrapper.song)}>
+                      <IonIcon icon={create} size="1" title="Edit"></IonIcon>
+                    </span>
+                  }
+                  {role !== 'GUEST' &&
+                    <>
+                      <br/>
+                      <span id="comment" title="Comment" onClick={(event) => setCommentSongId(wrapper.song.id as number)}>
+                        <IonIcon icon={chatbubbleEllipsesOutline} size="1" title="Comment"></IonIcon>
+                      </span>
+                      <span>{wrapper.song.songComments?.length}</span>
+                    </>
+                  }
                 </IonCol>
-              }
             </IonRow>
           );
         })
       }
+      {commentSongId > 0 && <CommentModal songId={commentSongId} closeModalCallback={() => setCommentSongId(0)}/>}
     </IonGrid>
   );
 }

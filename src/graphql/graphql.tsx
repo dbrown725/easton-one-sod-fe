@@ -91,6 +91,18 @@ export    const GET_MOST_RECENT_SONGS = gql`
                 link
                 message
                 sortOrder
+                songComments {
+                  id
+                  songId
+                  comment
+                  userId
+                  userFirstName
+                  userLastName
+                  userAvatarColor
+                  userIsTheSubmitter
+                  createTime
+                  modifyTime
+                }
                 userFirstName
                 userLastName
                 userAvatarColor
@@ -150,6 +162,18 @@ export    const GET_SONGS_WITH_ISSUES = gql`
                 playlist
                 message
                 sortOrder
+                songComments {
+                  id
+                  songId
+                  comment
+                  userId
+                  userFirstName
+                  userLastName
+                  userAvatarColor
+                  userIsTheSubmitter
+                  createTime
+                  modifyTime
+                }
                 userFirstName
                 userLastName
                 userAvatarColor
@@ -212,6 +236,18 @@ export    const GET_SONGS_WITH_ISSUES = gql`
               songNameHighlighted
               link
               playlist
+              songComments {
+                id
+                songId
+                comment
+                userId
+                userFirstName
+                userLastName
+                userAvatarColor
+                userIsTheSubmitter
+                createTime
+                modifyTime
+              }
               userFirstName
               userLastName
               userAvatarColor

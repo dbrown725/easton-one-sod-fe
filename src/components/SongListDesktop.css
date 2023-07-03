@@ -6,11 +6,25 @@
 }
 
 .desktop span#edit {
-    font-size: x-large;
+    font-size: large;
     cursor:pointer;
     text-decoration:underline;
     line-height: 1;
     margin-right: 20px;
+}
+
+.desktop ion-icon[title="Comment"] {
+    pointer-events: none;
+    padding-top: 10px;
+    cursor:pointer;
+    text-decoration:underline;
+}
+
+.desktop span#comment {
+    font-size: large;
+    cursor:pointer;
+    text-decoration:underline;
+    line-height: 1;
 }
 
 .desktop {
@@ -96,8 +110,8 @@
 }
 
 .desktop .edit-column {
-    padding-top: 40px;
-    padding-left: 25px;
+    padding-top: 30px;
+    padding-left: 20px;
 }
 
 

@@ -154,7 +154,7 @@ const CommentModal: React.FC<CommentModalProps> = (props) => {
             <IonToolbar>
               <IonTitle className="toolbar-title">Comments</IonTitle>
               <IonButtons slot="end">
-                <IonButton onClick={() => setIsOpen(false)}>Close</IonButton>
+                <IonButton onClick={() => {props.closeModalCallback!(); setIsOpen(false)}}>Close</IonButton>
               </IonButtons>
             </IonToolbar>
           </IonHeader>
