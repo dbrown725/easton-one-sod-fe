@@ -26,23 +26,14 @@
 }
 
 .comment-modal ion-avatar {
-    margin-bottom: -10px;
-    /* margin-top: -10px; */
-    margin-left: 20px;
+    margin-bottom: -30px;
 }
 
 .comment-modal ion-avatar img  {
-    width: 60%;
-    height: 60%;
+    width: 45%;
+    height: 45%;
     max-width: 100px !important;
     max-height: 100px !important;
-}
-
-@media (max-width: 600px) {
-    .comment-modal ion-avatar img  {
-        width: 50%;
-        height: 50%;
-    }
 }
 
 .comment-modal .thumbnail-row {
@@ -76,17 +67,45 @@
     text-decoration:underline;
 }
 
-@media (max-width: 600px) {
-    .comment-modal ion-icon[title="enter"] {
-        margin-left: 25px;
-    }
-}
-
 .comment-modal .date-div {
     font-size: 12px;
-    margin-top: -15px;
+    margin-top: 8px;
 }
 
 .hidden { 
     display:none; 
 }
+
+.comment-modal span#edit {
+    margin-left: 50px;
+}
+
+.comment-modal .cancelEdit {
+    margin-top: 20px;
+    margin-left: -10px;
+    color: red;
+    cursor:pointer;
+    text-decoration:underline;
+}
+
+@media (max-width: 600px) {
+    .comment-modal ion-icon[title="enter"] {
+        margin-left: 25px;
+    }
+    .comment-modal .date-div {
+        margin-left: 10px;
+    }
+    .comment-modal span#edit {
+        margin-left: 0px;
+    }
+    .comment-modal ion-avatar img  {
+        width: 60%;
+        height: 60%;
+    }
+    .comment-modal .cancelEdit {
+        font-size: 10px;
+        margin-top: 30px;
+    }
+}
+
+

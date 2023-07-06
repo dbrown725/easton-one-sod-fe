@@ -1,4 +1,4 @@
-import { IonAvatar, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonModal, IonRow, IonTitle, IonToolbar, useIonAlert } from '@ionic/react';
+import { IonAvatar, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonModal, IonRow, IonTextarea, IonTitle, IonToolbar, useIonAlert } from '@ionic/react';
 import { useEffect, useRef, useState } from 'react';
 import { CommentModalProps, Song, SongComment, UserInfo } from '../common/types';
 import { create, enterSharp, trash } from 'ionicons/icons';
@@ -6,11 +6,13 @@ import './CommentModal.css';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { ADD_SONG_COMMENT, DELETE_SONG_COMMENT, GET_SONG_BY_ID, GET_USER_INFO, UPDATE_SONG_COMMENT } from '../graphql/graphql';
 import { getThumbnailLink, sanitizeData } from '../common/helper';
+import { role, refreshRole } from '../firebase';
+import { getScreenDimensions } from '../common/helper';
 
 const CommentModal: React.FC<CommentModalProps> = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [song, setSong] = useState<Song>();
-  const [comment, setComment] = useState<string | number | null | undefined>('');
+  const [comment, setComment] = useState<string | null | undefined>('');
   const refUpdateValue = useRef<string>('');
   const [presentAlert] = useIonAlert();
   const [userInfo, setUserInfo] = useState<UserInfo>();
@@ -51,6 +53,10 @@ const CommentModal: React.FC<CommentModalProps> = (props) => {
   });
 
   useEffect(() => {
+    refreshRole();
+  }, []);
+
+  useEffect(() => {
     if (props.songId > 0) {
       getSongById();
     }
@@ -65,7 +71,7 @@ const CommentModal: React.FC<CommentModalProps> = (props) => {
   };
 
   const handleUpdate = (id: number) => {
-    
+
     updateSongComment({ variables: { id: id, comment: refUpdateValue.current } });
 
     setTimeout(() => {
@@ -87,14 +93,14 @@ const CommentModal: React.FC<CommentModalProps> = (props) => {
     }, 1000);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLIonInputElement>) => {
-    if(e.key == 'Enter') {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLIonTextareaElement>) => {
+    if (e.key == 'Enter') {
       handleSubmitClick();
     }
   }
 
-  const handleUpdateKeyDown = (e: React.KeyboardEvent<HTMLIonInputElement>, id: number) => {
-    if(e.key == 'Enter') {
+  const handleUpdateKeyDown = (e: React.KeyboardEvent<HTMLIonTextareaElement>, id: number) => {
+    if (e.key == 'Enter') {
       handleUpdate(id);
     }
   }
@@ -120,7 +126,6 @@ const CommentModal: React.FC<CommentModalProps> = (props) => {
       ],
       // onDidDismiss: (e: CustomEvent) => setRoleMessage(`Dismissed with role: ${e.detail.role}`),
     })
-
   }
 
   const handleUpdateButtonClick = (songComment: SongComment) => {
@@ -154,7 +159,7 @@ const CommentModal: React.FC<CommentModalProps> = (props) => {
             <IonToolbar>
               <IonTitle className="toolbar-title">Comments</IonTitle>
               <IonButtons slot="end">
-                <IonButton onClick={() => {props.closeModalCallback!(); setIsOpen(false)}}>Close</IonButton>
+                <IonButton onClick={() => { props.closeModalCallback!(); setIsOpen(false) }}>Close</IonButton>
               </IonButtons>
             </IonToolbar>
           </IonHeader>
@@ -178,15 +183,15 @@ const CommentModal: React.FC<CommentModalProps> = (props) => {
                   </IonCol>
                 </IonRow>
                 <IonRow className="input-row">
-                  <IonCol size="10">
-                    <IonInput label="New Comment" value={comment}
-                      onIonInput={(e) => { setComment((e.target as HTMLIonInputElement).value); }}
+                  <IonCol size={getScreenDimensions().width > 600 ? "10" : "8"}>
+                    <IonTextarea label="New Comment" value={comment}
+                      onIonInput={(e) => { setComment((e.target as HTMLIonTextareaElement).value); }}
                       onKeyDown={e => { handleKeyDown(e) }}
-                      labelPlacement="floating" fill="outline" 
+                      labelPlacement="floating" fill="outline"
                       maxlength={250} placeholder="Enter text">
-                    </IonInput>
+                    </IonTextarea>
                   </IonCol>
-                  <IonCol title="Submit" size="2" onClick={(e) => handleSubmitClick()}>
+                  <IonCol title="Submit" size={getScreenDimensions().width > 600 ? "2" : "4"} onClick={(e) => handleSubmitClick()}>
                     <IonButton fill='clear'>
                       <IonIcon className="submit-icon" slot="icon-only" size="large" title="enter" color="primary" icon={enterSharp}></IonIcon>
                     </IonButton>
@@ -199,58 +204,57 @@ const CommentModal: React.FC<CommentModalProps> = (props) => {
                       <IonRow key={comment.id} className='comment-row'>
                         <IonCol>
                           <IonRow>
-                            <IonCol>
-                              <IonRow>
-                                <IonCol size='9.75'>
-                                  <div className={comment.id as unknown as string + ' comment'}>
-                                    {comment.comment}
-                                  </div>
-                                  <IonRow className={comment.id as unknown as string + ' comment_input hidden'}>
-                                    <IonCol size='10'>
-                                      <IonInput value={comment.comment}
-                                        onIonInput={(e) => { refUpdateValue.current = (e.target as HTMLIonInputElement).value as string; }}
-                                        onKeyDown={e => { handleUpdateKeyDown(e, comment.id) }}
-                                        fill="outline"
-                                        maxlength={250}>
-                                      </IonInput>
-                                    </IonCol>
-                                    <IonCol size='2'>
-                                      <IonButton fill='clear' title="Submit Update" onClick={(e) => handleUpdate(comment.id)}>
-                                        <IonIcon slot="icon-only"
-                                          className="update-icon" size="large" title="update" color="primary" icon={enterSharp}></IonIcon>
-                                      </IonButton>
-                                    </IonCol>
-                                  </IonRow>
-                                </IonCol>
-                                <IonCol size='2.25'>
-                                  <IonRow>
-                                    <IonAvatar>
-                                      <img alt={comment.userFirstName + " " + comment.userLastName}
-                                        src={"https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=" + comment.userFirstName + "+"
-                                          + comment.userLastName + "&rounded=true&background=" + comment.userAvatarColor}
-                                        title={comment.userFirstName + " " + comment.userLastName} />
-                                    </IonAvatar>
-                                  </IonRow>
-                                  <IonRow>
-                                    <div className="date-div"
-                                      dangerouslySetInnerHTML={{ __html: sanitizeData(comment.createTime ? comment.createTime.substring(0, 10) : '') }}>
-                                    </div>
-                                  </IonRow>
-                                </IonCol>
-                              </IonRow>
+                            <IonCol size='1'>
+                              <IonAvatar>
+                                <img alt={comment.userFirstName + " " + comment.userLastName}
+                                  src={"https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=" + comment.userFirstName + "+"
+                                    + comment.userLastName + "&rounded=true&background=" + comment.userAvatarColor}
+                                  title={comment.userFirstName + " " + comment.userLastName} />
+                              </IonAvatar>
+                            </IonCol>
+                            <IonCol size='8'>
+                              <div className="date-div"
+                                dangerouslySetInnerHTML={{ __html: sanitizeData(comment.createTime ? comment.createTime.substring(0, 10) : '') }}>
+                              </div>
+                            </IonCol>
+                            <IonCol size='3'>
+                              {(role === 'ADMIN' || comment.userIsTheSubmitter) &&
+                                <>
+                                  <span id="edit" title="Edit" onClick={(event) => handleUpdateButtonClick(comment)}>
+                                    <IonIcon icon={create} size="small" title="Edit"></IonIcon>
+                                  </span>
+                                  <span onClick={(e) => handleDeleteClick(comment.id)}>
+                                    <IonIcon icon={trash} size="small" title="Delete"></IonIcon>
+                                  </span>
+                                </>
+                              }
                             </IonCol>
                           </IonRow>
-                          <IonRow>
-                            {comment.userIsTheSubmitter &&
-                              <>
-                                <span id="edit" title="Edit" onClick={(event) => handleUpdateButtonClick(comment)}>
-                                  <IonIcon icon={create} size="small" title="Edit"></IonIcon>
-                                </span>
-                                <span onClick={(e) => handleDeleteClick(comment.id)}>
-                                  <IonIcon icon={trash} size="small" title="Delete"></IonIcon>
-                                </span>
-                              </>
-                            }
+                          <IonRow className={comment.id as unknown as string + ' comment'}>
+                            <IonCol>
+                              <div>
+                                {comment.comment}
+                              </div>
+                            </IonCol>
+                          </IonRow>
+                          <IonRow className={comment.id as unknown as string + ' comment_input hidden'}>
+                            <IonCol className="editInputCol" size={getScreenDimensions().width > 600 ? "8.5" : "7.5"}>
+                              <IonTextarea value={comment.comment}
+                                onIonInput={(e) => { refUpdateValue.current = (e.target as HTMLIonTextareaElement).value as string; }}
+                                onKeyDown={e => { handleUpdateKeyDown(e, comment.id) }}
+                                fill="outline"
+                                maxlength={250}>
+                              </IonTextarea>
+                            </IonCol>
+                            <IonCol size={getScreenDimensions().width > 600 ? "2" : "3"}>
+                              <IonButton fill='clear' title="Submit Update" onClick={(e) => handleUpdate(comment.id)}>
+                                <IonIcon slot="icon-only"
+                                  className="update-icon" size="large" title="update" color="primary" icon={enterSharp}></IonIcon>
+                              </IonButton>
+                            </IonCol>
+                            <IonCol className="cancelEdit" size='1.5'>
+                              <div onClick={(e) => resetCommentClasses()}>cancel</div>
+                            </IonCol>
                           </IonRow>
                         </IonCol>
                       </IonRow>

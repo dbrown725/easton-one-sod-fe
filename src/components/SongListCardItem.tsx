@@ -142,7 +142,9 @@ const SongListCardItem: React.FC<SongListItemProps> = (props) => {
                       <span id="comment" title="Comment" onClick={(event) => setCommentSongId(props.songWrapper.song.id as number)}>
                         <IonIcon icon={chatbubbleEllipsesOutline} size="1" title="Comment"></IonIcon>
                       </span>
-                      <span>{props.songWrapper.song.songComments?.length}</span>
+                      {props.songWrapper.song.songComments?.length! > 0 &&
+                        <span>{props.songWrapper.song.songComments?.length}</span>
+                      }
                     </>
                   }
                 </IonCol>

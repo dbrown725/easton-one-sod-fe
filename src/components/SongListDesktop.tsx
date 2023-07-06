@@ -74,7 +74,9 @@ const SongListDesktop: React.FC<SongListDesktopProps> = (props) => {
                       <span id="comment" title="Comment" onClick={(event) => setCommentSongId(wrapper.song.id as number)}>
                         <IonIcon icon={chatbubbleEllipsesOutline} size="1" title="Comment"></IonIcon>
                       </span>
-                      <span>{wrapper.song.songComments?.length}</span>
+                      {wrapper.song.songComments?.length! > 0 &&
+                        <span>{wrapper.song.songComments?.length}</span>
+                      }
                     </>
                   }
                 </IonCol>
