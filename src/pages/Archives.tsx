@@ -32,7 +32,7 @@ const Archives: React.FC = () => {
             <IonTitle size="large">Archives</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <SearchForSongs editCallback={editClickHandler} showEditButton={true}/>
+        <SearchForSongs editCallback={editClickHandler} showEditButton={true} />
       </IonContent>
     </IonPage>
   );

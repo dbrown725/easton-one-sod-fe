@@ -56,6 +56,7 @@ export interface SongListProps {
     handleReorder?: ((event: IonReorderGroupCustomEvent<ItemReorderEventDetail>) => void) | undefined;
     deleteCallback?: ((event: React.MouseEvent<HTMLIonIconElement>, song: Song) => void) | undefined;
     editCallback?: ((event: React.MouseEvent<HTMLSpanElement>, song: Song) => void) | undefined;
+    closeModalCallback?: () => void;
 }
 
 export interface SongFormProps {
@@ -115,14 +116,17 @@ export interface SongWrapper {
 export interface SongListItemProps {
     songListProps: SongListProps;
     songWrapper: SongWrapper;
+    closeModalCallback?: () => void;
 }
 
 export interface SongListDesktopProps {
     songListProps: SongListProps;
     songWrapperList: SongWrapper[];
+    closeModalCallback?: () => void;
 }
 
 export interface CommentModalProps {
     songId: number;
     closeModalCallback?: () => void;
+    commentChangedCallback?: (songComments: SongComment[]) => void;
 }

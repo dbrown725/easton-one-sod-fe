@@ -13,8 +13,6 @@ const SongList: React.FC<SongListProps> = (props) => {
 
   const [screenWidth, setScreenWidth] = useState<number>(0);
 
-  const [desktopSize, isDesktopSize] = useState<boolean>(false);
-
   const [songWrapperList, setSongWrapperList] = useState<SongWrapper[]>([]);
 
   useEffect(() => {
@@ -41,14 +39,14 @@ const SongList: React.FC<SongListProps> = (props) => {
         <IonReorderGroup disabled={typeof props.handleReorder === "undefined"} onIonItemReorder={props.handleReorder}>
             {screenWidth >= 992 && !props.showDeleteButton &&
               songWrapperList.length > 0 &&
-                <SongListDesktop songListProps={props} songWrapperList={songWrapperList}/>
+                <SongListDesktop songListProps={props} songWrapperList={songWrapperList} closeModalCallback={props.closeModalCallback}/>
             }
             {(screenWidth < 992 || props.showDeleteButton) &&
               songWrapperList.length > 0 &&
               songWrapperList.map((wrapper: SongWrapper) => {
                 return (
                   <div key={wrapper.song.id}>
-                    <SongListCardItem songListProps={props} songWrapper={wrapper}/>
+                    <SongListCardItem songListProps={props} songWrapper={wrapper} closeModalCallback={() =>props.closeModalCallback!()}/>
                   </div>
                 );
               })

@@ -20,6 +20,8 @@ const Home: React.FC = () => {
     if(cmmtId > 0) {
       setCommentSongId(cmmtId);
       localStorage.removeItem('commentSongId');
+    } else {
+      setCommentSongId(0);
     }
   }, []);
 

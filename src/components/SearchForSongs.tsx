@@ -241,7 +241,8 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
               songs={displayData}
               editCallback={props.editCallback}
               showEditButton={props.showEditButton}
-              showDeleteButton={false} />
+              showDeleteButton={false}
+              closeModalCallback={() => getSongs()}/>
       }
 
       {displayData.length == 0 &&
@@ -255,7 +256,8 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
                 onIonChange={(e) => setSubmitterSelected(e.detail.value)} value={submitterSelected}>
               <IonSelectOption value="0">All</IonSelectOption>
               <IonSelectOption value="6">Brian</IonSelectOption>
-              <IonSelectOption value="8">Dave</IonSelectOption>
+              <IonSelectOption value="8">Dave B.</IonSelectOption>
+              <IonSelectOption value="9">Dave R.</IonSelectOption>
               <IonSelectOption value="5">Doug</IonSelectOption>
               <IonSelectOption value="2">Kevin</IonSelectOption>
               <IonSelectOption value="3">Lisa</IonSelectOption>

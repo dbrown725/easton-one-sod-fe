@@ -1,5 +1,5 @@
 import { IonAvatar, IonCol, IonGrid, IonIcon, IonImg, IonItem, IonLabel, IonRow } from '@ionic/react';
-import { SongListDesktopProps, SongWrapper } from '../common/types';
+import { SongComment, SongListDesktopProps, SongWrapper } from '../common/types';
 import { chatbubble, chatbubbleEllipses, chatbubbleEllipsesOutline, chatbubbleOutline, create } from 'ionicons/icons';
 import './SongListDesktop.css';
 import { getThumbnailLink, highlightMatches, sanitizeData } from '../common/helper';
@@ -19,12 +19,20 @@ const SongListDesktop: React.FC<SongListDesktopProps> = (props) => {
     }
   }, []);
 
+  //update comment count display for this song in the song list
+  const commentChanged = (songComments: SongComment[]) => {
+    let commentCount = document.getElementById(commentSongId?.toString())?.querySelector(".edit-column .comment-length");
+    if(commentCount != null) {
+      commentCount.innerHTML = songComments.length?.toString();
+    }
+  };
+
   return (
     <IonGrid className="desktop">
       {
         props.songWrapperList.map((wrapper: SongWrapper) => {
           return (
-            <IonRow className="item-row" key={wrapper.song.id}>
+            <IonRow className="item-row" key={wrapper.song.id} id={(wrapper.song.id)?.toString()}>
               <IonCol size="7">
                 <IonItem>
                   <a slot="start" href={wrapper.song.link} target='_blank' rel="noreferrer">
@@ -75,7 +83,8 @@ const SongListDesktop: React.FC<SongListDesktopProps> = (props) => {
                         <IonIcon icon={chatbubbleEllipsesOutline} size="1" title="Comment"></IonIcon>
                       </span>
                       {wrapper.song.songComments?.length! > 0 &&
-                        <span>{wrapper.song.songComments?.length}</span>
+                        //className used by resetting comment count logic
+                        <span className="comment-length">{wrapper.song.songComments?.length}</span>
                       }
                     </>
                   }
@@ -84,7 +93,10 @@ const SongListDesktop: React.FC<SongListDesktopProps> = (props) => {
           );
         })
       }
-      {commentSongId > 0 && <CommentModal songId={commentSongId} closeModalCallback={() => setCommentSongId(0)}/>}
+      {commentSongId > 0 && <CommentModal songId={commentSongId}
+                                          closeModalCallback={() => {setCommentSongId(0); props.closeModalCallback!()}}
+                                          commentChangedCallback={(songComments: SongComment[]) => {commentChanged(songComments)}}
+                                          />}
     </IonGrid>
   );
 }

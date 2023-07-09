@@ -153,7 +153,8 @@ const SongListCardItem: React.FC<SongListItemProps> = (props) => {
           </IonCardContent>
         </IonCard>
       }
-      {commentSongId > 0 && <CommentModal songId={commentSongId} closeModalCallback={() => setCommentSongId(0)}/>}
+      {commentSongId > 0 && <CommentModal songId={commentSongId}
+                              closeModalCallback={() => {setCommentSongId(0); props.closeModalCallback!()}}/>}
     </>
   );
 }

@@ -48,6 +48,9 @@ const CommentModal: React.FC<CommentModalProps> = (props) => {
     fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache',
     variables: { songId: props.songId }, onCompleted: (data) => {
       setSong(data.getSongById);
+      if(props.commentChangedCallback) {
+        props.commentChangedCallback(data.getSongById.songComments);
+      }
       setIsOpen(true);
     },
   });
