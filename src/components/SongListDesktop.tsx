@@ -23,7 +23,7 @@ const SongListDesktop: React.FC<SongListDesktopProps> = (props) => {
   const commentChanged = (songComments: SongComment[]) => {
     let commentCount = document.getElementById(commentSongId?.toString())?.querySelector(".edit-column .comment-length");
     if(commentCount != null) {
-      commentCount.innerHTML = songComments.length?.toString();
+      commentCount.innerHTML = (songComments.length > 0)?songComments.length?.toString():'';
     }
   };
 
@@ -82,10 +82,8 @@ const SongListDesktop: React.FC<SongListDesktopProps> = (props) => {
                       <span id="comment" title="Comment" onClick={(event) => setCommentSongId(wrapper.song.id as number)}>
                         <IonIcon icon={chatbubbleEllipsesOutline} size="1" title="Comment"></IonIcon>
                       </span>
-                      {wrapper.song.songComments?.length! > 0 &&
-                        //className used by resetting comment count logic
-                        <span className="comment-length">{wrapper.song.songComments?.length}</span>
-                      }
+                      {/* className used by resetting comment count logic */}
+                      <span className="comment-length">{wrapper.song.songComments?.length! > 0? wrapper.song.songComments?.length:''}</span>
                     </>
                   }
                 </IonCol>
