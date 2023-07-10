@@ -55,19 +55,19 @@
 }
 
 .desktop ion-avatar img  {
-    width:75% !important;
-    height: 75% !important;
+    width:50% !important;
+    height: 50% !important;
     max-width: 100px !important;
     max-height: 100px !important;
 }
 
 .desktop .avatar-column {
-    padding-top: 23px;
-    padding-left: 17px;
+    padding-top: 33px;
+    padding-left: 27px;
 }
 
 .desktop .date-div {
-    margin-top: -15px;
+    margin-top: -36px;
 }
 
 .desktop .item-row::after {
