@@ -95,6 +95,7 @@ export interface ErrorDisplayProps {
 
 export interface UserInfo {
     email: string;
+    emailPreference: string;
     isEmailVerified: boolean;
     issuer: string;
     firstName: string;

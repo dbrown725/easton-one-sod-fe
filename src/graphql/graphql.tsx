@@ -4,6 +4,7 @@ export    const GET_USER_INFO = gql`
             query getUserInfo {
               getUserInfo {
                 email
+                emailPreference
                 isEmailVerified
                 issuer
                 firstName
@@ -13,6 +14,23 @@ export    const GET_USER_INFO = gql`
               }
             }
             `;
+
+export   const UPDATE_EMAIL_PREFERENCE = gql`
+            mutation updateEmailPreference($emailPreference: String!) {
+              updateEmailPreference(
+                emailPreference: $emailPreference)
+                {
+                  email
+                  emailPreference
+                  isEmailVerified
+                  issuer
+                  firstName
+                  lastName
+                  screenName
+                  avatarColor
+                }
+            }
+          `;
 
 export   const ADD_BULLPEN_SONG = gql`
             mutation addBullpenSong($title: String!, $songName: String!, $bandName: String!, $link: String!, $message: String!) {
