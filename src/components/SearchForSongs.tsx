@@ -3,12 +3,13 @@ import { SearchbarChangeEventDetail, IonBadge, IonCol, IonGrid, IonItem, IonLabe
 import { useEffect, useRef, useState } from 'react';
 import FabToSubmit from './FabToSubmit';
 import SongList from './SongList';
-import { GET_BAND_STATS, GET_SEARCH_RESULTS } from '../graphql/graphql';
+import { GET_BAND_STATS, GET_SEARCH_RESULTS, GET_USERS_FOR_DROPDOWN } from '../graphql/graphql';
 import './SearchForSongs.css';
-import { BandStats, SearchingForSongsProps, Song } from '../common/types';
+import { BandStats, SearchingForSongsProps, Song, UserInfo } from '../common/types';
 import { useHistory, useLocation } from 'react-router';
 import ErrorDisplay from './ErrorDisplay';
 import { BuildSVG } from './BubbleChart';
+import { role, refreshRole } from '../firebase';
 
 const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
 
@@ -35,6 +36,16 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
   const [submitterSelected, setSubmitterSelected] = useState<string | undefined>("0");
 
   const [showBubbles, setShowBubbles] = useState<boolean>(false);
+
+  //Bad code, bad developer, bad! I will fix later
+  const [userTwoPrivacyOn, setUserTwoPrivacyOn] = useState<boolean>(false);
+  const [userThreePrivacyOn, setUserThreePrivacyOn] = useState<boolean>(false);
+  const [userFourPrivacyOn, setUserFourPrivacyOn] = useState<boolean>(false);
+  const [userFivePrivacyOn, setUserFivePrivacyOn] = useState<boolean>(false);
+  const [userSixPrivacyOn, setUserSixPrivacyOn] = useState<boolean>(false);
+  const [userSevenPrivacyOn, setUserSevenPrivacyOn] = useState<boolean>(false);
+  const [userEightPrivacyOn, setUserEightPrivacyOn] = useState<boolean>(false);
+  const [userNinePrivacyOn, setUserNinePrivacyOn] = useState<boolean>(false);
 
   const history = useHistory();
 
@@ -98,9 +109,13 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
   });
 
   useEffect(() => {
+    refreshRole();
     setFocus();
     getBandStatsList();
-
+    if(role === 'GUEST') {
+      //includes privacyOn field
+      getUsersForDropDown();
+    }
     //Add listener: When page visited again reload songs
     const unlisten = history.listen(() => {
       if (history.location.pathname === location.pathname) {
@@ -199,6 +214,43 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
     }
   });
 
+  const [
+    getUsersForDropDown,
+    { loading: laodingUsers, error: errorUsers, data: dataUsers }
+  ] = useLazyQuery(GET_USERS_FOR_DROPDOWN, {
+    fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache',
+    variables: {}, onCompleted: (data) => {
+      data.getUsersForDropDown.map((userInfo:UserInfo)  => {
+          var userId:Number = userInfo.id;
+          if(userInfo.id == 2) {
+            setUserTwoPrivacyOn(userInfo.privacyOn);
+          }
+          if(userInfo.id == 3) {
+            setUserThreePrivacyOn(userInfo.privacyOn);
+          }
+          if(userInfo.id == 4) {
+            setUserFourPrivacyOn(userInfo.privacyOn);
+          }
+          if(userInfo.id == 5) {
+            setUserFivePrivacyOn(userInfo.privacyOn);
+          }
+          if(userInfo.id == 6) {
+            setUserSixPrivacyOn(userInfo.privacyOn);
+          }
+          if(userInfo.id == 7) {
+            setUserSevenPrivacyOn(userInfo.privacyOn);
+          }
+          if(userInfo.id == 8) {
+            setUserEightPrivacyOn(userInfo.privacyOn);
+          }
+          if(userInfo.id == 9) {
+            setUserNinePrivacyOn(userInfo.privacyOn);
+          }
+        }
+      );
+    }
+  });
+
   const toggleInputChange = (e: CustomEvent<ToggleChangeEventDetail>) => {
     setShowBubbles(!showBubbles);
   };
@@ -255,14 +307,14 @@ const SearchForSongs: React.FC<SearchingForSongsProps> = (props) => {
                 interface="popover"
                 onIonChange={(e) => setSubmitterSelected(e.detail.value)} value={submitterSelected}>
               <IonSelectOption value="0">All</IonSelectOption>
-              <IonSelectOption value="6">Brian</IonSelectOption>
-              <IonSelectOption value="8">Dave B.</IonSelectOption>
-              <IonSelectOption value="9">Dave R.</IonSelectOption>
-              <IonSelectOption value="5">Doug</IonSelectOption>
-              <IonSelectOption value="2">Kevin</IonSelectOption>
-              <IonSelectOption value="3">Lisa</IonSelectOption>
-              <IonSelectOption value="7">Mike</IonSelectOption>
-              <IonSelectOption value="4">Tim</IonSelectOption>
+              <IonSelectOption value="6">{userSixPrivacyOn?'User 6':'Brian'}</IonSelectOption>
+              <IonSelectOption value="8">{userEightPrivacyOn?'User 8':'Dave B.'}</IonSelectOption>
+              <IonSelectOption value="9">{userNinePrivacyOn?'User 9':'Dave R.'}</IonSelectOption>
+              <IonSelectOption value="5">{userFivePrivacyOn?'User 5':'Doug'}</IonSelectOption>
+              <IonSelectOption value="2">{userTwoPrivacyOn?'User 2':'Kevin'}</IonSelectOption>
+              <IonSelectOption value="3">{userThreePrivacyOn?'User 3':'Lisa'}</IonSelectOption>
+              <IonSelectOption value="7">{userSevenPrivacyOn?'User 7':'Mike'}</IonSelectOption>
+              <IonSelectOption value="4">{userFourPrivacyOn?'User 4':'Tim'}</IonSelectOption>
             </IonSelect>
           </IonItem>
           <IonItem className="show-bubble-chart-toggle">

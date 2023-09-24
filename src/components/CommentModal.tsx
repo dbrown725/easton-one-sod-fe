@@ -48,7 +48,7 @@ const CommentModal: React.FC<CommentModalProps> = (props) => {
     fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache',
     variables: { songId: props.songId }, onCompleted: (data) => {
       setSong(data.getSongById);
-      if(props.commentChangedCallback) {
+      if (props.commentChangedCallback) {
         props.commentChangedCallback(data.getSongById.songComments);
       }
       setIsOpen(true);
@@ -155,7 +155,7 @@ const CommentModal: React.FC<CommentModalProps> = (props) => {
   }
 
   return (
-    <IonModal className='comment-modal' isOpen={isOpen}>
+    <IonModal className='comment-modal' backdropDismiss={false} isOpen={isOpen}>
       {(song && song!.id! > 0) &&
         <>
           <IonHeader>
@@ -185,21 +185,23 @@ const CommentModal: React.FC<CommentModalProps> = (props) => {
                     <span className="band-span" dangerouslySetInnerHTML={{ __html: sanitizeData(song!.bandName) }}></span>
                   </IonCol>
                 </IonRow>
-                <IonRow className="input-row">
-                  <IonCol size={getScreenDimensions().width > 600 ? "10" : "8"}>
-                    <IonTextarea label="New Comment" value={comment}
-                      onIonInput={(e) => { setComment((e.target as HTMLIonTextareaElement).value); }}
-                      onKeyDown={e => { handleKeyDown(e) }}
-                      labelPlacement="floating" fill="outline"
-                      maxlength={250} placeholder="Enter text">
-                    </IonTextarea>
-                  </IonCol>
-                  <IonCol title="Submit" size={getScreenDimensions().width > 600 ? "2" : "4"} onClick={(e) => handleSubmitClick()}>
-                    <IonButton fill='clear'>
-                      <IonIcon className="submit-icon" slot="icon-only" size="large" title="enter" color="primary" icon={enterSharp}></IonIcon>
-                    </IonButton>
-                  </IonCol>
-                </IonRow>
+                {role !== 'GUEST' &&
+                  <IonRow className="input-row">
+                    <IonCol size={getScreenDimensions().width > 600 ? "10" : "8"}>
+                      <IonTextarea label="New Comment" value={comment}
+                        onIonInput={(e) => { setComment((e.target as HTMLIonTextareaElement).value); }}
+                        onKeyDown={e => { handleKeyDown(e) }}
+                        labelPlacement="floating" fill="outline"
+                        maxlength={250} placeholder="Enter text">
+                      </IonTextarea>
+                    </IonCol>
+                    <IonCol title="Submit" size={getScreenDimensions().width > 600 ? "2" : "4"} onClick={(e) => handleSubmitClick()}>
+                      <IonButton fill='clear'>
+                        <IonIcon className="submit-icon" slot="icon-only" size="large" title="enter" color="primary" icon={enterSharp}></IonIcon>
+                      </IonButton>
+                    </IonCol>
+                  </IonRow>
+                }
                 {
                   song!.songComments!.length > 0 &&
                   song!.songComments!.map((comment: SongComment) => {
@@ -209,10 +211,18 @@ const CommentModal: React.FC<CommentModalProps> = (props) => {
                           <IonRow>
                             <IonCol size='1'>
                               <IonAvatar>
-                                <img alt={comment.userFirstName + " " + comment.userLastName}
-                                  src={"https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=" + comment.userFirstName + "+"
-                                    + comment.userLastName + "&rounded=true&background=" + comment.userAvatarColor}
-                                  title={comment.userFirstName + " " + comment.userLastName} />
+                                {role !== 'GUEST' &&
+                                  <img alt={comment.userFirstName + " " + comment.userLastName}
+                                    src={"https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=" + comment.userFirstName + "+"
+                                      + comment.userLastName + "&rounded=true&background=" + comment.userAvatarColor}
+                                    title={comment.userFirstName + " " + comment.userLastName} />
+                                }
+                                {role === 'GUEST' &&
+                                  <img alt={comment.userFirstName + " " + comment.userLastName}
+                                    src={"https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=" + "U" + "+"
+                                      + comment.userId + "&rounded=true&background=" + comment.userAvatarColor}
+                                    title={"User" + " " + comment.userId} />
+                                }
                               </IonAvatar>
                             </IonCol>
                             <IonCol size='8'>

@@ -18,10 +18,12 @@ export interface Song {
     modifyTime?: string;
     score?: number;
     songComments?: [SongComment];
+    userId?: number;
     userFirstName?: string;
     userLastName?: string;
     userAvatarColor?: string;
     userIsTheSubmitter: boolean;
+    privacyOn?: boolean;
 }
 
 export interface SongComment {
@@ -94,8 +96,10 @@ export interface ErrorDisplayProps {
 }
 
 export interface UserInfo {
+    id: number;
     email: string;
     emailPreference: string;
+    privacyOn: boolean;
     isEmailVerified: boolean;
     issuer: string;
     firstName: string;

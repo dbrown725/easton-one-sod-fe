@@ -3,8 +3,10 @@ import { gql } from "@apollo/client";
 export    const GET_USER_INFO = gql`
             query getUserInfo {
               getUserInfo {
+                id
                 email
                 emailPreference
+                privacyOn
                 isEmailVerified
                 issuer
                 firstName
@@ -15,13 +17,26 @@ export    const GET_USER_INFO = gql`
             }
             `;
 
+export    const GET_USERS_FOR_DROPDOWN = gql`
+            query getUsersForDropDown {
+              getUsersForDropDown {
+                id
+                firstName
+                lastName
+                privacyOn
+                }
+            }
+            `;
+
 export   const UPDATE_EMAIL_PREFERENCE = gql`
             mutation updateEmailPreference($emailPreference: String!) {
               updateEmailPreference(
                 emailPreference: $emailPreference)
                 {
+                  id
                   email
                   emailPreference
+                  privacyOn
                   isEmailVerified
                   issuer
                   firstName
@@ -31,6 +46,25 @@ export   const UPDATE_EMAIL_PREFERENCE = gql`
                 }
             }
           `;
+
+export   const UPDATE_PRIVACY_ON = gql`
+          mutation updatePrivacyOn($privacyOn: Boolean!) {
+            updatePrivacyOn(
+              privacyOn: $privacyOn)
+              {
+                id
+                email
+                emailPreference
+                privacyOn
+                isEmailVerified
+                issuer
+                firstName
+                lastName
+                screenName
+                avatarColor
+              }
+          }
+        `;
 
 export   const ADD_BULLPEN_SONG = gql`
             mutation addBullpenSong($title: String!, $songName: String!, $bandName: String!, $link: String!, $message: String!) {
@@ -121,12 +155,14 @@ export    const GET_MOST_RECENT_SONGS = gql`
                   createTime
                   modifyTime
                 }
+                userId
                 userFirstName
                 userLastName
                 userAvatarColor
                 createTime
                 modifyTime
                 userIsTheSubmitter
+                privacyOn
                 }
             }
             `;  
@@ -153,12 +189,14 @@ export    const GET_SONG_BY_ID = gql`
                   createTime
                   modifyTime
                 }
+                userId
                 userFirstName
                 userLastName
                 userAvatarColor
                 createTime
                 modifyTime
                 userIsTheSubmitter
+                privacyOn
                 }
             }
             `;
@@ -192,12 +230,14 @@ export    const GET_SONGS_WITH_ISSUES = gql`
                   createTime
                   modifyTime
                 }
+                userId
                 userFirstName
                 userLastName
                 userAvatarColor
                 createTime
                 modifyTime
                 userIsTheSubmitter
+                privacyOn
                 }
             }
             `;
@@ -266,6 +306,7 @@ export    const GET_SONGS_WITH_ISSUES = gql`
                 createTime
                 modifyTime
               }
+              userId
               userFirstName
               userLastName
               userAvatarColor
@@ -274,6 +315,7 @@ export    const GET_SONGS_WITH_ISSUES = gql`
               createTime
               modifyTime
               userIsTheSubmitter
+              privacyOn
             }
           }
           `;

@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonRadio, IonRadioGroup, IonTitle, IonToolbar, useIonAlert } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonMenuButton, IonModal, IonPage, IonRadio, IonRadioGroup, IonTitle, IonToggle, IonToolbar, ToggleChangeEventDetail, useIonAlert } from '@ionic/react';
 import './Profile.css';
 import {
   IonGrid,
@@ -8,16 +8,19 @@ import {
 import FabToSubmit from '../components/FabToSubmit';
 import { useEffect, useState } from 'react';
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { GET_USER_INFO, UPDATE_EMAIL_PREFERENCE } from '../graphql/graphql';
+import { GET_USER_INFO, UPDATE_EMAIL_PREFERENCE, UPDATE_PRIVACY_ON } from '../graphql/graphql';
 import { UserInfo } from '../common/types';
 import ErrorDisplay from '../components/ErrorDisplay';
 import { refreshRole, role } from '../firebase';
+import { informationCircleOutline } from 'ionicons/icons';
 
 const Profile: React.FC = () => {
 
   const [userInfo, setUserInfo] = useState<UserInfo>();
   const [emailPreference, setEmailPreference] = useState<string>("all");
   const [presentAlert] = useIonAlert();
+  const [privacyOn, setPrivacyOn] = useState<boolean>(false);
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   const [
     getUserInfo,
@@ -26,6 +29,7 @@ const Profile: React.FC = () => {
     fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache', onCompleted: (data) => {
       setUserInfo(data.getUserInfo);
       setEmailPreference(data.getUserInfo.emailPreference);
+      setPrivacyOn(data.getUserInfo.privacyOn);
     }
   });
 
@@ -33,6 +37,13 @@ const Profile: React.FC = () => {
     onCompleted: (data) => {
       getUserInfo();
       showEmailPrefUpdatedAlert();
+    }
+  });
+
+  const [updatePrivacyOn, { data: updtPriData, loading: updtPriLoading, error: updtPriError }] = useMutation(UPDATE_PRIVACY_ON, {
+    onCompleted: (data) => {
+      getUserInfo();
+      showPrivacyUpdatedAlert();
     }
   });
 
@@ -44,6 +55,10 @@ const Profile: React.FC = () => {
     updateEmailPreference({ variables: { emailPreference: emailPreference } });
   };
 
+  const toggleInputChange = (e: CustomEvent<ToggleChangeEventDetail>) => {
+    updatePrivacyOn({ variables: { privacyOn: !privacyOn } });
+  };
+
   useEffect(() => {
     getUserInfo();
     refreshRole();
@@ -52,6 +67,20 @@ const Profile: React.FC = () => {
   const showEmailPrefUpdatedAlert = () => {
     presentAlert({
       header: 'Your Email Preference change is complete.',
+      buttons: [
+        {
+          text: 'OK',
+          role: 'confirm',
+          handler: () => {
+          },
+        },
+      ]
+    });
+  };
+
+  const showPrivacyUpdatedAlert = () => {
+    presentAlert({
+      header: 'Your Privacy mode change is complete.',
       buttons: [
         {
           text: 'OK',
@@ -148,33 +177,72 @@ const Profile: React.FC = () => {
                   </IonCol>
                 </IonRow>
               </IonGrid>
-              <br />
-              <h2 className='profile-ion-title'>Email preferences</h2>
-              <IonRadioGroup value={emailPreference} onIonChange={({ detail: { value } }) => setEmailPreference(value)}>
-                <IonRadio className='profile-ion-radio' value="ALL" labelPlacement="end">
-                  <div className="profile-radio-text">Receive emails for new songs and comments.</div>
-                </IonRadio>
-                <br />
-                <IonRadio className='profile-ion-radio' value="NEW_SONG_ONLY" labelPlacement="end">
-                  Receive emails for new songs only.
-                </IonRadio>
-                <br />
-                <IonRadio className='profile-ion-radio' value="NONE" labelPlacement="end">
-                  Receive no emails.
-                </IonRadio>
-              </IonRadioGroup>
+              {role !== 'GUEST' &&
+                <>
+                  <br />
+                  <h2 className='profile-ion-email-preference-title'>Email preferences</h2>
+                  <IonRadioGroup value={emailPreference} onIonChange={({ detail: { value } }) => setEmailPreference(value)}>
+                    <IonRadio className='profile-ion-radio' value="ALL" labelPlacement="end">
+                      <div className="profile-radio-text">Receive emails for new songs and comments.</div>
+                    </IonRadio>
+                    <br />
+                    <IonRadio className='profile-ion-radio' value="NEW_SONG_ONLY" labelPlacement="end">
+                      Receive emails for new songs only.
+                    </IonRadio>
+                    <br />
+                    <IonRadio className='profile-ion-radio' value="NONE" labelPlacement="end">
+                      Receive no emails.
+                    </IonRadio>
+                  </IonRadioGroup>
 
-              <div className='profile-buttons'>
-                <IonButton id="resetEmailPreferences" size="small" type="submit" className="profile-button ion-margin-top" onClick={(e) => resetEmailPreference()}>
-                  Reset
-                </IonButton>
-                <IonButton id="updateEmailPreferences" size="small" type="submit" className="profile-button" onClick={(e) => handleEmailPrefUpdate()}>
-                  Update Email Preferences
-                </IonButton>
-              </div>
+                  <div className='profile-buttons'>
+                    <IonButton id="resetEmailPreferences" size="small" type="submit" className="profile-button ion-margin-top" onClick={(e) => resetEmailPreference()}>
+                      Reset
+                    </IonButton>
+                    <IonButton id="updateEmailPreferences" size="small" type="submit" className="profile-button" onClick={(e) => handleEmailPrefUpdate()}>
+                      Update Email Preferences
+                    </IonButton>
+                  </div>
+
+                  <span className='profile-ion-privacy-on-title'>Set privacy mode</span>
+                  <span className="profile-privacy-on-info-icon-span" title="Privacy On Info"
+                    onClick={(event) => setIsInfoOpen(true)}>
+                    <IonIcon className="profile-privacy-on-info-icon" icon={informationCircleOutline} size="large" color="primary"></IonIcon>
+                  </span>
+                  <IonItem className="profile-privacy-on-toggle">
+                    <IonLabel>Privacy mode</IonLabel>
+                    <IonToggle aria-label="archive toggle" slot="end" checked={privacyOn} onIonChange={e => { toggleInputChange(e) }}></IonToggle>
+                  </IonItem>
+                </>
+              }
             </>
         }
         <FabToSubmit />
+        <IonModal className='profile-info-modal' backdropDismiss={false} isOpen={isInfoOpen}>
+          <>
+            <IonHeader>
+              <IonToolbar>
+                <IonTitle className="toolbar-title">Privacy option information</IonTitle>
+                <IonButtons slot="end">
+                  <IonButton onClick={() => setIsInfoOpen(false)}>Close</IonButton>
+                </IonButtons>
+              </IonToolbar>
+            </IonHeader>
+            <IonContent>
+              <div className="profile-info-modal-content">
+                <div>A GUEST user can view all Song of the Day content but:</div>
+                <div>* does not have a Bullpen.</div>
+                <div>* can't submit songs.</div>
+                <div>* does not receive emails.</div>
+                <div>* is anonymous to other users.</div>
+                <div className="profile-info-modal-content-spacing">The number of GUEST users over time will grow as people ask for friends and family to be added.</div>
+                <div className="profile-info-modal-content-spacing">To protect the identity of current SOD submitters the "Privacy Option" has been added.</div>
+                <div className="profile-info-modal-content-spacing">If you activate the "Privacy Option" your identity will appear obfuscated to GUEST users.</div>
+                <div className="profile-info-modal-content-spacing">For example if David Brown turns privacy on then he will appear to GUEST users as "User 8" and his avatar will have the initials "U8".</div>
+              </div>
+            </IonContent>
+          </>
+        </IonModal>
       </IonContent>
     </IonPage>
   );
