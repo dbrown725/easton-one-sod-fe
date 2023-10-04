@@ -17,9 +17,11 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     const cmmtId = Number(localStorage.getItem('commentSongId'));
-    if(cmmtId > 0) {
-      setCommentSongId(cmmtId);
-      localStorage.removeItem('commentSongId');
+    if (cmmtId > 0) {
+      setTimeout(() => {
+        setCommentSongId(cmmtId);
+        localStorage.removeItem('commentSongId');
+      }, 50);
     } else {
       setCommentSongId(0);
     }
@@ -129,7 +131,9 @@ const Home: React.FC = () => {
             </IonCol>
           </IonRow>
         </IonGrid>
-        {commentSongId > 0 && <CommentModal songId={commentSongId}/>}
+        {commentSongId > 0 && <CommentModal songId={commentSongId}
+          closeModalCallback={() => { setCommentSongId(0) }}
+          />}
         <FabToSubmit />
       </IonContent>
     </IonPage>

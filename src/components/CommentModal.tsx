@@ -70,7 +70,7 @@ const CommentModal: React.FC<CommentModalProps> = (props) => {
     setComment("");
     const timeout = setTimeout(() => {
       getSongById();
-    }, 2000);
+    }, 3000);
   };
 
   const handleUpdate = (id: number) => {
