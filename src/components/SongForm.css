@@ -25,3 +25,25 @@
 .submit-form ion-item.ion-invalid.ion-touched{
     border-bottom: 2px solid var(--ion-color-danger) !important;
 }
+
+.submit-form ion-img::part(image) {
+    /* original image ratio height 75% of width */
+    /* dispaly image ratio should be height 56% of width */
+    height: 224px;
+    width: 400px;
+    object-fit: cover;
+    margin-bottom: 15px;
+    border-radius: 15px;
+}
+
+@media (max-width: 800px) {
+    .submit-form ion-img::part(image) {
+        height: 190px;
+        width: 340px;
+    }
+}
+
+.submit-form .image-wrapper {
+    display: flex;
+    justify-content: center;
+}

@@ -3,7 +3,7 @@ import { auth, logInWithEmailAndPassword} from "./../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import "./Login.css";
 import { useHistory } from 'react-router';
-import { IonContent, IonImg, IonPage } from "@ionic/react";
+import { IonContent, IonPage } from "@ionic/react";
 import { Link, } from "react-router-dom";
 
 const Login: React.FC = () => {

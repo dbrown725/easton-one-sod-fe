@@ -2,8 +2,20 @@ import './Latest.css';
 import { GET_MOST_RECENT_SONGS } from '../graphql/graphql';
 import ScrollingSongList from '../components/ScrollingSongList';
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { Song } from '../common/types';
+import { useHistory } from 'react-router';
+
 
 const Latest: React.FC = () => {
+
+  const history = useHistory();
+
+  const editClickHandler = (event: React.MouseEvent<HTMLSpanElement>, song: Song) => {
+    history.push({
+      pathname:'/page/Submit',
+      state: {song: song, updateSODRequest: true}
+    })
+  }
 
   return (
     <IonPage>
@@ -24,11 +36,12 @@ const Latest: React.FC = () => {
         </IonHeader>
         <ScrollingSongList
           count={400}
-          addDataIncrement={20}
+          addDataIncrement={40}
           queryDocumentNode={GET_MOST_RECENT_SONGS}
           queryDefinitionName={"getMostRecentSongs"}
+          editCallback={editClickHandler}
           showDeleteButton={false}
-          showEditButton={false} />
+          showEditButton={true} />
       </IonContent>
     </IonPage>
   );

@@ -79,7 +79,7 @@ const Repair: React.FC = () => {
             <IonTitle size="large">Song Repair Shop</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonSegment value={segmentValue} onIonChange={e => { handleInputChangeSegment(e) }}>
+        <IonSegment value={segmentValue as string} onIonChange={e => { handleInputChangeSegment(e) }}>
             <IonSegmentButton value="flagged">
               <IonLabel style={{fontSize: isAndroid ? '12px' : '14px' }}>{repairCount} Flagged Songs</IonLabel>
             </IonSegmentButton>
@@ -90,7 +90,7 @@ const Repair: React.FC = () => {
         {!isSearchShown &&
           <ScrollingSongList
               count={700}
-              addDataIncrement={20}
+              addDataIncrement={40}
               editCallback={editClickHandler}
               queryDocumentNode={GET_SONGS_WITH_ISSUES}
               queryDefinitionName={"getSongsWithIssues"}
