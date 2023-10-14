@@ -1,0 +1,180 @@
+ion-icon[title="Edit"] {
+    pointer-events: none;
+    padding-top: 10px;
+    cursor:pointer;
+    text-decoration:underline;
+}
+
+ion-icon[title="Delete"] {
+    padding-top: 10px;
+    cursor:pointer;
+    text-decoration:underline;
+}
+
+.card-item .bullpen-wide-screen ion-icon[title="Delete"] {
+    margin-top: -7px;
+    margin-left: -1px;
+}
+
+span#edit {
+    font-size: x-large;
+    cursor:pointer;
+    text-decoration:underline;
+    line-height: 1;
+    margin-right: 20px;
+}
+
+.card-item .thumbnail-image::part(image) {    
+    /* original image ratio height 75% of width */
+    /* display image ratio should be height 56% of width */
+    height: 224px;
+    width: 400px;
+    object-fit: cover;
+    margin-bottom: 15px;
+    margin: auto;
+    border-radius: 18px;
+}
+
+.card-item .bullpen-wide-screen .thumbnail-image::part(image) {    
+    margin: 0px;
+    height: 123px;
+    width: 220px;
+    border-radius: 12px;
+}
+
+@media (max-width: 1200px) {
+    .card-item .bullpen-wide-screen .thumbnail-image::part(image) {
+        height: 90px;
+        width: 160px;
+    }
+}
+
+@media (max-width: 500px) {
+    .card-item .bullpen.thumbnail-image::part(image) {    
+        height: 168px;
+        width: 300px;
+    }
+}
+
+@media (max-width: 450px) {
+    .card-item .thumbnail-image::part(image) {    
+        height: 196px;
+        width: 350px;
+    }
+}
+
+@media (max-width: 425px) {
+    .card-item .thumbnail-image::part(image) {    
+        height: 182px;
+        width: 325px;
+    }
+}
+
+@media (max-width: 405px) {
+    .card-item .bullpen.thumbnail-image::part(image) {    
+        height: 156px;
+        width: 280px;
+    }
+}
+
+@media (max-width: 370px) {
+    .card-item .bullpen.thumbnail-image::part(image) {    
+        height: 147px;
+        width: 260px;
+    }
+}
+
+@media (max-width: 400px) {
+    .card-item .thumbnail-image::part(image) {    
+        height: 168px;
+        width: 300px;
+    }
+}
+
+@media (max-width: 360px) {
+    .card-item .thumbnail-image::part(image) {    
+        height: 146px;
+        width: 260px;
+    }
+}
+
+.card-item ion-item {
+    --border-style: none;
+}
+
+.card-item .title {
+    margin-top: 28px;
+}
+
+.card-item .edit-column {
+    padding-left: 25px;
+    padding-top: 18px;
+}
+
+.card-item ion-card-content {
+    padding: 8px 11px 8px 0px;
+}
+
+.card-item .small-screen ion-col{
+    padding-left: 13px;
+}
+
+.card-item .small-screen .song-band-col{
+    margin-top: 10px;
+    padding-left: 20px;
+    margin-left: 5px;
+}
+
+.card-item .small-screen ion-avatar img  {
+    width:60% !important;
+    height: 60% !important;
+    max-width: 100px !important;
+    max-height: 100px !important;
+}
+
+.card-item .small-screen .avatar-column {
+    margin-left: 12px;
+}
+
+.card-item .small-screen .button-column {
+    margin-top: -6px
+}
+
+.card-item .small-screen .bullpen.button-column {
+    margin-top: -10px
+}
+
+.card-item .small-screen .date-div {
+    margin-top: 4px;
+}
+
+.card-item .small-screen .bullpen.date-div {
+    margin-left: 12px;
+    margin-top: -1px;
+}
+
+.card-item .small-screen .song-span {
+    font-size: 22px;
+}
+
+.card-item .small-screen .band-span {
+    margin-left: 10px;
+}
+
+.card-item .small-screen .title {
+    margin-top: -5px;
+    margin-left: 13px;
+}
+
+.card-item .small-screen .img-date-buttons-row {
+    margin-bottom: -21px;
+}
+
+.card-item .small-screen .bullpen.img-date-buttons-row {
+    margin-bottom: -8px;
+}
+
+
+
+
+

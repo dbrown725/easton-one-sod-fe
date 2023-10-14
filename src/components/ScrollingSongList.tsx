@@ -125,7 +125,11 @@ const ScrollingSongList: React.FC<ScrollingSongListProps> = (props) => {
       {
         error != null ? <ErrorDisplay message={error.message} detail={error.stack} /> :
         displayData
-        && <SongList showId={true} showScore={false} songs={displayData} editCallback={props.editCallback} showDeleteButton={props.showDeleteButton} showEditButton={props.showEditButton} />
+        && <SongList showId={true} showScore={false} songs={displayData}
+              editCallback={props.editCallback}
+              showDeleteButton={props.showDeleteButton}
+              showEditButton={props.showEditButton}
+              closeModalCallback={() => getSongs()}/>
       }
       <IonInfiniteScroll
         onIonInfinite={loadData}

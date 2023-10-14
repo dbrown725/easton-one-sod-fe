@@ -3,7 +3,10 @@ import { gql } from "@apollo/client";
 export    const GET_USER_INFO = gql`
             query getUserInfo {
               getUserInfo {
+                id
                 email
+                emailPreference
+                privacyOn
                 isEmailVerified
                 issuer
                 firstName
@@ -13,6 +16,55 @@ export    const GET_USER_INFO = gql`
               }
             }
             `;
+
+export    const GET_USERS_FOR_DROPDOWN = gql`
+            query getUsersForDropDown {
+              getUsersForDropDown {
+                id
+                firstName
+                lastName
+                privacyOn
+                }
+            }
+            `;
+
+export   const UPDATE_EMAIL_PREFERENCE = gql`
+            mutation updateEmailPreference($emailPreference: String!) {
+              updateEmailPreference(
+                emailPreference: $emailPreference)
+                {
+                  id
+                  email
+                  emailPreference
+                  privacyOn
+                  isEmailVerified
+                  issuer
+                  firstName
+                  lastName
+                  screenName
+                  avatarColor
+                }
+            }
+          `;
+
+export   const UPDATE_PRIVACY_ON = gql`
+          mutation updatePrivacyOn($privacyOn: Boolean!) {
+            updatePrivacyOn(
+              privacyOn: $privacyOn)
+              {
+                id
+                email
+                emailPreference
+                privacyOn
+                isEmailVerified
+                issuer
+                firstName
+                lastName
+                screenName
+                avatarColor
+              }
+          }
+        `;
 
 export   const ADD_BULLPEN_SONG = gql`
             mutation addBullpenSong($title: String!, $songName: String!, $bandName: String!, $link: String!, $message: String!) {
@@ -91,15 +143,63 @@ export    const GET_MOST_RECENT_SONGS = gql`
                 link
                 message
                 sortOrder
+                songComments {
+                  id
+                  songId
+                  comment
+                  userId
+                  userFirstName
+                  userLastName
+                  userAvatarColor
+                  userIsTheSubmitter
+                  createTime
+                  modifyTime
+                }
+                userId
                 userFirstName
                 userLastName
                 userAvatarColor
                 createTime
                 modifyTime
                 userIsTheSubmitter
+                privacyOn
                 }
             }
             `;  
+
+export    const GET_SONG_BY_ID = gql`
+            query getSongById($songId: ID!) {
+              getSongById(songId: $songId) {
+                id
+                bandName
+                songName
+                title
+                link
+                message
+                sortOrder
+                songComments {
+                  id
+                  songId
+                  comment
+                  userId
+                  userFirstName
+                  userLastName
+                  userAvatarColor
+                  userIsTheSubmitter
+                  createTime
+                  modifyTime
+                }
+                userId
+                userFirstName
+                userLastName
+                userAvatarColor
+                createTime
+                modifyTime
+                userIsTheSubmitter
+                privacyOn
+                }
+            }
+            `;
 
 export    const GET_SONGS_WITH_ISSUES_COUNT = gql`
             query getSongsWithIssuesCount {
@@ -118,12 +218,26 @@ export    const GET_SONGS_WITH_ISSUES = gql`
                 playlist
                 message
                 sortOrder
+                songComments {
+                  id
+                  songId
+                  comment
+                  userId
+                  userFirstName
+                  userLastName
+                  userAvatarColor
+                  userIsTheSubmitter
+                  createTime
+                  modifyTime
+                }
+                userId
                 userFirstName
                 userLastName
                 userAvatarColor
                 createTime
                 modifyTime
                 userIsTheSubmitter
+                privacyOn
                 }
             }
             `;
@@ -180,6 +294,19 @@ export    const GET_SONGS_WITH_ISSUES = gql`
               songNameHighlighted
               link
               playlist
+              songComments {
+                id
+                songId
+                comment
+                userId
+                userFirstName
+                userLastName
+                userAvatarColor
+                userIsTheSubmitter
+                createTime
+                modifyTime
+              }
+              userId
               userFirstName
               userLastName
               userAvatarColor
@@ -188,15 +315,63 @@ export    const GET_SONGS_WITH_ISSUES = gql`
               createTime
               modifyTime
               userIsTheSubmitter
+              privacyOn
             }
           }
           `;
 
 export    const GET_BAND_STATS = gql`
-    query getBandStats($count: Int!) {
-      getBandStats(count: $count) {
+    query getBandStats($count: Int!, $userId: ID!) {
+      getBandStats(count: $count, userId: $userId) {
         bandName
         songCount
         }
     }
     `;
+
+export   const ADD_SONG_COMMENT= gql`
+    mutation insertSongComment($songId: Int!, $comment: String!) {
+      insertSongComment(
+        songId: $songId,
+        comment: $comment)
+        {
+          id
+          songId
+          comment
+          userId
+          userFirstName
+          userLastName
+          userAvatarColor
+          createTime
+          modifyTime
+        }
+    }
+    `;
+
+  export   const DELETE_SONG_COMMENT = gql`
+    mutation deleteSongComment($id: ID!) {
+      deleteSongComment(
+        id: $id
+        )
+    }
+    `;
+
+  export   const UPDATE_SONG_COMMENT = gql`
+    mutation updateSongComment($id: ID!, $comment: String!) {
+      updateSongComment(
+        id: $id
+        comment: $comment)
+        {
+          id
+          songId
+          comment
+          userId
+          userFirstName
+          userLastName
+          userAvatarColor
+          createTime
+          modifyTime
+        }
+    }
+  `;
+

@@ -128,7 +128,7 @@ const Submit: React.FC<SubmitProps> = (props) => {
 
   const handleSODCancelUpdateFormSubmit = () => {
     clearSong();
-    history.push({pathname:'/page/Repair'});
+    history.goBack();
   };
 
   useEffect(() => {
@@ -185,7 +185,7 @@ const Submit: React.FC<SubmitProps> = (props) => {
             text: 'OK',
             role: 'confirm',
             handler: () => {
-              history.push({pathname:'/page/Repair'})
+              history.goBack();
             },
           },
         ]

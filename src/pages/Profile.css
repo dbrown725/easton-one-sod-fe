@@ -1,7 +1,9 @@
-
-
 .profile-ion-grid {
     margin-left: 20px
+}
+
+.profile-ion-radio {
+    margin-left: 50px
 }
 
 .profile-top-row {
@@ -10,4 +12,73 @@
 
 .profile-second-row {
     margin-top: 20px;
+}
+
+.profile-ion-email-preference-title {
+    margin-left: 30px;
+    margin-bottom: 10px;
+}
+
+.profile-buttons {
+    width: 15%;
+    margin-left: 30px;
+    margin-bottom: 40px
+}
+
+.profile-privacy-on-toggle {
+    max-width: 250px;
+    margin-left: 30px;
+    margin-bottom: 20px;
+}
+
+.profile-ion-privacy-on-title {
+    margin-left: 30px;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.profile-privacy-on-info-icon{
+    pointer-events: none;
+    height: 24px;
+}
+
+.profile-privacy-on-info-icon-span {
+    padding-top: 15px;
+    margin-left: 5px;
+    cursor:pointer;
+    text-decoration:underline;
+}
+
+.profile-info-modal-content {
+    margin: 30px;
+}
+
+.profile-info-modal-content-spacing {
+    margin-top: 20px;
+}
+
+@media (max-width: 1400px) {
+    .profile-buttons {
+        width: 30%;
+    }
+}
+
+@media (max-width: 700px) {
+    .profile-ion-title {
+        margin-left: 20px;
+    }
+    .profile-ion-radio {
+        margin-left: 20px
+    }
+    .profile-radio-text {
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        word-wrap: break-word;
+    }
+    .profile-buttons {
+        width: 90%;
+        margin-left: 10px;
+    }
 }
