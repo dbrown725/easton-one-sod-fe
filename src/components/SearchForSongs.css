@@ -7,3 +7,43 @@
 circle, text{
     cursor: pointer;
 }
+
+.bandstats-grid {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.bandstats-grid-label {
+    border-bottom: 1px solid rgb(115, 115, 115, .5);
+    margin-left: 6%;
+    margin-right: 6%;
+    margin-top: 15px;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.submitter-select-item {
+    max-width: 250px;
+    margin-left: 5%;
+}
+
+.submitter-select {
+    min-height: 48px;
+}
+
+.show-bubble-chart-toggle {
+    max-width: 250px;
+    margin-left: 10px;
+}
+
+.bandstats-options-row {
+    display: flex;
+    margin-top: -20px;
+}
+
+@media (max-width: 500px) {
+    .bandstats-options-row {
+        display: inline-block;
+    }
+}

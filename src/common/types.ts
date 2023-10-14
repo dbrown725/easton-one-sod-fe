@@ -17,10 +17,26 @@ export interface Song {
     createTime?: string;
     modifyTime?: string;
     score?: number;
+    songComments?: [SongComment];
+    userId?: number;
     userFirstName?: string;
     userLastName?: string;
     userAvatarColor?: string;
     userIsTheSubmitter: boolean;
+    privacyOn?: boolean;
+}
+
+export interface SongComment {
+    id: number;
+    songId: number;
+    comment: string;
+    userId: number;
+    userFirstName: string;
+    userLastName: string;
+    userAvatarColor: string;
+    userIsTheSubmitter: boolean;
+    createTime: string;
+    modifyTime: string;
 }
 
 export interface SongResult {
@@ -42,6 +58,7 @@ export interface SongListProps {
     handleReorder?: ((event: IonReorderGroupCustomEvent<ItemReorderEventDetail>) => void) | undefined;
     deleteCallback?: ((event: React.MouseEvent<HTMLIonIconElement>, song: Song) => void) | undefined;
     editCallback?: ((event: React.MouseEvent<HTMLSpanElement>, song: Song) => void) | undefined;
+    closeModalCallback?: () => void;
 }
 
 export interface SongFormProps {
@@ -79,7 +96,10 @@ export interface ErrorDisplayProps {
 }
 
 export interface UserInfo {
+    id: number;
     email: string;
+    emailPreference: string;
+    privacyOn: boolean;
     isEmailVerified: boolean;
     issuer: string;
     firstName: string;
@@ -91,4 +111,27 @@ export interface UserInfo {
 export interface BandStats {
     bandName: string;
     songCount: number;
+}
+
+export interface SongWrapper {
+    song: Song;
+    displayEditButton: boolean;
+}
+
+export interface SongListItemProps {
+    songListProps: SongListProps;
+    songWrapper: SongWrapper;
+    closeModalCallback?: () => void;
+}
+
+export interface SongListDesktopProps {
+    songListProps: SongListProps;
+    songWrapperList: SongWrapper[];
+    closeModalCallback?: () => void;
+}
+
+export interface CommentModalProps {
+    songId: number;
+    closeModalCallback?: () => void;
+    commentChangedCallback?: (songComments: SongComment[]) => void;
 }

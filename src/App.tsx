@@ -40,6 +40,13 @@ import { TimeoutLogic } from './components/TimeoutLogic';
 setupIonicReact();
 
 const App: React.FC = () => {
+
+  const queryParameters = new URLSearchParams(window.location.search)
+  const commentSongId = queryParameters.get("commentSongId")
+  if(commentSongId) {
+    localStorage.setItem('commentSongId', commentSongId as string);
+  }
+
   const [token, setToken] = useState<string>('');
 
   auth.onAuthStateChanged(function (user) {

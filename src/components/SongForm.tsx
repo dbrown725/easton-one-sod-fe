@@ -1,9 +1,10 @@
-import { IonButton, IonInput, IonItem, IonLabel, IonList, IonNote, IonTextarea } from '@ionic/react';
+import { IonButton, IonImg, IonInput, IonItem, IonLabel, IonList, IonNote, IonTextarea } from '@ionic/react';
 import { useEffect, useRef, useState } from 'react';
 import { Song, SongFormProps } from '../common/types';
 import DOMPurify from 'dompurify';
 import { useHistory, useLocation } from 'react-router';
 import './SongForm.css';
+import { getThumbnailLink } from '../common/helper';
 
 const SongForm: React.FC<SongFormProps> = (props) => {
 
@@ -16,6 +17,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
   const [link, setLink] = useState<string | number | null | undefined>('');
   const [playlist, setPlaylist] = useState<string | number | null | undefined>(playlistName);
   const [isFormValidated, setFormValidated] = useState<boolean>(false);
+  const [thumbnailLink, setThumbnailLink] = useState<string | null | undefined>('');
   const location = useLocation<{ song: Song }>();
   const history = useHistory();
 
@@ -36,7 +38,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
       document.getElementsByClassName("bandArtist")[0]?.querySelector("input")?.focus();
       document.getElementsByClassName("bandArtist")[0].parentElement?.classList.remove("ion-invalid");
       document.getElementsByClassName("songName")[0].parentElement?.classList.remove("ion-invalid");
-      document.getElementsByClassName("title")[0].parentElement?.classList.remove("ion-invalid");
+      document.getElementsByClassName("titleClass")[0].parentElement?.classList.remove("ion-invalid");
       document.getElementsByClassName("url")[0].parentElement?.classList.remove("ion-invalid");
     }, 500);
     setMyState(location.pathname);
@@ -66,6 +68,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
         setBandName(location.state.song.bandName);
         setSongName(location.state.song.songName);
         setLink(location.state.song.link);
+        setThumbnailLink(getThumbnailLink(location.state.song.link, "high"));
         if (location.state.song.playlist) {
           setPlaylist(location.state.song.playlist);
         } else {
@@ -139,8 +142,8 @@ const SongForm: React.FC<SongFormProps> = (props) => {
       } else if(classList?.contains("songName")) {
         e.preventDefault();
         e.stopPropagation();
-        document.getElementsByClassName("title")[0]?.querySelector("input")?.focus();
-      } else if(classList?.contains("title")) {
+        document.getElementsByClassName("titleClass")[0]?.querySelector("input")?.focus();
+      } else if(classList?.contains("titleClass")) {
         e.preventDefault();
         e.stopPropagation();
         document.getElementsByClassName("url")[0]?.querySelector("input")?.focus();
@@ -152,7 +155,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
     }
     const timeout = setTimeout(() => {
       validateForm();
-  }, 500);
+    }, 500);
   }
 
   const handleTextFocusEvent = (e: React.FormEvent<HTMLIonInputElement>) => {
@@ -169,7 +172,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
       (e.target as HTMLFormElement).parentElement?.parentElement?.classList.add("item-has-focus");
     } else if(classList?.contains("songName")) {
       document.getElementsByClassName("songNameNote")[0].classList.remove("hide");
-    } else if(classList?.contains("title")) {
+    } else if(classList?.contains("titleClass")) {
       document.getElementsByClassName("titleNote")[0].classList.remove("hide");
       if(!title && bandName && songName) {
         setTitle(bandName + " - " + songName);
@@ -185,6 +188,10 @@ const SongForm: React.FC<SongFormProps> = (props) => {
   //Handles clear button click and mouse paste events
   const onChanged = (target: HTMLIonInputElement) => {
     validateForm();
+    setLink((state) => {
+      setThumbnailLink(getThumbnailLink(state, "high"));
+      return state;
+    });
   };
 
   const handleTextBlurEvent = (e: React.FormEvent<HTMLIonInputElement>) => {
@@ -193,7 +200,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
       (e.target as HTMLFormElement).parentElement?.parentElement?.classList.add("ion-invalid");
     } else if(classList?.contains("songName") && !songName) {
       (e.target as HTMLFormElement).parentElement?.parentElement?.classList.add("ion-invalid");
-    } else if(classList?.contains("title") && !title) {
+    } else if(classList?.contains("titleClass") && !title) {
       (e.target as HTMLFormElement).parentElement?.parentElement?.classList.add("ion-invalid");
     } else if(classList?.contains("url") && !link?.toString().startsWith(urlStartsWith1)
           && !link?.toString().startsWith(urlStartsWith2)) {
@@ -208,7 +215,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
       &&
       document.getElementsByClassName("songName")[0].querySelector("input")?.value.trim()
       &&
-      document.getElementsByClassName("title")[0].querySelector("input")?.value.trim()
+      document.getElementsByClassName("titleClass")[0].querySelector("input")?.value.trim()
       &&
       (document.getElementsByClassName("url")[0].querySelector("input")?.value?.trim().startsWith(urlStartsWith1)
         || document.getElementsByClassName("url")[0].querySelector("input")?.value?.trim().startsWith(urlStartsWith2))) {
@@ -221,6 +228,11 @@ const SongForm: React.FC<SongFormProps> = (props) => {
   return (
     <IonList>
       <form onSubmit={(e) => e.preventDefault()} className='submit-form ion-padding' onKeyDown={e => { handleKeyDown(e) }}>
+        { thumbnailLink &&
+          <div className="image-wrapper">
+            <IonImg src={thumbnailLink} className='form-image' alt="Song of the day!" />
+          </div>
+        }
         <IonItem
           className="item-has-focus ion-touched">
           <IonLabel>
@@ -231,7 +243,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
             maxlength={100}
             autofocus
             value={bandName}
-            onIonChange={(e) => {setBandName((e.target as HTMLIonInputElement).value); onChanged(e.target)}}
+            onIonInput={(e) => {setBandName((e.target as HTMLIonInputElement).value); onChanged(e.target)}}
             onBlur={(e) => handleTextBlurEvent((e as React.FormEvent<HTMLIonInputElement>))}
             onFocus={(e) => handleTextFocusEvent((e as React.FormEvent<HTMLIonInputElement>))}
             required
@@ -249,7 +261,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
             className="songName"
             maxlength={100}
             value={songName}
-            onIonChange={(e) => {setSongName((e.target as HTMLIonInputElement).value); onChanged(e.target)}}
+            onIonInput={(e) => {setSongName((e.target as HTMLIonInputElement).value); onChanged(e.target)}}
             onBlur={(e) => handleTextBlurEvent((e as React.FormEvent<HTMLIonInputElement>))}
             onFocus={(e) => handleTextFocusEvent((e as React.FormEvent<HTMLIonInputElement>))}
             required
@@ -264,10 +276,10 @@ const SongForm: React.FC<SongFormProps> = (props) => {
             Title <span className="asterisk">*</span>:
           </IonLabel>
           <IonInput
-            className="title"
+            className="titleClass" //"title" alone caused issues. Reserved name?
             maxlength={203} //band (max 100) + " - " + //song (max 100)
             value={title}
-            onIonChange={(e) => {setTitle((e.target as HTMLIonInputElement).value); onChanged(e.target)}}
+            onIonInput={(e) => {setTitle((e.target as HTMLIonInputElement).value); onChanged(e.target)}}
             onBlur={(e) => handleTextBlurEvent((e as React.FormEvent<HTMLIonInputElement>))}
             onFocus={(e) => handleTextFocusEvent((e as React.FormEvent<HTMLIonInputElement>))}
             required
@@ -285,7 +297,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
             className="url"
             maxlength={100}
             value={link}
-            onIonChange={(e) => {setLink((e.target as HTMLIonInputElement).value); onChanged(e.target)}}
+            onIonInput={(e) => {setLink((e.target as HTMLIonInputElement).value); onChanged(e.target)}}
             onBlur={(e) => handleTextBlurEvent((e as React.FormEvent<HTMLIonInputElement>))}
             onFocus={(e) => handleTextFocusEvent((e as React.FormEvent<HTMLIonInputElement>))}
             required
@@ -303,7 +315,7 @@ const SongForm: React.FC<SongFormProps> = (props) => {
               maxlength={250}
               value={message}
               onFocus={(e) => handleTextFocusEvent((e as unknown as React.FormEvent<HTMLIonInputElement>))}
-              onIonChange={(e) => setMessage((e.target as HTMLIonTextareaElement).value)}
+              onIonInput={(e) => setMessage((e.target as HTMLIonTextareaElement).value)}
               placeholder="A great live performance by the Allman Brothers!">
             </IonTextarea>
             <IonNote className="hide commentNote" slot="helper">Optional: Will only be included in the email.</IonNote>
