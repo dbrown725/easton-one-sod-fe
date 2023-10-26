@@ -19,9 +19,16 @@ import { baseballOutline, baseballSharp, constructOutline, constructSharp, downl
   personCircleSharp, searchOutline, searchSharp } from 'ionicons/icons';
 import './Menu.css';
 import { role, logout, refreshRole } from '../firebase';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { GET_SONGS_WITH_INVALID_URLS_COUNT } from '../graphql/graphql';
+import { useLazyQuery } from '@apollo/client';
+import { setIssueCount } from '../store/slices/issueCountSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store/store';
 
 const Menu: React.FC = () => {
+
+  const [repairCount, setRepairCount] = useState<string>('0');
 
   const history = useHistory();
 
@@ -29,8 +36,26 @@ const Menu: React.FC = () => {
 
   const menuRef = useRef<HTMLIonMenuElement>(null);
 
+  const dispatch = useDispatch();
+  const songsWithIssuesCount = useSelector((state: RootState) => state.issueCount.value);
+
+  const [
+    getIssueCount,
+    { loading: countLoading, error: countError, data: countData }
+  ] = useLazyQuery(GET_SONGS_WITH_INVALID_URLS_COUNT, {
+    fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache', onCompleted: (data) => {
+      dispatch(setIssueCount(data.getAllInvalidUrlSongsCount));
+    },
+  });
+
+  useEffect(() => {
+    setRepairCount(songsWithIssuesCount.toString());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [songsWithIssuesCount]);
+
   useEffect(() => {
     refreshRole();
+    getIssueCount();
   }, []);
 
   const handleLogOut = () => {
@@ -75,12 +100,12 @@ const Menu: React.FC = () => {
       iosIcon: baseballOutline,
       mdIcon: baseballSharp
     },
-    // {
-    //   title: 'Repair Shop',
-    //   url: '/page/Repair',
-    //   iosIcon: constructOutline,
-    //   mdIcon: constructSharp
-    // },
+    {
+      title: 'Repair Shop',
+      url: '/page/Repair',
+      iosIcon: constructOutline,
+      mdIcon: constructSharp
+    },
     {
       title: 'Download',
       url: '/page/Download',
@@ -128,7 +153,7 @@ const Menu: React.FC = () => {
                     <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url}
                       routerDirection="none" lines="none" detail={false} onClick={() => appPage.title == 'Log Out' ? handleLogOut() : undefined}>
                       <IonIcon slot="start" ios={appPage.iosIcon} md={appPage.mdIcon} />
-                      <IonLabel>{appPage.title}</IonLabel>
+                      <IonLabel>{appPage.title} {appPage.title === 'Repair Shop'?'(' + repairCount +')':""}</IonLabel>
                     </IonItem>
                   </IonMenuToggle>
                 );

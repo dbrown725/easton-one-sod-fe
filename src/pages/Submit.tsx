@@ -5,7 +5,7 @@ import SongForm from '../components/SongForm';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { useHistory, useLocation } from 'react-router';
 import { useEffect, useState } from 'react';
-import { ADD_BULLPEN_SONG, DELETE_BULLPEN_SONG, GET_SONGS_WITH_ISSUES_COUNT, INSERT_SOD, UPDATE_BULLPEN_SONG, UPDATE_SOD } from '../graphql/graphql';
+import { ADD_BULLPEN_SONG, DELETE_BULLPEN_SONG, GET_SONGS_WITH_INVALID_URLS_COUNT, GET_SONGS_WITH_ISSUES_COUNT, INSERT_SOD, UPDATE_BULLPEN_SONG, UPDATE_SOD } from '../graphql/graphql';
 import { useDispatch } from 'react-redux';
 import { setIssueCount } from '../store/slices/issueCountSlice';
 
@@ -109,9 +109,9 @@ const Submit: React.FC<SubmitProps> = (props) => {
   const [
     getIssueCount,
     { loading: countLoading, error: countError, data: countData }
-  ] = useLazyQuery(GET_SONGS_WITH_ISSUES_COUNT, {
+  ] = useLazyQuery(GET_SONGS_WITH_INVALID_URLS_COUNT, {
     fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache', onCompleted: (data) => {
-      dispatch(setIssueCount(data.getSongsWithIssuesCount));
+      dispatch(setIssueCount(data.getAllInvalidUrlSongsCount));
     },
   });
 

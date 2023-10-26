@@ -241,6 +241,47 @@ export    const GET_SONGS_WITH_ISSUES = gql`
                 }
             }
             `;
+
+export    const GET_SONGS_WITH_INVALID_URLS_COUNT = gql`
+            query getAllInvalidUrlSongsCount {
+              getAllInvalidUrlSongsCount
+            }
+            `;
+
+export    const GET_SONGS_WITH_INVALID_URLS = gql`
+            query getAllInvalidUrlSongs {
+              getAllInvalidUrlSongs {
+                id
+                bandName
+                songName
+                title
+                link
+                playlist
+                message
+                sortOrder
+                songComments {
+                  id
+                  songId
+                  comment
+                  userId
+                  userFirstName
+                  userLastName
+                  userAvatarColor
+                  userIsTheSubmitter
+                  createTime
+                  modifyTime
+                }
+                userId
+                userFirstName
+                userLastName
+                userAvatarColor
+                createTime
+                modifyTime
+                userIsTheSubmitter
+                privacyOn
+                }
+            }
+            `;
             
  export   const INSERT_SOD = gql`
             mutation insertSodSong($title: String!, $songName: String!, $bandName: String!, $link: String!, $message: String!, $playlist: String!) {

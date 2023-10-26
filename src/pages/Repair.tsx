@@ -1,5 +1,5 @@
 import './Repair.css';
-import { GET_SONGS_WITH_ISSUES, GET_SONGS_WITH_ISSUES_COUNT } from '../graphql/graphql';
+import { GET_SONGS_WITH_INVALID_URLS, GET_SONGS_WITH_INVALID_URLS_COUNT } from '../graphql/graphql';
 import ScrollingSongList from '../components/ScrollingSongList';
 import { IonButtons, IonContent, IonHeader, IonLabel, IonMenuButton, IonPage, IonSegment, IonSegmentButton, IonTitle, IonToolbar, SegmentChangeEventDetail } from '@ionic/react';
 import { useEffect, useState } from 'react';
@@ -26,10 +26,10 @@ const Repair: React.FC = () => {
   const [
     getIssueCount,
     { loading: loadingCount, error: errorCount, data: dataCount }
-  ] = useLazyQuery(GET_SONGS_WITH_ISSUES_COUNT, {
+  ] = useLazyQuery(GET_SONGS_WITH_INVALID_URLS_COUNT, {
     fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache', onCompleted: (data) => {
-      setRepairCount(data.getSongsWithIssuesCount);
-      dispatch(setIssueCount(data.getSongsWithIssuesCount));
+      setRepairCount(data.getAllInvalidUrlSongsCount);
+      dispatch(setIssueCount(data.getAllInvalidUrlSongsCount));
     },
   });
 
@@ -92,8 +92,8 @@ const Repair: React.FC = () => {
               count={700}
               addDataIncrement={40}
               editCallback={editClickHandler}
-              queryDocumentNode={GET_SONGS_WITH_ISSUES}
-              queryDefinitionName={"getSongsWithIssues"}
+              queryDocumentNode={GET_SONGS_WITH_INVALID_URLS}
+              queryDefinitionName={"getAllInvalidUrlSongs"}
               showDeleteButton={false}
               showEditButton={true} />}
         {isSearchShown && <SearchForSongs editCallback={editClickHandler} showEditButton={true}/>}
