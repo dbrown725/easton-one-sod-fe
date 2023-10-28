@@ -1,6 +1,6 @@
 import { IonAvatar, IonCol, IonGrid, IonIcon, IonImg, IonItem, IonLabel, IonRow } from '@ionic/react';
 import { SongComment, SongListDesktopProps, SongWrapper } from '../common/types';
-import { chatbubble, chatbubbleEllipses, chatbubbleEllipsesOutline, chatbubbleOutline, create } from 'ionicons/icons';
+import { chatbubbleEllipsesOutline, create } from 'ionicons/icons';
 import './SongListDesktop.css';
 import { getThumbnailLink, highlightMatches, sanitizeData } from '../common/helper';
 import { useEffect, useState } from 'react';
