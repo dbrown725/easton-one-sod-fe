@@ -138,7 +138,6 @@ const Radio: React.FC = () => {
       //Sort "Radio" songs
       var arrayLength = radioSongs.length;
       for (var i = 0; i < arrayLength; i++) {
-        console.log(radioSongs[i]);
         data.getSongsByIds.forEach( (sng: Song)=> {
           if(sng.id == radioSongs[i]) {
             songsArray.push(JSON.parse(JSON.stringify(sng)));
