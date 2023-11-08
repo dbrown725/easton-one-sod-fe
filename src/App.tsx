@@ -35,6 +35,7 @@ import { useState } from 'react';
 /* Theme variables */
 import './theme/variables.css';
 import { TimeoutLogic } from './components/TimeoutLogic';
+import Radio from './pages/Radio';
 
 
 setupIonicReact();
@@ -102,6 +103,9 @@ const App: React.FC = () => {
                 </Route>
                 <Route path="/page/Latest" exact={true}>
                   <Latest />
+                </Route>
+                <Route path="/page/Radio" exact={true}>
+                  <Radio />
                 </Route>
                 <Route path="/page/Submit" exact={true}>
                   <Submit />

@@ -1,0 +1,78 @@
+ion-col.player-col {
+    display: flex;
+    justify-content: center;
+}
+
+.radio ion-col.song-info-col {
+    justify-content: center;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.radio .video-wrapper {
+    width: auto;
+    /* Reset width */
+    height: auto;
+    /* Reset height */
+}
+
+.radio .react-player {
+    padding-top: 56.25%;
+    /* Percentage ratio for 16:9 */
+    position: relative;
+    /* Set to relative */
+}
+
+.radio .react-player>div {
+    position: absolute;
+    /* Scaling will occur since parent is relative now */
+}
+
+.radio .radio-song-title {
+    padding-top: 10px;
+}
+
+.radio .submitter-select-item {
+    max-width: 250px;
+    margin-left: 5%;
+}
+
+.radio .submitter-select {
+    min-height: 48px;
+}
+
+/* .radio .bandstats-options-row {
+    display: flex;
+} */
+
+.radio .select-column {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.radio hr {
+    background-color: gray;
+    border-top-style: dotted !important;
+    height: 1px;
+    width: 25%;
+}
+
+.radio ion-button {
+    background-color: gray;
+    color: white;
+}
+
+.radio ion-button.radio-latest {
+    width: "50%";
+}
+
+.radio ion-button.radio-bullpen {
+    width: "50%";
+}
+
+@media (max-width: 500px) {
+    .radio .dj-options-row {
+        display: inline-block;
+    }
+}

@@ -282,7 +282,109 @@ export    const GET_SONGS_WITH_INVALID_URLS = gql`
                 }
             }
             `;
+
+export    const GET_RANDOM_SONGS = gql`
+            query getRandomSongs($count: Int!) {
+              getRandomSongs(count: $count) {
+                id
+                bandName
+                songName
+                title
+                link
+                message
+                sortOrder
+                songComments {
+                  id
+                  songId
+                  comment
+                  userId
+                  userFirstName
+                  userLastName
+                  userAvatarColor
+                  userIsTheSubmitter
+                  createTime
+                  modifyTime
+                }
+                userId
+                userFirstName
+                userLastName
+                userAvatarColor
+                createTime
+                modifyTime
+                userIsTheSubmitter
+                privacyOn
+                }
+            }
+            `;
             
+export    const GET_RANDOM_SONGS_BY_USER_ID = gql`
+            query getRandomSongsByUserId($userId: ID!, $count: Int!) {
+              getRandomSongsByUserId(userId: $userId, count: $count) {
+                id
+                bandName
+                songName
+                title
+                link
+                message
+                sortOrder
+                songComments {
+                  id
+                  songId
+                  comment
+                  userId
+                  userFirstName
+                  userLastName
+                  userAvatarColor
+                  userIsTheSubmitter
+                  createTime
+                  modifyTime
+                }
+                userId
+                userFirstName
+                userLastName
+                userAvatarColor
+                createTime
+                modifyTime
+                userIsTheSubmitter
+                privacyOn
+                }
+            }
+            `;     
+                   
+export    const GET_SONGS_BY_IDS = gql`
+            query getSongsByIds($songIds: [Int]!) {
+              getSongsByIds(songIds: $songIds) {
+                id
+                bandName
+                songName
+                title
+                link
+                message
+                sortOrder
+                songComments {
+                  id
+                  songId
+                  comment
+                  userId
+                  userFirstName
+                  userLastName
+                  userAvatarColor
+                  userIsTheSubmitter
+                  createTime
+                  modifyTime
+                }
+                userId
+                userFirstName
+                userLastName
+                userAvatarColor
+                createTime
+                modifyTime
+                userIsTheSubmitter
+                privacyOn
+                }
+            }
+            `;          
+
  export   const INSERT_SOD = gql`
             mutation insertSodSong($title: String!, $songName: String!, $bandName: String!, $link: String!, $message: String!, $playlist: String!) {
               insertSodSong(

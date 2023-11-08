@@ -16,7 +16,7 @@ import { baseballOutline, baseballSharp, constructOutline, constructSharp, downl
   homeOutline,
   homeSharp,
   listOutline, listSharp, logOutOutline, logOutSharp, musicalNoteOutline, musicalNoteSharp, personCircleOutline,
-  personCircleSharp, searchOutline, searchSharp } from 'ionicons/icons';
+  personCircleSharp, radioOutline, radioSharp, searchOutline, searchSharp } from 'ionicons/icons';
 import './Menu.css';
 import { role, logout, refreshRole } from '../firebase';
 import { useEffect, useRef, useState } from 'react';
@@ -83,6 +83,12 @@ const Menu: React.FC = () => {
       mdIcon: homeSharp
     },
     {
+      title: 'WSOD Radio',
+      url: '/page/Radio',
+      iosIcon: radioOutline,
+      mdIcon: radioSharp
+    },
+    {
       title: 'Latest songs',
       url: '/page/Latest',
       iosIcon: musicalNoteOutline,
@@ -146,6 +152,10 @@ const Menu: React.FC = () => {
               {appPages.map((appPage, index) => {
                 if((appPage.title === 'My Bullpen' || appPage.title === 'Repair Shop')
                       && role !== 'ADMIN' && role !== 'SUBMITTER') {
+                  return false;
+                }
+                if(appPage.title === 'WSOD Radio'
+                      && role !== 'ADMIN') {
                   return false;
                 }
                 return (
