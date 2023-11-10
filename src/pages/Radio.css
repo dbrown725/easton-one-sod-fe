@@ -58,21 +58,31 @@ ion-col.player-col {
     width: 25%;
 }
 
-.radio ion-button {
-    background-color: gray;
-    color: white;
-}
-
 .radio ion-button.radio-latest {
     width: "50%";
+    margin-top: 0;
 }
 
 .radio ion-button.radio-bullpen {
     width: "50%";
+    margin-top: 0;
 }
 
 @media (max-width: 500px) {
     .radio .dj-options-row {
         display: inline-block;
+    }
+}
+
+@media (max-width: 450px) {
+    .radio .radio-archive-search {
+        margin-top: -6px;
+        margin-left: -6px;
+    }
+}
+
+@media (min-width: 600px) and (max-width: 1200px) {
+    .radio .radio-archive-search {
+        margin-top: -6px;
     }
 }

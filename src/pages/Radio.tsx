@@ -1,4 +1,4 @@
-import { IonAvatar, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonMenuButton, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonMenuButton, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar } from '@ionic/react';
 import ReactPlayer from 'react-player';
 import './Radio.css';
 import {
@@ -201,6 +201,18 @@ const Radio: React.FC = () => {
     setSearchPhraseInput("");
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLIonInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearchInitiation();
+    }
+  }
+
+  const handleSearchInitiation = () => {
+    setDiscJockeySelected("");
+    setSearchPhrase(searchPhraseInput);
+    getArchiveSongs();
+  }
+
   const [
     getUsersForDropDown,
     { loading: laodingUsers, error: errorUsers, data: dataUsers }
@@ -282,7 +294,10 @@ const Radio: React.FC = () => {
                       height={playerHeight} 
                       onPlay={() => {
                         setVideoPlaying(true);
-                      }} />
+                      }}
+                      onPause={() => {
+                        setVideoPlaying(false);
+                      }}  />
                   }
                 </div>
               </IonCol>
@@ -346,7 +361,7 @@ const Radio: React.FC = () => {
             <IonCol size-xl="5" size-lg="4.5" size-md="4" size-sm="4" size-xs="2.5">
               </IonCol>    
               <IonCol size-xl="2" size-lg="3" size-md="4"  size-sm="4" size-xs="7">
-                <IonButton className="radio-latest ion-text-wrap" fill="clear" expand="block" onClick={(event) => {
+                <IonButton className="radio-latest ion-margin-top" expand="block" onClick={(event) => {
                       setDiscJockeySelected("");
                       clearSearch();
                       getLatestSongs();
@@ -362,7 +377,7 @@ const Radio: React.FC = () => {
               <IonCol size-xl="5" size-lg="4.5" size-md="4" size-sm="4" size-xs="2.5">
               </IonCol>    
               <IonCol size-xl="2" size-lg="3" size-md="4"  size-sm="4" size-xs="7">
-                <IonButton className="radio-bullpen ion-text-wrap" fill="clear" expand="block" onClick={(event) => {
+                <IonButton className="radio-bullpen ion-margin-top" expand="block" onClick={(event) => {
                       getBpSongs();
                       setDiscJockeySelected("");
                       clearSearch();
@@ -387,6 +402,7 @@ const Radio: React.FC = () => {
                           maxlength={100}
                           value={searchPhraseInput}
                           onIonInput={(e) => {setSearchPhraseInput((e.target as HTMLIonInputElement).value);}}
+                          onKeyDown={e => { handleKeyDown(e) }}
                           placeholder="Allman Brothers"
                           required
                           clear-input>
@@ -394,10 +410,8 @@ const Radio: React.FC = () => {
                     </IonItem>
                   </IonCol>
                   <IonCol size-md="1" size-xs="3">
-                    <IonButton className="archive-search ion-text-wrap" fill="clear" expand="block" onClick={(event) => {
-                        setDiscJockeySelected("");
-                        setSearchPhrase(searchPhraseInput);
-                        getArchiveSongs();
+                    <IonButton className="ion-margin-top radio-archive-search" expand="block" onClick={(event) => {
+                        handleSearchInitiation();
                       }}>
                       Search
                     </IonButton>
