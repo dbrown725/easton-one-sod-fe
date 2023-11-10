@@ -21,8 +21,6 @@ const Radio: React.FC = () => {
 
   const [videoPlaying, setVideoPlaying] = useState<boolean>(false);
 
-  const [initialSongLoad, setInitialSongLoad] = useState<boolean>(true);
-
   const [songs, setSongs] = useState<Song[]>([]);
 
   const [playIndex, setPlayIndex] = useState<number>(0);
@@ -163,14 +161,13 @@ const Radio: React.FC = () => {
   });
 
   useEffect(() => {
-    if(discJockeySelected == '0') {
-      if(initialSongLoad) {
-        setInitialSongLoad(false);
-      } else {
-        getRandomSongs();
-      }
+    if(discJockeySelected == '') {
+      // do nothing
+    } else if(discJockeySelected == '0') {
+      getRandomSongs();
+    } else {
+      getRandomSongsByUserId();
     }
-    getRandomSongsByUserId();
   }, [discJockeySelected]);
 
   const [
