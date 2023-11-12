@@ -1,10 +1,9 @@
-ion-col.player-col {
+.radio ion-col.player-col {
     display: flex;
     justify-content: center;
 }
 
 .radio ion-col.song-info-col {
-    justify-content: center;
     text-align: center;
     margin-top: 10px;
 }
@@ -41,10 +40,6 @@ ion-col.player-col {
     min-height: 48px;
 }
 
-/* .radio .bandstats-options-row {
-    display: flex;
-} */
-
 .radio .select-column {
     display: flex;
     justify-content: center;
@@ -66,6 +61,37 @@ ion-col.player-col {
 .radio ion-button.radio-bullpen {
     width: "50%";
     margin-top: 0;
+}
+
+.radio-history {
+    margin-top: 20px;
+}
+
+.radio-history .history-block {
+    border-top: 1px solid rgb(115, 115, 115, .5);
+}
+
+.radio-history .history-title {
+    display: flex;
+    justify-content: center;
+}
+
+.radio-history .thumbnail_col {
+    justify-content: right;
+    display: flex;
+}
+
+.radio-history .thumbnail-image::part(image) {    
+    /* original image ratio height 75% of width */
+    /* display image ratio should be height 56% of width */
+    /* height: 123px;
+    width: 220px; */
+    height: 101px;
+    width: 180px;
+    object-fit: cover;
+    margin-top: 9px;
+    margin-bottom: 0px;
+    border-radius: 12px;
 }
 
 @media (max-width: 500px) {

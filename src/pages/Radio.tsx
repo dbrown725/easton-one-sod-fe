@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonMenuButton, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonCard, IonCardContent, IonContent, IonHeader, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonMenuButton, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar } from '@ionic/react';
 import ReactPlayer from 'react-player';
 import './Radio.css';
 import {
@@ -13,7 +13,7 @@ import { useLazyQuery } from '@apollo/client';
 import { GET_ALL_BULLPEN_SONGS, GET_MOST_RECENT_SONGS, GET_RANDOM_SONGS, GET_RANDOM_SONGS_BY_USER_ID, GET_SEARCH_RESULTS, GET_SONGS_BY_IDS, GET_USERS_FOR_DROPDOWN } from '../graphql/graphql';
 import { BullpenSongData, Song, UserInfo } from '../common/types';
 import { role, refreshRole } from '../firebase';
-import { getScreenDimensions } from '../common/helper';
+import { getScreenDimensions, getThumbnailLink } from '../common/helper';
 
 const Radio: React.FC = () => {
 
@@ -22,6 +22,8 @@ const Radio: React.FC = () => {
   const [videoPlaying, setVideoPlaying] = useState<boolean>(false);
 
   const [songs, setSongs] = useState<Song[]>([]);
+
+  const [songHistory, setSongHistory] = useState<Song[]>([]);
 
   const [playIndex, setPlayIndex] = useState<number>(0);
 
@@ -61,17 +63,17 @@ const Radio: React.FC = () => {
 
   useEffect(() => {
     //ration 16:9 (.5625)
-    if(getScreenDimensions().width > 2000) {
+    if (getScreenDimensions().width > 2000) {
       setPlayerWidth('900px');
       setPlayerHeight('506px');
-    } else if(getScreenDimensions().width > 1000) {
+    } else if (getScreenDimensions().width > 1000) {
       setPlayerWidth('600px');
       setPlayerHeight('337px');
     } else {
       setPlayerWidth('380px');
       setPlayerHeight('212px');
     }
-    if(role === 'GUEST') {
+    if (role === 'GUEST') {
       //includes privacyOn field
       getUsersForDropDown();
     }
@@ -84,28 +86,28 @@ const Radio: React.FC = () => {
     { loading: loadingLatest, error: errorLatest, data: dataLatest }
   ] = useLazyQuery(GET_MOST_RECENT_SONGS, {
     fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache',
-    variables: {count: 20}, onCompleted: (data) => {
-      setPlayIndex(0);
+    variables: { count: 20 }, onCompleted: (data) => {
       let songsArray: Song[] = [];
-      data.getMostRecentSongs.forEach( (sng: Song)=> {
+      data.getMostRecentSongs.forEach((sng: Song) => {
         songsArray.push(JSON.parse(JSON.stringify(sng)));
       });
       setSongs(songsArray);
+      updatePlayIndex(0);
     },
   });
-  
+
   const [
     getArchiveSongs,
     { loading: loadingSearch, error: errorSearch, data: dataSearch }
   ] = useLazyQuery(GET_SEARCH_RESULTS, {
     fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache',
-    variables: { searchText:  searchPhrase }, onCompleted: (data) => {
-      setPlayIndex(0);
+    variables: { searchText: searchPhrase }, onCompleted: (data) => {
       let songsArray: Song[] = [];
-      data.songBySearchText.forEach( (sng: Song)=> {
+      data.songBySearchText.forEach((sng: Song) => {
         songsArray.push(JSON.parse(JSON.stringify(sng)));
       });
       setSongs(songsArray);
+      updatePlayIndex(0);
     }
   });
 
@@ -114,13 +116,13 @@ const Radio: React.FC = () => {
     { loading, error, data }
   ] = useLazyQuery(GET_RANDOM_SONGS, {
     fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache',
-    variables: {count: 20}, onCompleted: (data) => {
-      setPlayIndex(0);
+    variables: { count: 20 }, onCompleted: (data) => {
       let songsArray: Song[] = [];
-      data.getRandomSongs.forEach( (sng: Song)=> {
+      data.getRandomSongs.forEach((sng: Song) => {
         songsArray.push(JSON.parse(JSON.stringify(sng)));
       });
       setSongs(songsArray);
+      updatePlayIndex(0);
     },
   });
 
@@ -129,41 +131,42 @@ const Radio: React.FC = () => {
     { loading: loadingByIds, error: errorByIds, data: dataByIds }
   ] = useLazyQuery(GET_SONGS_BY_IDS, {
     fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache',
-    variables: {songIds: radioSongs}, onCompleted: (data) => {
-      setPlayIndex(0);
+    variables: { songIds: radioSongs }, onCompleted: (data) => {
       let songsArray: Song[] = [];
 
       //Sort "Radio" songs
       var arrayLength = radioSongs.length;
       for (var i = 0; i < arrayLength; i++) {
-        data.getSongsByIds.forEach( (sng: Song)=> {
-          if(sng.id == radioSongs[i]) {
+        data.getSongsByIds.forEach((sng: Song) => {
+          if (sng.id == radioSongs[i]) {
             songsArray.push(JSON.parse(JSON.stringify(sng)));
           }
         });
       }
       setSongs(songsArray);
+      updatePlayIndex(0);
     },
   });
 
   const [
     getBpSongs,
     { loading: loadingBp, error: errorBp, data: dataBp }
-  ] =  useLazyQuery<BullpenSongData, SongVars>(GET_ALL_BULLPEN_SONGS, 
-    {fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache', onCompleted: (data) => {
-      setPlayIndex(0);
-      let songsArray: Song[] = [];
-      data.getAllBullpenSongs.forEach( (sng: Song)=> {
-        songsArray.push(JSON.parse(JSON.stringify(sng)));
-      });
-      setSongs(songsArray);
-    },
-  });
+  ] = useLazyQuery<BullpenSongData, SongVars>(GET_ALL_BULLPEN_SONGS,
+    {
+      fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache', onCompleted: (data) => {
+        let songsArray: Song[] = [];
+        data.getAllBullpenSongs.forEach((sng: Song) => {
+          songsArray.push(JSON.parse(JSON.stringify(sng)));
+        });
+        setSongs(songsArray);
+        updatePlayIndex(0);
+      },
+    });
 
   useEffect(() => {
-    if(discJockeySelected == '') {
+    if (discJockeySelected == '') {
       // do nothing
-    } else if(discJockeySelected == '0') {
+    } else if (discJockeySelected == '0') {
       getRandomSongs();
     } else {
       getRandomSongsByUserId();
@@ -175,23 +178,38 @@ const Radio: React.FC = () => {
     { loading: loadingRndSngUsr, error: errorRndSngUsr, data: dataRndSngUsr }
   ] = useLazyQuery(GET_RANDOM_SONGS_BY_USER_ID, {
     fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache',
-    variables: { userId: discJockeySelected, count: 20}, onCompleted: (data) => {
-      setPlayIndex(0);
+    variables: { userId: discJockeySelected, count: 20 }, onCompleted: (data) => {
       let songsArray: Song[] = [];
-      data.getRandomSongsByUserId.forEach( (sng: Song)=> {
+      data.getRandomSongsByUserId.forEach((sng: Song) => {
         songsArray.push(JSON.parse(JSON.stringify(sng)));
       });
       setSongs(songsArray);
+      updatePlayIndex(0);
     },
   });
 
+  const updatePlayIndex = (index: number) => {
+    setSongs((state) => {
+      setSongHistory( // Replace the state
+        [ // with a new array
+          ...songHistory, // that contains all the old items
+          state[index]// and one new item at the end
+        ]
+      );
+
+      return state;
+    });
+
+    setPlayIndex(index);
+  }
+
   const nextVideo = () => {
-  	setPlayIndex(playIndex + 1);
+    updatePlayIndex(playIndex + 1);
   }
 
   const errorCondition = () => {
     console.log("An Error occurred moving to the next video");
-    setPlayIndex(playIndex + 1);
+    updatePlayIndex(playIndex + 1);
   }
 
   const clearSearch = () => {
@@ -216,33 +234,33 @@ const Radio: React.FC = () => {
   ] = useLazyQuery(GET_USERS_FOR_DROPDOWN, {
     fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache',
     variables: {}, onCompleted: (data) => {
-      data.getUsersForDropDown.map((userInfo:UserInfo)  => {
-          var userId:Number = userInfo.id;
-          if(userInfo.id == 2) {
-            setUserTwoPrivacyOn(userInfo.privacyOn);
-          }
-          if(userInfo.id == 3) {
-            setUserThreePrivacyOn(userInfo.privacyOn);
-          }
-          if(userInfo.id == 4) {
-            setUserFourPrivacyOn(userInfo.privacyOn);
-          }
-          if(userInfo.id == 5) {
-            setUserFivePrivacyOn(userInfo.privacyOn);
-          }
-          if(userInfo.id == 6) {
-            setUserSixPrivacyOn(userInfo.privacyOn);
-          }
-          if(userInfo.id == 7) {
-            setUserSevenPrivacyOn(userInfo.privacyOn);
-          }
-          if(userInfo.id == 8) {
-            setUserEightPrivacyOn(userInfo.privacyOn);
-          }
-          if(userInfo.id == 9) {
-            setUserNinePrivacyOn(userInfo.privacyOn);
-          }
+      data.getUsersForDropDown.map((userInfo: UserInfo) => {
+        var userId: Number = userInfo.id;
+        if (userInfo.id == 2) {
+          setUserTwoPrivacyOn(userInfo.privacyOn);
         }
+        if (userInfo.id == 3) {
+          setUserThreePrivacyOn(userInfo.privacyOn);
+        }
+        if (userInfo.id == 4) {
+          setUserFourPrivacyOn(userInfo.privacyOn);
+        }
+        if (userInfo.id == 5) {
+          setUserFivePrivacyOn(userInfo.privacyOn);
+        }
+        if (userInfo.id == 6) {
+          setUserSixPrivacyOn(userInfo.privacyOn);
+        }
+        if (userInfo.id == 7) {
+          setUserSevenPrivacyOn(userInfo.privacyOn);
+        }
+        if (userInfo.id == 8) {
+          setUserEightPrivacyOn(userInfo.privacyOn);
+        }
+        if (userInfo.id == 9) {
+          setUserNinePrivacyOn(userInfo.privacyOn);
+        }
+      }
       );
     }
   });
@@ -264,164 +282,233 @@ const Radio: React.FC = () => {
             <IonTitle size="large">WSOD Radio</IonTitle>
           </IonToolbar>
         </IonHeader>
-          {
-            errorDetail != null ? <ErrorDisplay message={errorDetail.message} detail={errorDetail.stack} /> :
-          <IonGrid className='radio'>
+        {
+          errorDetail != null ? <ErrorDisplay message={errorDetail.message} detail={errorDetail.stack} /> :
+            <>
+              <IonGrid className='radio'>
 
-            {/* Temp hack to replace css for top margin */}
-            <IonRow>
-              <IonCol>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol className='player-col'>
-                <div className="video-wrapper">
-                {/* width='380px' height='212px'  */}
-                  {(songs[playIndex]) &&
-                      <ReactPlayer url={(songs[playIndex]).link} 
-                      controls={true} 
-                      playing={videoPlaying} 
-                      onEnded={nextVideo} 
-                      onError={errorCondition} 
-                      width={playerWidth} 
-                      height={playerHeight} 
-                      onPlay={() => {
-                        setVideoPlaying(true);
-                      }}
-                      onPause={() => {
-                        setVideoPlaying(false);
-                      }}  />
-                  }
-                </div>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol className='song-info-col'>
-                {(songs[playIndex]) &&
-                  <>
-                    <IonRow>
-                      <IonCol>
-                        <div className='radio-song-title'>{(songs[playIndex]).bandName}  -  {(songs[playIndex]).songName} </div>
-                      </IonCol>
-                    </IonRow>
-                    <IonRow>
-                      <IonCol>
-                        {(role !== 'GUEST' || !(songs[playIndex]).privacyOn) &&
-                          <>
-                           {(songs[playIndex]).userFirstName == 'David' ? <div>{(songs[playIndex]).userFirstName} {((songs[playIndex]).userLastName)?.charAt(0)}.</div> : <div>{(songs[playIndex]).userFirstName}</div>}
-                          </>
-                        }
-                        {role === 'GUEST' && (songs[playIndex]).privacyOn &&
-                          <div>User {(songs[playIndex]).userId}</div>
-                        }
-                      </IonCol>
-                    </IonRow>
-                  </>
-                }
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol className="select-column">
-                <div className="dj-options-row">
-                  <IonItem className="submitter-select-item">
-                    <IonLabel>Submitted by:</IonLabel>
-                    <IonSelect
-                        className="submitter-select"
-                        aria-label="Submitter"
-                        interface="popover"
-                        onIonChange={(e) => {setDiscJockeySelected(e.detail.value); clearSearch()}} value={discJockeySelected}>
-                      <IonSelectOption value="">Select DJ</IonSelectOption>    
-                      <IonSelectOption value="0">DJ All</IonSelectOption>
-                      <IonSelectOption value="6">DJ {userSixPrivacyOn?'User 6':'Brian'}</IonSelectOption>
-                      <IonSelectOption value="8">DJ {userEightPrivacyOn?'User 8':'Dave B.'}</IonSelectOption>
-                      <IonSelectOption value="9">DJ {userNinePrivacyOn?'User 9':'Dave R.'}</IonSelectOption>
-                      <IonSelectOption value="5">DJ {userFivePrivacyOn?'User 5':'Doug'}</IonSelectOption>
-                      <IonSelectOption value="2">DJ {userTwoPrivacyOn?'User 2':'Kevin'}</IonSelectOption>
-                      <IonSelectOption value="3">DJ {userThreePrivacyOn?'User 3':'Lisa'}</IonSelectOption>
-                      <IonSelectOption value="7">DJ {userSevenPrivacyOn?'User 7':'Mike'}</IonSelectOption>
-                      <IonSelectOption value="4">DJ {userFourPrivacyOn?'User 4':'Tim'}</IonSelectOption>
-                    </IonSelect>
-                  </IonItem>
-                </div>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol>
-                <hr/>
-              </IonCol>
-            </IonRow>
-            <IonRow>  
-            <IonCol size-xl="5" size-lg="4.5" size-md="4" size-sm="4" size-xs="2.5">
-              </IonCol>    
-              <IonCol size-xl="2" size-lg="3" size-md="4"  size-sm="4" size-xs="7">
-                <IonButton className="radio-latest ion-margin-top" expand="block" onClick={(event) => {
+                {/* Temp hack to replace css for top margin */}
+                <IonRow>
+                  <IonCol>
+                  </IonCol>
+                </IonRow>
+                <IonRow>
+                  <IonCol>
+                  </IonCol>
+                </IonRow>
+                <IonRow>
+                  <IonCol className='player-col'>
+                    <div className="video-wrapper">
+                      {(songs[playIndex]) &&
+                        <ReactPlayer url={(songs[playIndex]).link}
+                          controls={true}
+                          playing={videoPlaying}
+                          onEnded={nextVideo}
+                          onError={errorCondition}
+                          width={playerWidth}
+                          height={playerHeight}
+                          onPlay={() => {
+                            setVideoPlaying(true);
+                          }}
+                          onPause={() => {
+                            setVideoPlaying(false);
+                          }} />
+                      }
+                      {!songs[playIndex] &&
+                        <div>No Songs Returned</div>
+                      }
+                    </div>
+                  </IonCol>
+                </IonRow>
+                <IonRow>
+                  <IonCol className='song-info-col'>
+                    {(songs[playIndex]) &&
+                      <>
+                        <IonRow>
+                          <IonCol>
+                            <div className='radio-song-title'>{(songs[playIndex]).bandName}  -  {(songs[playIndex]).songName} </div>
+                          </IonCol>
+                        </IonRow>
+                        <IonRow>
+                          <IonCol>
+                            {(role !== 'GUEST' || !(songs[playIndex]).privacyOn) &&
+                              <>
+                                {(songs[playIndex]).userFirstName == 'David' ? <div>{(songs[playIndex]).userFirstName} {((songs[playIndex]).userLastName)?.charAt(0)}.</div> : <div>{(songs[playIndex]).userFirstName}</div>}
+                              </>
+                            }
+                            {role === 'GUEST' && (songs[playIndex]).privacyOn &&
+                              <div>User {(songs[playIndex]).userId}</div>
+                            }
+                          </IonCol>
+                        </IonRow>
+                      </>
+                    }
+                  </IonCol>
+                </IonRow>
+                <IonRow>
+                  <IonCol className="select-column">
+                    <div className="dj-options-row">
+                      <IonItem className="submitter-select-item">
+                        <IonLabel>Submitted by:</IonLabel>
+                        <IonSelect
+                          className="submitter-select"
+                          aria-label="Submitter"
+                          interface="popover"
+                          onIonChange={(e) => { setDiscJockeySelected(e.detail.value); clearSearch() }} value={discJockeySelected}>
+                          <IonSelectOption value="">Select DJ</IonSelectOption>
+                          <IonSelectOption value="0">DJ All</IonSelectOption>
+                          <IonSelectOption value="6">DJ {userSixPrivacyOn ? 'User 6' : 'Brian'}</IonSelectOption>
+                          <IonSelectOption value="8">DJ {userEightPrivacyOn ? 'User 8' : 'Dave B.'}</IonSelectOption>
+                          <IonSelectOption value="9">DJ {userNinePrivacyOn ? 'User 9' : 'Dave R.'}</IonSelectOption>
+                          <IonSelectOption value="5">DJ {userFivePrivacyOn ? 'User 5' : 'Doug'}</IonSelectOption>
+                          <IonSelectOption value="2">DJ {userTwoPrivacyOn ? 'User 2' : 'Kevin'}</IonSelectOption>
+                          <IonSelectOption value="3">DJ {userThreePrivacyOn ? 'User 3' : 'Lisa'}</IonSelectOption>
+                          <IonSelectOption value="7">DJ {userSevenPrivacyOn ? 'User 7' : 'Mike'}</IonSelectOption>
+                          <IonSelectOption value="4">DJ {userFourPrivacyOn ? 'User 4' : 'Tim'}</IonSelectOption>
+                        </IonSelect>
+                      </IonItem>
+                    </div>
+                  </IonCol>
+                </IonRow>
+                <IonRow>
+                  <IonCol>
+                    <hr />
+                  </IonCol>
+                </IonRow>
+                <IonRow>
+                  <IonCol size-xl="5" size-lg="4.5" size-md="4" size-sm="4" size-xs="2.5">
+                  </IonCol>
+                  <IonCol size-xl="2" size-lg="3" size-md="4" size-sm="4" size-xs="7">
+                    <IonButton className="radio-latest ion-margin-top" expand="block" onClick={(event) => {
                       setDiscJockeySelected("");
                       clearSearch();
                       getLatestSongs();
                     }}>
-                  Latest Songs
-                </IonButton>
-              </IonCol>
-              <IonCol size-xl="5" size-lg="4.5" size-md="4" size-sm="4" size-xs="2.5">
-              </IonCol>
-              <hr/> 
-            </IonRow>
-            <IonRow>
-              <IonCol size-xl="5" size-lg="4.5" size-md="4" size-sm="4" size-xs="2.5">
-              </IonCol>    
-              <IonCol size-xl="2" size-lg="3" size-md="4"  size-sm="4" size-xs="7">
-                <IonButton className="radio-bullpen ion-margin-top" expand="block" onClick={(event) => {
+                      Latest Songs
+                    </IonButton>
+                  </IonCol>
+                  <IonCol size-xl="5" size-lg="4.5" size-md="4" size-sm="4" size-xs="2.5">
+                  </IonCol>
+                  <hr />
+                </IonRow>
+                <IonRow>
+                  <IonCol size-xl="5" size-lg="4.5" size-md="4" size-sm="4" size-xs="2.5">
+                  </IonCol>
+                  <IonCol size-xl="2" size-lg="3" size-md="4" size-sm="4" size-xs="7">
+                    <IonButton className="radio-bullpen ion-margin-top" expand="block" onClick={(event) => {
                       getBpSongs();
                       setDiscJockeySelected("");
                       clearSearch();
                     }}>
-                  My Bullpen Songs
-                </IonButton>
-
-              </IonCol>
-              <IonCol size-xl="5" size-lg="4.5" size-md="4" size-sm="4" size-xs="2.5">
-              </IonCol> 
-              <hr/>
-            </IonRow>
-            <IonRow>   
-              <IonCol>
-                <IonRow>
-                  <IonCol size-md="4.5" size-xs="1">
-                  </IonCol>  
-                  <IonCol size-md="2" size-xs="7">
-                    <IonItem>
-                      <IonInput
-                          className="url"
-                          maxlength={100}
-                          value={searchPhraseInput}
-                          onIonInput={(e) => {setSearchPhraseInput((e.target as HTMLIonInputElement).value);}}
-                          onKeyDown={e => { handleKeyDown(e) }}
-                          placeholder="Allman Brothers"
-                          required
-                          clear-input>
-                        </IonInput>
-                    </IonItem>
-                  </IonCol>
-                  <IonCol size-md="1" size-xs="3">
-                    <IonButton className="ion-margin-top radio-archive-search" expand="block" onClick={(event) => {
-                        handleSearchInitiation();
-                      }}>
-                      Search
+                      My Bullpen Songs
                     </IonButton>
-                  </IonCol>
-                  <IonCol size-md="4.5" size-xs="1">
-                  </IonCol>  
-                </IonRow>
 
-              </IonCol>
-            </IonRow>
-          </IonGrid>
-          }
-          <FabToSubmit/>
+                  </IonCol>
+                  <IonCol size-xl="5" size-lg="4.5" size-md="4" size-sm="4" size-xs="2.5">
+                  </IonCol>
+                  <hr />
+                </IonRow>
+                <IonRow>
+                  <IonCol>
+                    <IonRow>
+                      <IonCol size-md="4.5" size-xs="1">
+                      </IonCol>
+                      <IonCol size-md="2" size-xs="7">
+                        <IonItem>
+                          <IonInput
+                            className="url"
+                            maxlength={100}
+                            value={searchPhraseInput}
+                            onIonInput={(e) => { setSearchPhraseInput((e.target as HTMLIonInputElement).value); }}
+                            onKeyDown={e => { handleKeyDown(e) }}
+                            placeholder="Allman Brothers"
+                            required
+                            clear-input>
+                          </IonInput>
+                        </IonItem>
+                      </IonCol>
+                      <IonCol size-md="1" size-xs="3">
+                        <IonButton className="ion-margin-top radio-archive-search" expand="block" onClick={(event) => {
+                          handleSearchInitiation();
+                        }}>
+                          Search
+                        </IonButton>
+                      </IonCol>
+                      <IonCol size-md="4.5" size-xs="1">
+                      </IonCol>
+                    </IonRow>
+
+                  </IonCol>
+                </IonRow>
+              </IonGrid>
+              <IonGrid className='radio-history'>
+                <IonRow>
+                  <IonCol size-md="4">
+                  </IonCol>
+                  <IonCol className="history-title" size-md="4">
+                    <div>
+                      Play History
+                    </div>
+                  </IonCol>
+                  <IonCol size-md="4">
+                  </IonCol>
+                </IonRow>
+                {songHistory.length > 0 &&
+                  songHistory.slice(0, songHistory.length - 1).reverse().map((song: Song, index) => {
+                    return (
+                      <IonRow key={index}>
+                        <IonCol size-md="4">
+                        </IonCol>
+                        <IonCol size-md="4">
+                          <IonRow className="history-block">
+                            <IonCol className="thumbnail_col" size-md="5">
+                              {song &&
+                                <a href={song.link} target='_blank' rel="noreferrer">
+                                  <IonImg src={getThumbnailLink(song.link, "high")}
+                                    className={"thumbnail-image"} />
+                                </a>
+                              }
+                            </IonCol>
+                            <IonCol size-md="6" className='song-info-col'>
+                              {(song) &&
+                                <>
+                                  <IonRow>
+                                    <IonCol>
+                                      <div className='radio-song-title'>{song.bandName}</div>
+                                    </IonCol>
+                                  </IonRow>
+                                  <IonRow>
+                                    <IonCol>
+                                      <div className='radio-song-title'>{song.songName} </div>
+                                    </IonCol>
+                                  </IonRow>
+                                  <IonRow>
+                                    <IonCol>
+                                      {(role !== 'GUEST' || !song.privacyOn) &&
+                                        <>
+                                          {song.userFirstName == 'David' ? <div>{song.userFirstName} {(song.userLastName)?.charAt(0)}.</div> : <div>{song.userFirstName}</div>}
+                                        </>
+                                      }
+                                      {role === 'GUEST' && song.privacyOn &&
+                                        <div>User {song.userId}</div>
+                                      }
+                                    </IonCol>
+                                  </IonRow>
+                                </>
+                              }
+                            </IonCol>
+                          </IonRow>
+                        </IonCol>
+                        <IonCol size-md="4">
+                        </IonCol>
+                      </IonRow>
+                    );
+                  })
+                }
+              </IonGrid>
+            </>
+        }
+        <FabToSubmit />
       </IonContent>
     </IonPage>
   );
