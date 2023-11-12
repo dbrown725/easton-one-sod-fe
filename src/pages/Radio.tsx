@@ -207,8 +207,8 @@ const Radio: React.FC = () => {
     updatePlayIndex(playIndex + 1);
   }
 
-  const errorCondition = () => {
-    console.log("An Error occurred moving to the next video");
+  const errorCondition = (e: Error) => {
+    console.log("An Error occurred moving to the next video. Error:", e, "Name:", e.name, "Message:", e.message, "Cause:", e.cause, "Stack:", e.stack);
     updatePlayIndex(playIndex + 1);
   }
 
@@ -304,7 +304,7 @@ const Radio: React.FC = () => {
                           controls={true}
                           playing={videoPlaying}
                           onEnded={nextVideo}
-                          onError={errorCondition}
+                          onError={(e) => errorCondition(e)}
                           width={playerWidth}
                           height={playerHeight}
                           onPlay={() => {
@@ -416,7 +416,7 @@ const Radio: React.FC = () => {
                       <IonCol size-md="2" size-xs="7">
                         <IonItem>
                           <IonInput
-                            className="url"
+                            className="searchUrl"
                             maxlength={100}
                             value={searchPhraseInput}
                             onIonInput={(e) => { setSearchPhraseInput((e.target as HTMLIonInputElement).value); }}
@@ -437,7 +437,6 @@ const Radio: React.FC = () => {
                       <IonCol size-md="4.5" size-xs="1">
                       </IonCol>
                     </IonRow>
-
                   </IonCol>
                 </IonRow>
               </IonGrid>
@@ -457,11 +456,11 @@ const Radio: React.FC = () => {
                   songHistory.slice(0, songHistory.length - 1).reverse().map((song: Song, index) => {
                     return (
                       <IonRow key={index}>
-                        <IonCol size-md="4">
+                        <IonCol size-xs="2" size-xl="2">
                         </IonCol>
-                        <IonCol size-md="4">
+                        <IonCol size-xs="8" size-xl="8">
                           <IonRow className="history-block">
-                            <IonCol className="thumbnail_col" size-md="5">
+                            <IonCol className="thumbnail_col" size-xl="6" size-md="5">
                               {song &&
                                 <a href={song.link} target='_blank' rel="noreferrer">
                                   <IonImg src={getThumbnailLink(song.link, "high")}
@@ -469,7 +468,7 @@ const Radio: React.FC = () => {
                                 </a>
                               }
                             </IonCol>
-                            <IonCol size-md="6" className='song-info-col'>
+                            <IonCol size-xl="6" size-md="7" className='song-info-col'>
                               {(song) &&
                                 <>
                                   <IonRow>
@@ -499,7 +498,7 @@ const Radio: React.FC = () => {
                             </IonCol>
                           </IonRow>
                         </IonCol>
-                        <IonCol size-md="4">
+                        <IonCol size-xs="2" size-xl="2">
                         </IonCol>
                       </IonRow>
                     );

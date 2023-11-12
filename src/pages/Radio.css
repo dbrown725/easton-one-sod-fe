@@ -67,7 +67,15 @@
     margin-top: 20px;
 }
 
-.radio-history .history-block {
+/* .radio-history .history-block {
+    border-top: 1px solid rgb(115, 115, 115, .5);
+} */
+
+.radio-history .history-block:after {
+    content: "";
+    display: block;
+    width: 50%;
+    margin: 1em auto 0;
     border-top: 1px solid rgb(115, 115, 115, .5);
 }
 
@@ -98,6 +106,9 @@
     .radio .dj-options-row {
         display: inline-block;
     }
+    .radio-history .thumbnail_col {
+        justify-content: center;
+    }
 }
 
 @media (max-width: 450px) {
@@ -110,5 +121,17 @@
 @media (min-width: 600px) and (max-width: 1200px) {
     .radio .radio-archive-search {
         margin-top: -6px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .radio-history .history-block:after {
+        width: 70%;
+    }
+}
+
+@media (max-width: 800px) {
+    .radio-history .history-block:after {
+        width: 90%;
     }
 }
