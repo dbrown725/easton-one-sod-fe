@@ -102,6 +102,19 @@
     border-radius: 12px;
 }
 
+.radio-errors {
+    margin-top: 20px;
+}
+
+.radio-errors .errors-title {
+    display: flex;
+    justify-content: center;
+}
+
+.radio-errors .error-row {
+    margin-top: 20px;
+}
+
 @media (max-width: 500px) {
     .radio .dj-options-row {
         display: inline-block;

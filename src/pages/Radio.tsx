@@ -39,6 +39,8 @@ const Radio: React.FC = () => {
 
   const [discJockeySelected, setDiscJockeySelected] = useState<string | undefined>("");
 
+  const [playerErrors, setPlayerErrors] = useState<string[]>([]);
+
   //Bad code, bad developer, bad! I will fix later
   const [userTwoPrivacyOn, setUserTwoPrivacyOn] = useState<boolean>(false);
   const [userThreePrivacyOn, setUserThreePrivacyOn] = useState<boolean>(false);
@@ -208,7 +210,19 @@ const Radio: React.FC = () => {
   }
 
   const errorCondition = (e: Error) => {
-    console.log("An Error occurred moving to the next video. Error:", e, "Name:", e.name, "Message:", e.message, "Cause:", e.cause, "Stack:", e.stack);
+
+    const message: string = "Band: " + songs[playIndex].bandName + " Song: " + songs[playIndex].songName + " Url: " + songs[playIndex].link + "     Error: " 
+      + e + " Name: " + e.name + " Message: " + e.message + " Cause: " + e.cause + " Stack: " + e.stack;
+
+    console.log("Error: " + message);
+
+    setPlayerErrors( // Replace the state
+      [ // with a new array
+        ...playerErrors, // that contains all the old items
+        message
+      ]
+    );
+
     updatePlayIndex(playIndex + 1);
   }
 
@@ -505,6 +519,47 @@ const Radio: React.FC = () => {
                   })
                 }
               </IonGrid>
+              {role === 'ADMIN' && playerErrors.length > 0 &&
+              <IonGrid className='radio-errors'>
+                <IonRow>
+                  <IonCol size-md="2">
+                  </IonCol>
+                  <IonCol className="errors-title" size-md="8">
+                    <div>
+                      Player Errors
+                    </div>
+                  </IonCol>
+                  <IonCol size-md="2">
+                  </IonCol>
+                </IonRow>
+                <IonRow>
+                  <IonCol size-md="2">
+                  </IonCol>
+                  <IonCol className="errors-title" size-md="8">
+                    <div>
+                      Guide: <a href="https://www.gamerevolution.com/guides/939598-youtube-error-code-150-video-unavailable-fix-causes">Error 150</a>
+                    </div>
+                  </IonCol>
+                  <IonCol size-md="2">
+                  </IonCol>
+                </IonRow>
+                {playerErrors.length > 0 &&
+                  playerErrors.map((error: string, index) => {
+                    return (
+                      <IonRow key={index} className="error-row">
+                        <IonCol size-xs="2" size-xl="2">
+                        </IonCol>
+                        <IonCol size-xs="8" size-xl="8">
+                          <div>Error message: {error}</div>
+                        </IonCol>
+                        <IonCol size-xs="2" size-xl="2">
+                        </IonCol>
+                      </IonRow>
+                    );
+                  })
+                }
+              </IonGrid>
+              }
             </>
         }
         <FabToSubmit />
