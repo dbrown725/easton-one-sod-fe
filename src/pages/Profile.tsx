@@ -248,12 +248,15 @@ const Profile: React.FC = () => {
                     <IonLabel>Privacy mode</IonLabel>
                     <IonToggle aria-label="archive toggle" slot="end" checked={privacyOn} onIonChange={e => { togglePrivacyInputChange(e) }}></IonToggle>
                   </IonItem>
-
-                  <span className='profile-ion-privacy-on-title'>Set dark mode</span>
-                  <IonItem className="profile-privacy-on-toggle">
-                    <IonLabel>Dark mode</IonLabel>
-                    <IonToggle aria-label="archive toggle" slot="end" checked={darkModeOn} onIonChange={e => { toggleDarkModeInputChange(e) }}></IonToggle>
-                  </IonItem>
+                  {role === 'ADMIN' &&
+                    <>
+                    <span className='profile-ion-privacy-on-title'>Set dark mode</span>
+                    <IonItem className="profile-privacy-on-toggle">
+                      <IonLabel>Dark mode</IonLabel>
+                      <IonToggle aria-label="archive toggle" slot="end" checked={darkModeOn} onIonChange={e => { toggleDarkModeInputChange(e) }}></IonToggle>
+                    </IonItem>
+                    </>
+                  }
                 </>
               }
             </>
