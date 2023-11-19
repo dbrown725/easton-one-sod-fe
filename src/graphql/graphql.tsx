@@ -7,6 +7,7 @@ export    const GET_USER_INFO = gql`
                 email
                 emailPreference
                 privacyOn
+                darkModeOn
                 isEmailVerified
                 issuer
                 firstName
@@ -37,6 +38,7 @@ export   const UPDATE_EMAIL_PREFERENCE = gql`
                   email
                   emailPreference
                   privacyOn
+                  darkModeOn
                   isEmailVerified
                   issuer
                   firstName
@@ -56,6 +58,7 @@ export   const UPDATE_PRIVACY_ON = gql`
                 email
                 emailPreference
                 privacyOn
+                darkModeOn
                 isEmailVerified
                 issuer
                 firstName
@@ -65,6 +68,26 @@ export   const UPDATE_PRIVACY_ON = gql`
               }
           }
         `;
+
+export   const UPDATE_DARK_MODE_ON = gql`
+        mutation updateDarkModeOn($darkModeOn: Boolean!) {
+          updateDarkModeOn(
+            darkModeOn: $darkModeOn)
+            {
+              id
+              email
+              emailPreference
+              privacyOn
+              darkModeOn
+              isEmailVerified
+              issuer
+              firstName
+              lastName
+              screenName
+              avatarColor
+            }
+        }
+      `;        
 
 export   const ADD_BULLPEN_SONG = gql`
             mutation addBullpenSong($title: String!, $songName: String!, $bandName: String!, $link: String!, $message: String!) {

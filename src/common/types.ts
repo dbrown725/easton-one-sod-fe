@@ -100,6 +100,7 @@ export interface UserInfo {
     email: string;
     emailPreference: string;
     privacyOn: boolean;
+    darkModeOn: boolean;
     isEmailVerified: boolean;
     issuer: string;
     firstName: string;

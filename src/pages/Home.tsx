@@ -9,6 +9,8 @@ import FabToSubmit from '../components/FabToSubmit';
 import { getScreenDimensions } from '../common/helper';
 import { useEffect, useState } from 'react';
 import CommentModal from '../components/CommentModal';
+import { GET_USER_INFO } from '../graphql/graphql';
+import { useLazyQuery } from '@apollo/client';
 
 const Home: React.FC = () => {
   const [commentSongId, setCommentSongId] = useState<number>(0);
@@ -25,7 +27,22 @@ const Home: React.FC = () => {
     } else {
       setCommentSongId(0);
     }
+    getUserInfo();
   }, []);
+
+  const [
+    getUserInfo,
+    { loading, error, data }
+  ] = useLazyQuery(GET_USER_INFO, {
+    fetchPolicy: 'no-cache', nextFetchPolicy: 'no-cache', onCompleted: (data) => {
+      toggleDarkTheme(data.getUserInfo.darkModeOn);
+    }
+  });
+
+  // Add or remove the "dark" class on the document body
+  const toggleDarkTheme = (shouldAdd: boolean) => {
+    document.body.classList.toggle('dark', shouldAdd);
+  };
 
   return (
     <IonPage>

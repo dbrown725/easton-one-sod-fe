@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonMenuButton, IonModal, IonPage, IonRadio, IonRadioGroup, IonTitle, IonToggle, IonToolbar, ToggleChangeEventDetail, useIonAlert } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonMenuButton, IonModal, IonPage, IonRadio, IonRadioGroup, IonTitle, IonToggle, IonToolbar, ToggleChangeEventDetail, useIonAlert } from '@ionic/react';
 import './Profile.css';
 import {
   IonGrid,
@@ -8,11 +8,12 @@ import {
 import FabToSubmit from '../components/FabToSubmit';
 import { useEffect, useState } from 'react';
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { GET_USER_INFO, UPDATE_EMAIL_PREFERENCE, UPDATE_PRIVACY_ON } from '../graphql/graphql';
+import { GET_USER_INFO, UPDATE_DARK_MODE_ON, UPDATE_EMAIL_PREFERENCE, UPDATE_PRIVACY_ON } from '../graphql/graphql';
 import { UserInfo } from '../common/types';
 import ErrorDisplay from '../components/ErrorDisplay';
 import { refreshRole, role } from '../firebase';
 import { informationCircleOutline } from 'ionicons/icons';
+import type { ToggleCustomEvent } from '@ionic/react';
 
 const Profile: React.FC = () => {
 
@@ -21,6 +22,21 @@ const Profile: React.FC = () => {
   const [presentAlert] = useIonAlert();
   const [privacyOn, setPrivacyOn] = useState<boolean>(false);
   const [isInfoOpen, setIsInfoOpen] = useState(false);
+  const [darkModeOn, setDarkModeOn] = useState<boolean>(false);
+
+  // Listen for the toggle check/uncheck to toggle the dark theme
+  const toggleDarkModeInputChange = (ev: ToggleCustomEvent) => {
+    updateDarkModeOn({ variables: { darkModeOn: !darkModeOn } });
+  };
+
+  const togglePrivacyInputChange = (e: CustomEvent<ToggleChangeEventDetail>) => {
+    updatePrivacyOn({ variables: { privacyOn: !privacyOn } });
+  };
+
+  // Add or remove the "dark" class on the document body
+  const toggleDarkTheme = (shouldAdd: boolean) => {
+    document.body.classList.toggle('dark', shouldAdd);
+  };
 
   const [
     getUserInfo,
@@ -30,6 +46,8 @@ const Profile: React.FC = () => {
       setUserInfo(data.getUserInfo);
       setEmailPreference(data.getUserInfo.emailPreference);
       setPrivacyOn(data.getUserInfo.privacyOn);
+      setDarkModeOn(data.getUserInfo.darkModeOn);
+      toggleDarkTheme(data.getUserInfo.darkModeOn);
     }
   });
 
@@ -47,16 +65,19 @@ const Profile: React.FC = () => {
     }
   });
 
+  const [updateDarkModeOn, { data: updtDarkData, loading: updtDarkLoading, error: updtDarkError }] = useMutation(UPDATE_DARK_MODE_ON, {
+    onCompleted: (data) => {
+      getUserInfo();
+      showDarkModeUpdatedAlert();
+    }
+  });
+
   const resetEmailPreference = () => {
     setEmailPreference(userInfo?.emailPreference as string);
   };
 
   const handleEmailPrefUpdate = () => {
     updateEmailPreference({ variables: { emailPreference: emailPreference } });
-  };
-
-  const toggleInputChange = (e: CustomEvent<ToggleChangeEventDetail>) => {
-    updatePrivacyOn({ variables: { privacyOn: !privacyOn } });
   };
 
   useEffect(() => {
@@ -81,6 +102,20 @@ const Profile: React.FC = () => {
   const showPrivacyUpdatedAlert = () => {
     presentAlert({
       header: 'Your Privacy mode change is complete.',
+      buttons: [
+        {
+          text: 'OK',
+          role: 'confirm',
+          handler: () => {
+          },
+        },
+      ]
+    });
+  };
+
+  const showDarkModeUpdatedAlert = () => {
+    presentAlert({
+      header: 'Your Dark mode change is complete.',
       buttons: [
         {
           text: 'OK',
@@ -211,7 +246,13 @@ const Profile: React.FC = () => {
                   </span>
                   <IonItem className="profile-privacy-on-toggle">
                     <IonLabel>Privacy mode</IonLabel>
-                    <IonToggle aria-label="archive toggle" slot="end" checked={privacyOn} onIonChange={e => { toggleInputChange(e) }}></IonToggle>
+                    <IonToggle aria-label="archive toggle" slot="end" checked={privacyOn} onIonChange={e => { togglePrivacyInputChange(e) }}></IonToggle>
+                  </IonItem>
+
+                  <span className='profile-ion-privacy-on-title'>Set dark mode</span>
+                  <IonItem className="profile-privacy-on-toggle">
+                    <IonLabel>Dark mode</IonLabel>
+                    <IonToggle aria-label="archive toggle" slot="end" checked={darkModeOn} onIonChange={e => { toggleDarkModeInputChange(e) }}></IonToggle>
                   </IonItem>
                 </>
               }
