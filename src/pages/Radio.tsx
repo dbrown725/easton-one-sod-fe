@@ -94,7 +94,7 @@ const Radio: React.FC = () => {
         songsArray.push(JSON.parse(JSON.stringify(sng)));
       });
       setSongs(songsArray);
-      updatePlayIndex(0);
+      updatePlayIndex(0, false);
     },
   });
 
@@ -109,7 +109,7 @@ const Radio: React.FC = () => {
         songsArray.push(JSON.parse(JSON.stringify(sng)));
       });
       setSongs(songsArray);
-      updatePlayIndex(0);
+      updatePlayIndex(0, false);
     }
   });
 
@@ -124,7 +124,7 @@ const Radio: React.FC = () => {
         songsArray.push(JSON.parse(JSON.stringify(sng)));
       });
       setSongs(songsArray);
-      updatePlayIndex(0);
+      updatePlayIndex(0, false);
     },
   });
 
@@ -146,7 +146,7 @@ const Radio: React.FC = () => {
         });
       }
       setSongs(songsArray);
-      updatePlayIndex(0);
+      updatePlayIndex(0, false);
     },
   });
 
@@ -161,7 +161,7 @@ const Radio: React.FC = () => {
           songsArray.push(JSON.parse(JSON.stringify(sng)));
         });
         setSongs(songsArray);
-        updatePlayIndex(0);
+        updatePlayIndex(0, false);
       },
     });
 
@@ -186,15 +186,20 @@ const Radio: React.FC = () => {
         songsArray.push(JSON.parse(JSON.stringify(sng)));
       });
       setSongs(songsArray);
-      updatePlayIndex(0);
+      updatePlayIndex(0, false);
     },
   });
 
-  const updatePlayIndex = (index: number) => {
+  const updatePlayIndex = (index: number, error: boolean) => {
     setSongs((state) => {
+
+      var newHistory = songHistory;
+      if (error) { 
+        newHistory = songHistory.filter((song) => song.id !== songs[playIndex].id);
+      }
       setSongHistory( // Replace the state
         [ // with a new array
-          ...songHistory, // that contains all the old items
+          ...newHistory, // that contains all the old items
           state[index]// and one new item at the end
         ]
       );
@@ -206,12 +211,11 @@ const Radio: React.FC = () => {
   }
 
   const nextVideo = () => {
-    updatePlayIndex(playIndex + 1);
+    updatePlayIndex(playIndex + 1, false);
   }
 
   const errorCondition = (e: Error) => {
-
-    const message: string = "Band: " + songs[playIndex].bandName + " Song: " + songs[playIndex].songName + " Url: " + songs[playIndex].link + "     Error: " 
+    const message: string = "Band: " + songs[playIndex].bandName + " Song: " + songs[playIndex].songName + " Url: " + songs[playIndex].link + "     Error: "
       + e + " Name: " + e.name + " Message: " + e.message + " Cause: " + e.cause + " Stack: " + e.stack;
 
     console.log("Error: " + message);
@@ -223,7 +227,7 @@ const Radio: React.FC = () => {
       ]
     );
 
-    updatePlayIndex(playIndex + 1);
+    updatePlayIndex(playIndex + 1, true);
   }
 
   const clearSearch = () => {
